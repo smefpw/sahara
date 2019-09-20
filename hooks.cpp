@@ -118,11 +118,10 @@ namespace Hooks
 		C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
 		bSendPacket = g_EngineClient->GetNetChannel()->m_nChokedPackets >= Variables.MiscFakelagChoke;
-		if (cmd->buttons & IN_ATTACK)
-			bSendPacket = true;
+
+		if (cmd->buttons & IN_ATTACK) bSendPacket = true;
 
 		MovementFix::Get().Start(cmd);
-
 		RageAimbot::Get().StartEnginePred(cmd);
 
 		if (Variables.RageAimbotEnabled)
@@ -251,10 +250,9 @@ namespace Hooks
 	}
 	//--------------------------------------------------------------------------------
 	void __fastcall hkFrameStageNotify(void* _this, int edx, ClientFrameStage_t stage)
-	// i love pasting yes
 	{
 		static auto ofunc = hlclient_hook.get_original<decltype(&hkFrameStageNotify)>(index::FrameStageNotify);
-		if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) // checking for this instead of g_LocalPlayer coz it fucks up when full updating
+		if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer)
 		{
 			ofunc(g_CHLClient, edx, stage);
 			return;
@@ -321,7 +319,7 @@ namespace Hooks
 			ofunc(g_ClientMode, edx, vsView);
 			return;
 		}
-		vsView->fov = 90.f; //yes
+		vsView->fov = 90.f;
 
 		ofunc(g_ClientMode, edx, vsView);
 	}

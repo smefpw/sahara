@@ -17,7 +17,7 @@
 #define CHAR_TEX_BLOODYFLESH	'B'
 #define	CHAR_TEX_CONCRETE		'C'
 #define CHAR_TEX_DIRT			'D'
-#define CHAR_TEX_EGGSHELL		'E' ///< the egg sacs in the tunnels in ep2.
+#define CHAR_TEX_EGGSHELL		'E'
 #define CHAR_TEX_FLESH			'F'
 #define CHAR_TEX_GRATE			'G'
 #define CHAR_TEX_ALIENFLESH		'H'
@@ -33,7 +33,7 @@
 #define CHAR_TEX_VENT			'V'
 #define CHAR_TEX_WOOD			'W'
 #define CHAR_TEX_GLASS			'Y'
-#define CHAR_TEX_WARPSHIELD		'Z' ///< wierd-looking jello effect for advisor shield.
+#define CHAR_TEX_WARPSHIELD		'Z'
 
 void ScaleDamage_1(int hitgroup, C_BasePlayer* enemy, float weapon_armor_ratio, float& current_damage)
 {
@@ -98,8 +98,8 @@ void Autowall::TraceLine(Vector& absStart, Vector& absEnd, unsigned int mask, IC
 void Autowall::ClipTraceToPlayers(const Vector& absStart, const Vector absEnd, unsigned int mask, ITraceFilter* filter, CGameTrace* tr)
 {
 
-	C_BasePlayer* pLocal = g_LocalPlayer;// Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
-	C_BaseCombatWeapon* weapon = pLocal->m_hActiveWeapon();//(C_BaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(pLocal->GetActiveWeaponHandle());
+	C_BasePlayer* pLocal = g_LocalPlayer;
+	C_BaseCombatWeapon* weapon = pLocal->m_hActiveWeapon();
 
 	static DWORD dwAddress = (DWORD)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "53 8B DC 83 EC 08 83 E4 F0 83 C4 04 55 8B 6B 04 89 6C 24 04 8B EC 81 EC ? ? ? ? 8B 43 10");
 
@@ -127,7 +127,6 @@ void Autowall::ClipTraceToPlayers(const Vector& absStart, const Vector absEnd, u
 	}
 }
 
-////////////////////////////////////// Legacy Functions //////////////////////////////////////
 void Autowall::GetBulletTypeParameters(float& maxRange, float& maxDistance, char* bulletType, bool sv_penetration_type)
 {
 	if (sv_penetration_type)
@@ -137,8 +136,6 @@ void Autowall::GetBulletTypeParameters(float& maxRange, float& maxDistance, char
 	}
 	else
 	{
-		//Play tribune to framerate. Thanks, stringcompare
-		//Regardless I doubt anyone will use the old penetration system anyway; so it won't matter much.
 		if (!strcmp(bulletType, ("BULLET_PLAYER_338MAG")))
 		{
 			maxRange = 45.0;
@@ -187,7 +184,6 @@ void Autowall::GetBulletTypeParameters(float& maxRange, float& maxDistance, char
 	}
 }
 
-////////////////////////////////////// Misc Functions //////////////////////////////////////
 bool Autowall::BreakableEntity(IClientEntity* entity)
 {
 
@@ -210,8 +206,8 @@ bool Autowall::BreakableEntity(IClientEntity* entity)
 void Autowall::ScaleDamage(CGameTrace& enterTrace, CCSWeaponInfo* weaponData, float& currentDamage)
 {
 
-	C_BasePlayer* pLocal = g_LocalPlayer;//Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
-	C_BaseCombatWeapon* weapon = pLocal->m_hActiveWeapon();//(C_BaseCombatWeapon*)Interfaces::EntList->GetClientEntityFromHandle(pLocal->GetActiveWeaponHandle());
+	C_BasePlayer* pLocal = g_LocalPlayer;
+	C_BaseCombatWeapon* weapon = pLocal->m_hActiveWeapon();
 	bool hasHeavyArmor = false;
 	int armorValue = ((C_BasePlayer*)enterTrace.hit_entity)->m_ArmorValue();
 	int hitGroup = enterTrace.hitgroup;
@@ -271,7 +267,7 @@ void Autowall::ScaleDamage(CGameTrace& enterTrace, CCSWeaponInfo* weaponData, fl
 			bonusValue = 0.33f;
 		}
 
-		auto NewDamage = currentDamage * armorRatio;
+		float NewDamage = currentDamage * armorRatio;
 
 		if (((currentDamage - (currentDamage * armorRatio)) * (bonusValue * armorBonusRatio)) > armorValue)
 		{
@@ -282,7 +278,6 @@ void Autowall::ScaleDamage(CGameTrace& enterTrace, CCSWeaponInfo* weaponData, fl
 	}
 }
 
-////////////////////////////////////// Main autowall Functions //////////////////////////////////////
 bool Autowall::trace_to_exit(CGameTrace& enterTrace, CGameTrace& exitTrace, Vector startPosition, Vector direction)
 {
 	Vector start, end;
@@ -342,7 +337,6 @@ bool Autowall::trace_to_exit(CGameTrace& enterTrace, CGameTrace& exitTrace, Vect
 			{
 				if (enterTrace.DidHitNonWorldEntity() && BreakableEntity(enterTrace.hit_entity))
 				{
-					//auto t = enterTrace;
 					exitTrace = enterTrace;
 					exitTrace.endpos = start + direction;
 					return true;
@@ -357,21 +351,23 @@ bool Autowall::trace_to_exit(CGameTrace& enterTrace, CGameTrace& exitTrace, Vect
 
 bool Autowall::HandleBulletPenetration(CCSWeaponInfo* weaponData, CGameTrace& enterTrace, Vector& eyePosition, Vector direction, int& possibleHitsRemaining, float& currentDamage, float penetrationPower, bool sv_penetration_type, float ff_damage_reduction_bullets, float ff_damage_bullet_penetration)
 {
-	//Because there's been issues regarding this- putting this here.
 	if (&currentDamage == nullptr)
 	{
 		handle_penetration = false;
 		return false;
 	}
 
-	C_BasePlayer* local = g_LocalPlayer;//(IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	C_BasePlayer* local = g_LocalPlayer;
 
 	FireBulletData data(local->GetEyePos());
+
 	data.filter = CTraceFilter();
 	data.filter.pSkip = local;
+
 	CGameTrace exitTrace;
 	C_BasePlayer* pEnemy = (C_BasePlayer*)enterTrace.hit_entity;
 	surfacedata_t* enterSurfaceData = g_PhysSurface->GetSurfaceData(enterTrace.surface.surfaceProps);
+
 	int enterMaterial = enterSurfaceData->game.material;
 
 	float enterSurfPenetrationModifier = enterSurfaceData->game.flPenetrationModifier;
@@ -508,12 +504,7 @@ bool Autowall::FireBullet(C_BaseCombatWeapon* pWeapon, Vector& direction, float&
 		return false;
 	}
 
-	C_BasePlayer* local = g_LocalPlayer;//(IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
-
-	//FireBulletData data(local->GetEyePos());
-
-	//data.filter = CTraceFilter();
-	//data.filter.pSkip = local;
+	C_BasePlayer* local = g_LocalPlayer;
 
 	bool sv_penetration_type;
 
@@ -559,7 +550,7 @@ bool Autowall::FireBullet(C_BaseCombatWeapon* pWeapon, Vector& direction, float&
 		Vector end = eyePosition + direction * maxRange;
 
 		TraceLine(eyePosition, end, MASK_SHOT_HULL | CONTENTS_HITBOX, local, &enterTrace);
-		ClipTraceToPlayers(eyePosition, end + direction * rayExtension, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &enterTrace); //  | CONTENTS_HITBOX
+		ClipTraceToPlayers(eyePosition, end + direction * rayExtension, MASK_SHOT_HULL | CONTENTS_HITBOX, &filter, &enterTrace);
 
 		surfacedata_t* enterSurfaceData = g_PhysSurface->GetSurfaceData(enterTrace.surface.surfaceProps);
 
@@ -597,25 +588,22 @@ bool Autowall::FireBullet(C_BaseCombatWeapon* pWeapon, Vector& direction, float&
 	return false;
 }
 
-////////////////////////////////////// Usage Calls //////////////////////////////////////
 float Autowall::CanHit(Vector& point)
 {
-	C_BasePlayer* local = g_LocalPlayer;//(IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	C_BasePlayer* local = g_LocalPlayer;
 
 	if (!local || !local->IsAlive())
 	{
 		return -1.f;
 	}
 
-	FireBulletData data(local->GetEyePos());// = FireBulletData(local->GetEyePosition());
+	FireBulletData data(local->GetEyePos());
 	data.filter = CTraceFilter();
 	data.filter.pSkip = local;
 	Vector angles, direction;
 	Vector tmp = point - local->GetEyePos();
 	float currentDamage = 0;
 
-	//VectorAngles(tmp, angles);
-	//AngleVectors(angles, &direction);
 	direction = tmp;
 	direction.NormalizeInPlace();
 
@@ -628,22 +616,20 @@ float Autowall::CanHit(Vector& point)
 
 float Autowall::CanHit(Vector& start, Vector& point)
 {
-	C_BasePlayer* local = g_LocalPlayer;//(IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
+	C_BasePlayer* local = g_LocalPlayer;
 
 	if (!local || !local->IsAlive())
 	{
 		return -1.f;
 	}
 
-	FireBulletData data(start);// = FireBulletData(local->GetEyePosition());
+	FireBulletData data(start);
 	data.filter = CTraceFilter();
 	data.filter.pSkip = local;
 	Vector angles, direction;
 	Vector tmp = point - start;
 	float currentDamage = 0;
 
-	//VectorAngles(tmp, angles);
-	//AngleVectors(angles, &direction);
 	direction = tmp;
 	direction.NormalizeInPlace();
 
@@ -656,8 +642,6 @@ float Autowall::CanHit(Vector& start, Vector& point)
 
 float Autowall::CanHit(C_BasePlayer* ent, Vector& point)
 {
-	//C_BasePlayer* local = g_LocalPlayer;//(IClientEntity*)Interfaces::EntList->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
-
 	if (!ent || !ent->IsAlive())
 	{
 		return -1.f;
@@ -670,8 +654,6 @@ float Autowall::CanHit(C_BasePlayer* ent, Vector& point)
 	Vector tmp = point - ent->GetEyePos();
 	float currentDamage = 0;
 
-	//VectorAngles(tmp, angles);
-	//AngleVectors(angles, &direction);
 	direction = tmp;
 	direction.NormalizeInPlace();
 
@@ -684,49 +666,16 @@ float Autowall::CanHit(C_BasePlayer* ent, Vector& point)
 
 bool Autowall::trace_awall(float& damage)
 {
-	/*
-	auto m_local = g_LocalPlayer;//->GetClientEntity(Interfaces::Engine->GetLocalPlayer());
-	if (m_local && m_local->IsAlive())
-	{
-		FireBulletData data(m_local->GetEyePos());// = FireBulletData(m_local->GetEyePosition());
-		data.filter = CTraceFilter();
-		data.filter.pSkip = m_local;
-		QAngle eye_angle; g_EngineClient->GetViewAngles(eye_angle);
-		Vector dst, forward;
-		Math::AngleVectors(eye_angle, forward);
-		dst = data.src + (forward * 8196.f);
-		QAngle angles;
-		angles = Math::CalcAngle(data.src, dst);
-		angles.Normalize();
-		Math::AngleVectors(angles, data.direction);
-		//VectorNormalize(data.direction);
-		auto m_weapon = m_local->m_hActiveWeapon();
-		if (m_weapon) {
-			data.penetrate_count = 1;
-			data.trace_length = 0.0f;
-			CCSWeaponInfo *weapon_data = m_weapon->GetCSWeaponData();
-			if (weapon_data) {
-				data.current_damage = weapon_data->iDamage;
-				data.trace_length_remaining = weapon_data->flRange - data.trace_length;
-				Vector end = data.src + data.direction * data.trace_length_remaining;
-				TraceLine(data.src, end, MASK_SHOT | CONTENTS_GRATE, m_local, &data.enter_trace);
-				if (data.enter_trace.fraction == 1.0f) return false;
-				if (handle_penetration) {
-					damage = data.current_damage;
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-	*/
 	C_BasePlayer* local = g_LocalPlayer;
+
 	if (!local)
 	{
 		return false;
 	}
+
 	FireBulletData data(local->GetEyePos());
 	Vector eyepos = local->GetEyePos();
+
 	data.filter = CTraceFilter();
 	data.filter.pSkip = local;
 
@@ -778,31 +727,23 @@ bool Autowall::trace_awall(float& damage)
 		return true;
 	}
 
-	//if (!HandleBulletPenetration(weaponData, data.enter_trace, eyepos, end, possibleHitsRemaining,
-	//	currentDamage, penetrationPower, sv_penetration_type, ff_damage_reduction_bullets, ff_damage_bullet_penetration)) {
-	//	damage = data.current_damage;
-	//	return true;
-	//}
-
 	return false;
 }
 bool Autowall::trace_awall(C_BasePlayer* m_local, Vector hit, float& damage)
 {
 	if (m_local && m_local->IsAlive())
 	{
-		FireBulletData data(m_local->GetEyePos());// = FireBulletData(m_local->GetEyePosition());
+		FireBulletData data(m_local->GetEyePos());
 		data.filter = CTraceFilter();
 		data.filter.pSkip = m_local;
-		//QAngle eye_angle; g_EngineClient->GetViewAngles(eye_angle);
-		//Vector dst;// , forward;
-		//Math::AngleVectors(eye_angle, forward);
-		//dst = data.src + (m_local->GetEyePos() * 8196.f);
+
 		QAngle angles;
 		angles = Math::CalcAngle(data.src, hit);
 		Math::Normalize3(angles);
 		Math::AngleVectors(angles, data.direction);
-		//VectorNormalize(data.direction);
-		auto m_weapon = m_local->m_hActiveWeapon();
+
+		CHandle<C_BaseCombatWeapon> m_weapon = m_local->m_hActiveWeapon();
+
 		if (m_weapon)
 		{
 			data.penetrate_count = 1;
@@ -828,44 +769,3 @@ bool Autowall::trace_awall(C_BasePlayer* m_local, Vector hit, float& damage)
 	}
 	return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

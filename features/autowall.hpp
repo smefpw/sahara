@@ -21,7 +21,9 @@ struct FireBulletData
 	float           current_damage;
 	int             penetrate_count;
 };
+
 #pragma once
+
 class Autowall : public Singleton<Autowall>
 {
 public:
@@ -42,6 +44,4 @@ public:
 	bool handle_penetration = false;
 
 private:
-	//typedef int(__fastcall* UTIL_TraceLine_t)(const Vector&, const Vector&, unsigned int, const IClientEntity*, int, trace_t*);
-	//void trace_line(const Vector& vecAbsStart, const Vector& vecAbsEnd, unsigned int mask, const IClientEntity *ignore, int collisionGroup, trace_t &ptr);
 };

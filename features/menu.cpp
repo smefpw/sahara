@@ -16,7 +16,6 @@ void Menu::Initialize()
 	VisualsChams = false;
 	VisualsGlow = false;
 
-
 	ImGui::CreateContext();
 
 	ImGui_ImplDX9_Init(InputSys::Get().GetMainWindow(), g_D3DDevice9);

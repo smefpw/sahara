@@ -23,9 +23,9 @@ public:
 	void Line(int X1, int Y1, int X2, int Y2, Color DrawColor);
 };
 class Chams
-	: public Singleton<Chams>
-{
+	: public Singleton<Chams>{
 	friend class Singleton<Chams>;
+
 	Chams();
 	~Chams();
 

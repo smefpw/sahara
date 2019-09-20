@@ -43,7 +43,6 @@ void RageAimbot::StartEnginePred(CUserCmd* cmd)
 	static int nTickBase;
 	static CUserCmd* pLastCmd;
 
-	// fix tickbase if game didnt render previous tick
 	if (pLastCmd)
 	{
 		if (pLastCmd->hasbeenpredicted)
@@ -79,7 +78,7 @@ void RageAimbot::EndEnginePred()
 	g_GlobalVars->frametime = flOldFrametime;
 }
 
-bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlayer* ent, float chance) //pasted
+bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlayer* ent, float chance)
 {
 	Vector forward, right, up;
 	Vector src = g_LocalPlayer->GetEyePos();
@@ -154,7 +153,7 @@ bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack
 
 		highestDamage = Variables.RageAimbotMinDmg;
 
-		for (auto HitBoxID : HitBoxesToScan)
+		for (int HitBoxID : HitBoxesToScan)
 		{
 			Player->SetAbsOrigin(Player->m_vecOrigin());
 			Vector Point = Player->GetHitboxPos(HitBoxID, BoneMatrix);
@@ -168,12 +167,12 @@ bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack
 			}
 		}
 	}
-	else //didnt autowall the backtrackz coz my pc is slow af and it goes skra
+	else
 	{
-		for (auto HitBoxID : HitBoxesToScan)
+		for (int HitBoxID : HitBoxesToScan)
 		{
-			//Player->SetAbsOrigin(BacktrackRecords[Player->EntIndex()].back().Origin);
 			Vector Point = Player->GetHitboxPos(HitBoxID, BoneMatrix);
+
 			if (g_LocalPlayer->CanSeePlayer(Player, Point))
 			{
 				bestHitbox = HitBoxID;
@@ -207,8 +206,7 @@ void RageAimbot::StoreRecords()
 				BacktrackRecords[i].pop_back();
 	}
 }
-float Hitchance2(C_BaseCombatWeapon* Weapon) 
-// coz i need to restore shit for the proper hitchance to work with backtrack
+float Hitchance2(C_BaseCombatWeapon* Weapon)
 {
 	float Hitchance = 101;
 	if (!Weapon) return 0;

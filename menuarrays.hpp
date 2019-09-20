@@ -13,11 +13,11 @@ const char* LegitAimbotHitbox[] =
 };
 const char* MenuTabs[]
 {
-	"Legit			",
-	"Rage			",
-	"Visuals			",
-	"Misc			",
-	"Skins			"
+	"Legit",
+	"Rage",
+	"Visuals",
+	"Misc",
+	"Skins"
 };
 const char* VisualsTabs[]
 {
@@ -27,11 +27,7 @@ const char* VisualsTabs[]
 };
 const char* ChamsMaterials[]
 {
-	"None",
-	"Textured",
-	"Flat",
-	"Metallic",
-	"Pulsing"
+	"Metallic"
 };
 const char* ChamsBacktrack[]
 {

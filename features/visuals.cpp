@@ -50,65 +50,8 @@ void Render::Line(int X1, int Y1, int X2, int Y2, Color DrawColor)
 }
 Chams::Chams()
 {
-	std::ofstream("csgo\\materials\\material_textured.vmt") << R"#("VertexLitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#";
-	std::ofstream("csgo\\materials\\material_textured_ignorez.vmt") << R"#("VertexLitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#";
-	std::ofstream("csgo\\materials\\material_flat.vmt") << R"#("UnlitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#";
-	std::ofstream("csgo\\materials\\material_flat_ignorez.vmt") << R"#("UnlitGeneric"
-{
-  "$basetexture" "vgui/white_additive"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#";
-	std::ofstream("csgo\\materials\\material_reflective.vmt") << R"#("VertexLitGeneric" {
-      "$basetexture" "vgui/white_additive"
-      "$ignorez" "0"
+	std::ofstream("csgo\\materials\\reflective.vmt") << (R"#("VertexLitGeneric" {
+	  "$basetexture" "vgui/white"
       "$envmap" "env_cubemap"
       "$normalmapalphaenvmapmask" "1"
       "$envmapcontrast"  "1"
@@ -120,48 +63,19 @@ Chams::Chams()
       "$znearer" "0"
       "$flat" "1" 
 }
-)#";
-	std::ofstream("csgo\\materials\\material_reflective_ignorez.vmt") << R"#("VertexLitGeneric" {
-      "$basetexture" "vgui/white_additive"
-      "$ignorez" "1"
-      "$envmap" "env_cubemap"
-      "$normalmapalphaenvmapmask" "1"
-      "$envmapcontrast"  "1"
-      "$nofog" "1"
-      "$model" "1"
-      "$nocull" "0"
-      "$selfillum" "1"
-      "$halflambert" "1"
-      "$znearer" "0"
-      "$flat" "1" 
-}
-)#";
-
-	materialRegular = g_MatSystem->FindMaterial("material_textured", TEXTURE_GROUP_MODEL);
-	materialRegularIgnoreZ = g_MatSystem->FindMaterial("material_textured_ignorez", TEXTURE_GROUP_MODEL);
-	materialFlat = g_MatSystem->FindMaterial("material_flat", TEXTURE_GROUP_MODEL);
-	materialFlatIgnoreZ = g_MatSystem->FindMaterial("material_flat_ignorez", TEXTURE_GROUP_MODEL);
-	materialMetallic = g_MatSystem->FindMaterial("material_reflective", TEXTURE_GROUP_MODEL);
-	materialMetallicIgnoreZ = g_MatSystem->FindMaterial("material_reflective_ignorez", TEXTURE_GROUP_MODEL);
-	materialDogtag = g_MatSystem->FindMaterial("models\\inventory_items\\dogtags\\dogtags_outline", TEXTURE_GROUP_OTHER);
+)#");
+	materialMetallic = g_MatSystem->FindMaterial("reflective", TEXTURE_GROUP_MODEL);
 }
 Chams::~Chams()
 {
-	std::remove("csgo\\materials\\material_textured.vmt");
-	std::remove("csgo\\materials\\material_textured_ignorez.vmt");
-	std::remove("csgo\\materials\\material_flat.vmt");
-	std::remove("csgo\\materials\\material_flat_ignorez.vmt");
 	std::remove("csgo\\materials\\material_reflective.vmt");
-	std::remove("csgo\\materials\\material_reflective_ignorez.vmt");
 }
 void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& info, matrix3x4_t* matrix)
 {
 	static auto fnDME = Hooks::mdlrender_hook.get_original<decltype(&Hooks::hkDrawModelExecute)>(index::DrawModelExecute);
 	const auto mdl = info.pModel;
 
-	if (g_MdlRender->IsForcedMaterialOverride())
-		return fnDME(g_MdlRender, 0, ctx, state, info, matrix);
-
+	if (g_MdlRender->IsForcedMaterialOverride()) return fnDME(g_MdlRender, 0, ctx, state, info, matrix);
 	bool is_player = strstr(mdl->szName, "models/player") != nullptr;
 
 	static IMaterial* normal = nullptr;
@@ -169,64 +83,34 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 	static IMaterial* backtrack = nullptr;
 	static IMaterial* zbacktrack = nullptr;
 
+	// this could be a if statement but i'm fucking retarded :/
 	switch (Variables.VisualsChamsMaterial)
 	{
 	case 0:
-		normal = nullptr;
-		znormal = nullptr;
-		break;
-	case 1:
-		normal = materialRegular;
-		znormal = materialRegularIgnoreZ;
-		break;
-	case 2:
-		normal = materialFlat;
-		znormal = materialFlatIgnoreZ;
-		break;
-	case 3:
 		normal = materialMetallic;
-		znormal = materialMetallicIgnoreZ;
-		break;
-	case 4:
-		normal = materialDogtag;
-		znormal = materialDogtag;
+		znormal = materialMetallicZ;
 		break;
 	}
 	switch (Variables.VisualsChamsBacktrackMaterial)
 	{
 	case 0:
-		backtrack = nullptr;
-		zbacktrack = nullptr;
-		break;
-	case 1:
-		backtrack = materialRegular;
-		zbacktrack = materialRegularIgnoreZ;
-		break;
-	case 2:
-		backtrack = materialFlat;
-		zbacktrack = materialFlatIgnoreZ;
-		break;
-	case 3:
 		backtrack = materialMetallic;
-		zbacktrack = materialMetallicIgnoreZ;
-		break;
-	case 4:
-		backtrack = materialDogtag;
-		zbacktrack = materialDogtag;
+		zbacktrack = materialMetallicZ;
 		break;
 	}
-	float color[3] = {
+	float color[3] = 
+	{
 		Variables.VisualsChamsColor[0],
 		Variables.VisualsChamsColor[1],
-		Variables.VisualsChamsColor[2] };
-	float zcolor[3] = {
-		Variables.VisualsChamsColorIgnoreZ[0],
-		Variables.VisualsChamsColorIgnoreZ[1],
-		Variables.VisualsChamsColorIgnoreZ[2] };
-	float backtrackcolor[3] = {
+		Variables.VisualsChamsColor[2] 
+	};
+	float backtrackcolor[3] = 
+	{
 		Variables.VisualsChamsBacktrackColor[0],
 		Variables.VisualsChamsBacktrackColor[1],
-		Variables.VisualsChamsBacktrackColor[2] };
+		Variables.VisualsChamsBacktrackColor[2] 
+	};
+
 	if (is_player)
 	{
 		C_BasePlayer* entity = C_BasePlayer::GetPlayerByIndex(info.entity_index);
@@ -247,7 +131,6 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 								continue;
 							g_RenderView->SetColorModulation(backtrackcolor);
 							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							g_MdlRender->ForcedMaterialOverride(Variables.VisualsChamsIgnoreZ ? zbacktrack : backtrack);
 							fnDME(g_MdlRender, 0, ctx, state, info, RageAimbot::Get().BacktrackRecords[info.entity_index].at(t).BoneMatrix);
 						}
 						break;
@@ -257,7 +140,6 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 						{
 							g_RenderView->SetColorModulation(backtrackcolor);
 							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							g_MdlRender->ForcedMaterialOverride(Variables.VisualsChamsIgnoreZ ? zbacktrack : backtrack);
 							fnDME(g_MdlRender, 0, ctx, state, info, RageAimbot::Get().BacktrackRecords[info.entity_index].back().BoneMatrix);
 						}
 						break;
@@ -275,7 +157,6 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 								continue;
 							g_RenderView->SetColorModulation(backtrackcolor);
 							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							g_MdlRender->ForcedMaterialOverride(Variables.VisualsChamsIgnoreZ ? zbacktrack : backtrack);
 							fnDME(g_MdlRender, 0, ctx, state, info, LegitBacktrack::Get().BacktrackRecords[info.entity_index].at(t).BoneMatrix);
 						}
 						break;
@@ -285,18 +166,10 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 						{
 							g_RenderView->SetColorModulation(backtrackcolor);
 							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							g_MdlRender->ForcedMaterialOverride(Variables.VisualsChamsIgnoreZ ? zbacktrack : backtrack);
 							fnDME(g_MdlRender, 0, ctx, state, info, LegitBacktrack::Get().BacktrackRecords[info.entity_index].back().BoneMatrix);
 						}
 						break;
 					}
-				}
-				if (Variables.VisualsChamsIgnoreZ)
-				{
-					g_RenderView->SetColorModulation(zcolor);
-					g_RenderView->SetBlend(float(Variables.VisualsChamsAlpha) / 255.f);
-					g_MdlRender->ForcedMaterialOverride(znormal);
-					fnDME(g_MdlRender, 0, ctx, state, info, matrix);
 				}
 				g_RenderView->SetColorModulation(color);
 				g_RenderView->SetBlend(float(Variables.VisualsChamsAlpha) / 255.f);
@@ -481,9 +354,9 @@ bool Visuals::Begin(C_BasePlayer* Player)
 
 void Visuals::Box()
 {
-	Render::Get().OutlinedRectange(Context.Box.left - 1, Context.Box.top - 1, Context.Box.right + 1, Context.Box.bottom + 1, Color(0, 0, 0, 150));
-	Render::Get().OutlinedRectange(Context.Box.left + 1, Context.Box.top + 1, Context.Box.right - 1, Context.Box.bottom - 1, Color(0, 0, 0, 150));
-	Render::Get().OutlinedRectange(Context.Box.left, Context.Box.top, Context.Box.right, Context.Box.bottom, Color(255, 255, 255, 255));
+	Render::Get().OutlinedRectange(Context.Box.left - 1, Context.Box.top - 1, Context.Box.right + 1, Context.Box.bottom + 1, Color::Black);
+	Render::Get().OutlinedRectange(Context.Box.left + 1, Context.Box.top + 1, Context.Box.right - 1, Context.Box.bottom - 1, Color::Black);
+	Render::Get().OutlinedRectange(Context.Box.left, Context.Box.top, Context.Box.right, Context.Box.bottom, Color::White);
 }
 void Visuals::Name()
 {

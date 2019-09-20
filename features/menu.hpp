@@ -11,6 +11,7 @@
 #include "../options.hpp"
 #include "../ui.hpp"
 #include <d3dx9tex.h>
+
 #pragma comment(lib,"d3dx9.lib")
 
 struct IDirect3DDevice9;

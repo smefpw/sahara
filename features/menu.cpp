@@ -88,9 +88,6 @@ void Menu::RenderMenu()
 					ImGui::ColorEdit3("##chamscolor", Variables.VisualsChamsColor, ImGuiColorEditFlags_NoInputs);
 					ImGui::Combo("Material##chams", &Variables.VisualsChamsMaterial, ChamsMaterials, ARRAYSIZE(ChamsMaterials));
 					ImGui::SliderInt("Alpha##chamsalpha", &Variables.VisualsChamsAlpha, 0, 255);
-					ImGui::Checkbox("Ignore-Z##chamsingorezenabled", &Variables.VisualsChamsIgnoreZ);
-					ImGui::SameLine();
-					ImGui::ColorEdit3("##chamscolorignorez", Variables.VisualsChamsColorIgnoreZ, ImGuiColorEditFlags_NoInputs);
 					if (Variables.LegitBacktrackEnabled || Variables.RageAimbotEnabled)
 					{
 						ImGui::Text("Backtrack");

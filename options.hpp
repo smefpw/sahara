@@ -37,8 +37,6 @@ public:
 	bool VisualsChamsEnabled = false;
 	float VisualsChamsColor[3] = { 1.f, 1.f, 1.f };
 	int VisualsChamsMaterial = 2;
-	bool VisualsChamsIgnoreZ = false;
-	float VisualsChamsColorIgnoreZ[3] = { 1.f, 1.f, 1.f };
 	int VisualsChamsAlpha = 255;
 	int VisualsChamsBacktrack = 0;
 	int VisualsChamsBacktrackMaterial = 2;

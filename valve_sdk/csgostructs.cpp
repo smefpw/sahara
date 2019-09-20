@@ -4,10 +4,7 @@
 
 bool C_BaseEntity::IsPlayer()
 {
-	//index: 152
-	//ref: "effects/nightvision"
-	//sig: 8B 92 ? ? ? ? FF D2 84 C0 0F 45 F7 85 F6
-	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 155)(this);
+	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 156)(this);
 }
 
 bool C_BaseEntity::IsLoot() {
@@ -24,10 +21,7 @@ bool C_BaseEntity::IsLoot() {
 
 bool C_BaseEntity::IsWeapon()
 {
-	//index: 160
-	//ref: "CNewParticleEffect::DrawModel"
-	//sig: 8B 80 ? ? ? ? FF D0 84 C0 74 6F 8B 4D A4
-	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 163)(this);
+	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 164)(this);
 }
 
 
@@ -43,13 +37,7 @@ bool C_BaseEntity::IsDefuseKit()
 
 CCSWeaponInfo* C_BaseCombatWeapon::GetCSWeaponData()
 {
-	return CallVFunction<CCSWeaponInfo*(__thiscall*)(void*)>(this, 454)(this);
-	/*
-	static auto fnGetWpnData
-	= reinterpret_cast<CCSWeaponInfo*(__thiscall*)(void*)>(
-	Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "55 8B EC 81 EC ? ? ? ? 53 8B D9 56 57 8D 8B")
-	);
-	return fnGetWpnData(this);*/
+	return CallVFunction<CCSWeaponInfo*(__thiscall*)(void*)>(this, 455)(this);
 }
 
 bool C_BaseCombatWeapon::HasBullets()
@@ -61,7 +49,9 @@ bool C_BaseCombatWeapon::CanFire()
 {
 	static decltype(this) stored_weapon = nullptr;
 	static auto stored_tick = 0;
-	if (stored_weapon != this || stored_tick >= g_LocalPlayer->m_nTickBase()) {
+
+	if (stored_weapon != this || stored_tick >= g_LocalPlayer->m_nTickBase()) 
+	{
 		stored_weapon = this;
 		stored_tick = g_LocalPlayer->m_nTickBase();
 		return false; //cannot shoot first tick after switch
@@ -155,17 +145,17 @@ bool C_BaseCombatWeapon::IsReloading()
 
 float C_BaseCombatWeapon::GetInaccuracy()
 {
-	return CallVFunction<float(__thiscall*)(void*)>(this, 476)(this);
+	return CallVFunction<float(__thiscall*)(void*)>(this, 477)(this);
 }
 
 float C_BaseCombatWeapon::GetSpread()
 {
-	return CallVFunction<float(__thiscall*)(void*)>(this, 446)(this);
+	return CallVFunction<float(__thiscall*)(void*)>(this, 447)(this);
 }
 
 void C_BaseCombatWeapon::UpdateAccuracyPenalty()
 {
-	CallVFunction<void(__thiscall*)(void*)>(this, 477)(this);
+	CallVFunction<void(__thiscall*)(void*)>(this, 478)(this);
 }
 
 CUtlVector<IRefCounted*>& C_BaseCombatWeapon::m_CustomMaterials()
@@ -224,12 +214,7 @@ int C_BasePlayer::GetSequenceActivity(int sequence)
 	if (!hdr)
 		return -1;
 
-	// sig for stuidohdr_t version: 53 56 8B F1 8B DA 85 F6 74 55
-	// sig for C_BaseAnimating version: 55 8B EC 83 7D 08 FF 56 8B F1 74 3D
-	// c_csplayer vfunc 242, follow calls to find the function.
-
 	static auto get_sequence_activity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(Utils::PatternScan(GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 7D 08 FF 56 8B F1 74 3D"));
-
 	return get_sequence_activity(this, hdr, sequence);
 }
 float C_BasePlayer::MaxDesyncDelta() {
@@ -238,15 +223,14 @@ float C_BasePlayer::MaxDesyncDelta() {
 
 	float duckammount = *(float*)(animstate + 0xA4);
 	float speedfraction = std::fmax(0, std::fmin(*reinterpret_cast<float*>(animstate + 0xF8), 1));
-
 	float speedfactor = std::fmax(0, std::fmin(1, *reinterpret_cast<float*> (animstate + 0xFC)));
 
 	float unk1 = ((*reinterpret_cast<float*> (animstate + 0x11C) * -0.30000001) - 0.19999999) * speedfraction;
 	float unk2 = unk1 + 1.f;
 	float unk3;
 
-	if (duckammount > 0) {
-
+	if (duckammount > 0) 
+	{
 		unk2 += ((duckammount * speedfactor) * (0.5f - unk2));
 
 	}
@@ -328,11 +312,7 @@ bool C_BasePlayer::IsFlashed()
 
 bool C_BasePlayer::HasC4()
 {
-	static auto fnHasC4
-		= reinterpret_cast<bool(__thiscall*)(void*)>(
-			Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "56 8B F1 85 F6 74 31")
-			);
-
+	static auto fnHasC4 = reinterpret_cast<bool(__thiscall*)(void*)>(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "56 8B F1 85 F6 74 31"));
 	return fnHasC4(this);
 }
 
@@ -340,11 +320,14 @@ Vector C_BasePlayer::GetHitboxPos(int hitbox_id)
 {
 	matrix3x4_t boneMatrix[MAXSTUDIOBONES];
 
-	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.0f)) {
+	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.0f)) 
+	{
 		auto studio_model = g_MdlInfo->GetStudiomodel(GetModel());
-		if (studio_model) {
+		if (studio_model) 
+		{
 			auto hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);
-			if (hitbox) {
+			if (hitbox) 
+			{
 				auto
 					min = Vector{},
 					max = Vector{};
@@ -376,29 +359,13 @@ Vector C_BasePlayer::GetHitboxPos(int hitbox_id, matrix3x4_t* boneMatrix)
 	}
 	return Vector{};
 }
-/*Vector C_BasePlayer::GetHitboxPos(int Hitbox, matrix3x4_t* Matrix) // any public source
-{
-	studiohdr_t* hdr = g_MdlInfo->GetStudiomodel(this->GetModel());
-	mstudiohitboxset_t* set = hdr->GetHitboxSet(0);
-	mstudiobbox_t* hitbox = set->GetHitbox(Hitbox);
 
-	if (hitbox)
-	{
-		Vector vMin, vMax, vCenter, sCenter;
-		Math::VectorTransform(hitbox->bbmin, Matrix[hitbox->bone], vMin);
-		Math::VectorTransform(hitbox->bbmax, Matrix[hitbox->bone], vMax);
-		vCenter = (vMin + vMax) * 0.5;
-
-		return vCenter;
-	}
-
-	return Vector(0, 0, 0);
-}*/
 mstudiobbox_t* C_BasePlayer::GetHitbox(int hitbox_id)
 {
 	matrix3x4_t boneMatrix[MAXSTUDIOBONES];
 
-	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.0f)) {
+	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.0f)) 
+	{
 		auto studio_model = g_MdlInfo->GetStudiomodel(GetModel());
 		if (studio_model) {
 			auto hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);

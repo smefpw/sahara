@@ -5,16 +5,19 @@
 
 void Render::CreateFonts()
 {
-	VerdanaBold12 = g_VGuiSurface->CreateFont_();
+	Watermark = g_VGuiSurface->CreateFont_();
+	g_VGuiSurface->SetFontGlyphSet(Watermark, "Verdana", 16, 600, 0, 0, FONTFLAG_OUTLINE);
 
-	g_VGuiSurface->SetFontGlyphSet(VerdanaBold12, "Tahoma Bold", 12, 400, 0, 0, FONTFLAG_DROPSHADOW);
-	//g_VGuiSurface->SetFontGlyphSet(FuckMyAss, "Counter-Strike", 18, 500, 0, 0, FONTFLAG_ANTIALIAS);
+	Visuals = g_VGuiSurface->CreateFont_();
+	g_VGuiSurface->SetFontGlyphSet(Visuals, "Tahoma", 12, 400, 0, 0, FONTFLAG_OUTLINE);
 }
-void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawColor, bool Center/*, bool eatmyasscheeks*/)
+void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawColor, bool Center)
 {
 	std::wstring WText = std::wstring(std::string_view(Text).begin(), std::string_view(Text).end());
+
 	g_VGuiSurface->DrawSetTextFont(Font);
 	g_VGuiSurface->DrawSetTextColor(DrawColor);
+
 	if (Center)
 	{
 		int TextWidth, TextHeight;
@@ -160,10 +163,12 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 		return fnDME(g_MdlRender, 0, ctx, state, info, matrix);
 
 	bool is_player = strstr(mdl->szName, "models/player") != nullptr;
+
 	static IMaterial* normal = nullptr;
 	static IMaterial* znormal = nullptr;
 	static IMaterial* backtrack = nullptr;
 	static IMaterial* zbacktrack = nullptr;
+
 	switch (Variables.VisualsChamsMaterial)
 	{
 	case 0:
@@ -224,7 +229,7 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 		Variables.VisualsChamsBacktrackColor[2] };
 	if (is_player)
 	{
-		auto entity = C_BasePlayer::GetPlayerByIndex(info.entity_index);
+		C_BasePlayer* entity = C_BasePlayer::GetPlayerByIndex(info.entity_index);
 
 		if (g_LocalPlayer && entity && entity->IsAlive() && !entity->IsDormant())
 		{
@@ -298,14 +303,6 @@ void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& s
 				g_MdlRender->ForcedMaterialOverride(normal);
 				fnDME(g_MdlRender, 0, ctx, state, info, matrix);
 			}
-			/*else if (!entity->IsEnemy() && entity != g_LocalPlayer && false)
-			{
-
-			}
-			else if (entity == g_LocalPlayer && g_Input->m_fCameraInThirdPerson && false)
-			{
-				
-			}*/
 		}
 	}
 	fnDME(g_MdlRender, 0, ctx, state, info, matrix);
@@ -337,10 +334,10 @@ Glow::~Glow()
 
 void Glow::Shutdown()
 {
-	// Remove glow from all entities
-	for (auto i = 0; i < g_GlowObjManager->m_GlowObjectDefinitions.Count(); i++) {
-		auto& glowObject = g_GlowObjManager->m_GlowObjectDefinitions[i];
-		auto entity = reinterpret_cast<C_BasePlayer*>(glowObject.m_pEntity);
+	for (int i = 0; i < g_GlowObjManager->m_GlowObjectDefinitions.Count(); i++) 
+	{
+		GlowObjectDefinition_t & glowObject = g_GlowObjManager->m_GlowObjectDefinitions[i];
+		C_BasePlayer* entity = reinterpret_cast<C_BasePlayer*>(glowObject.m_pEntity);
 
 		if (glowObject.IsUnused())
 			continue;
@@ -356,9 +353,10 @@ void Glow::Run()
 {
 	if (Variables.VisualsGlowEnabled)
 	{
-		for (auto i = 0; i < g_GlowObjManager->m_GlowObjectDefinitions.Count(); i++) {
-			auto& glowObject = g_GlowObjManager->m_GlowObjectDefinitions[i];
-			auto entity = reinterpret_cast<C_BasePlayer*>(glowObject.m_pEntity);
+		for (int i = 0; i < g_GlowObjManager->m_GlowObjectDefinitions.Count(); i++) 
+		{
+			GlowObjectDefinition_t & glowObject = g_GlowObjManager->m_GlowObjectDefinitions[i];
+			C_BasePlayer* entity = reinterpret_cast<C_BasePlayer*>(glowObject.m_pEntity);
 
 			if (glowObject.IsUnused())
 				continue;
@@ -366,10 +364,13 @@ void Glow::Run()
 			if (!entity || entity->IsDormant())
 				continue;
 
-			auto class_id = entity->GetClientClass()->m_ClassID;
-			auto color = Color{};
-			switch (class_id) {
+			ClassId class_id = entity->GetClientClass()->m_ClassID;
+			Color color = Color{};
+
+			switch (class_id) 
+			{
 			case ClassId_CCSPlayer:
+
 				if (!entity->IsAlive() || !entity->IsEnemy())
 					continue;
 
@@ -379,12 +380,6 @@ void Glow::Run()
 					int(Variables.VisualsGlowColor[2] * 255),
 					int(Variables.VisualsGlowAlpha));
 				break;
-				/*case ClassId_CPlantedC4:
-					color = Color(255, 255, 255, 170);
-					break;
-				default:
-					if (entity->IsWeapon())
-						color = Color(255, 255, 255, 170);*/
 			}
 
 			glowObject.m_flRed = color.r() / 255.0f;
@@ -398,16 +393,16 @@ void Glow::Run()
 	}
 }
 
-RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[]) //not pasted ;))
+RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[])
 {
 	RECT rect{};
-	auto collideable = Player->GetCollideable();
+	ICollideable* collideable = Player->GetCollideable();
 
 	if (!collideable)
 		return rect;
 
-	auto min = collideable->OBBMins();
-	auto max = collideable->OBBMaxs();
+	Vector min = collideable->OBBMins();
+	Vector max = collideable->OBBMaxs();
 
 	const matrix3x4_t& trans = Player->m_rgflCoordinateFrame();
 
@@ -424,6 +419,7 @@ RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[]) //not pa
 	};
 
 	Vector pointsTransformed[8];
+
 	for (int i = 0; i < 8; i++) {
 		Math::VectorTransform(points[i], trans, pointsTransformed[i]);
 	}
@@ -437,10 +433,10 @@ RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[]) //not pa
 		else
 			TransformedPoints[i] = screen_points[i];
 
-	auto left = screen_points[0].x;
-	auto top = screen_points[0].y;
-	auto right = screen_points[0].x;
-	auto bottom = screen_points[0].y;
+	float left = screen_points[0].x;
+	float top = screen_points[0].y;
+	float right = screen_points[0].x;
+	float bottom = screen_points[0].y;
 
 	for (int i = 1; i < 8; i++)
 	{
@@ -465,13 +461,12 @@ bool Visuals::Begin(C_BasePlayer* Player)
 	if (Context.Player->IsDormant())
 		return false;
 
-	auto head = Context.Player->GetHitboxPos(HITBOX_HEAD);
-	auto origin = Context.Player->GetAbsOrigin();
+	Vector head = Context.Player->GetHitboxPos(HITBOX_HEAD);
+	Vector origin = Context.Player->GetAbsOrigin();
 
 	head.z += 15;
 
-	if (!Math::WorldToScreen(head, Context.HeadPos) ||
-		!Math::WorldToScreen(origin, Context.Origin))
+	if (!Math::WorldToScreen(head, Context.HeadPos) || !Math::WorldToScreen(origin, Context.Origin))
 		return false;
 
 	Vector points_transformed[8];
@@ -496,18 +491,20 @@ void Visuals::Name()
 	g_EngineClient->GetPlayerInfo(Context.Player->EntIndex(), &PlayerInfo);
 
 	int TextWidth, TextHeight;
-	Render::Get().TextSize(TextWidth, TextHeight, PlayerInfo.szName, Render::Get().VerdanaBold12);
-	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.top - TextHeight, PlayerInfo.szName, Render::Get().VerdanaBold12, Color(255, 255, 255, 255), true);
+	Render::Get().TextSize(TextWidth, TextHeight, PlayerInfo.szName, Render::Get().Visuals);
+	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.top - TextHeight, PlayerInfo.szName, Render::Get().Visuals, Color(255, 255, 255, 255), true);
 }
 void Visuals::Weapon()
 {
 	C_BaseCombatWeapon* Weapon = Context.Player->m_hActiveWeapon();
 	if (!Weapon) return;
+
 	std::string WeaponName = std::string(Weapon->GetCSWeaponData()->szHudName + std::string("(") + std::to_string(Weapon->m_iClip1()) + std::string("/") + std::to_string(Weapon->m_iPrimaryReserveAmmoCount()) + std::string(")"));
 	WeaponName.erase(0, 13);
 	int TextWidth, TextHeight;
-	Render::Get().TextSize(TextWidth, TextHeight, WeaponName.c_str(), Render::Get().VerdanaBold12);
-	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.bottom - 1, WeaponName.c_str(), Render::Get().VerdanaBold12, Color(255, 255, 255, 255), true);
+
+	Render::Get().TextSize(TextWidth, TextHeight, WeaponName.c_str(), Render::Get().Visuals);
+	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.bottom - 1, WeaponName.c_str(), Render::Get().Visuals, Color(255, 255, 255, 255), true);
 }
 void Visuals::Health()
 {

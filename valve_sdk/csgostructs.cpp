@@ -411,7 +411,9 @@ bool C_BasePlayer::GetHitboxPos(int hitbox, Vector &output)
 Vector C_BasePlayer::GetBonePos(int bone)
 {
 	matrix3x4_t boneMatrix[MAXSTUDIOBONES];
-	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_ANYTHING, 0.0f)) {
+
+	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_ANYTHING, 0.0f)) 
+	{
 		return boneMatrix[bone].at(3);
 	}
 	return Vector{};
@@ -437,6 +439,7 @@ bool C_BasePlayer::CanSeePlayer(C_BasePlayer* player, const Vector& pos)
 	CGameTrace tr;
 	Ray_t ray;
 	CTraceFilter filter;
+
 	filter.pSkip = this;
 
 	ray.Init(GetEyePos(), pos);

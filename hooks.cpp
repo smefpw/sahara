@@ -9,11 +9,13 @@
 #include "features/menu.hpp"
 
 #pragma intrinsic(_ReturnAddress) 
+
 float Hooks::RealAngle;
 float Hooks::FakeAngle;
 float Hooks::Pitch;
-namespace Hooks {
 
+namespace Hooks 
+{
 	void Initialize()
 	{
 		direct3d_hook.setup(g_D3DDevice9);
@@ -68,7 +70,6 @@ namespace Hooks {
 		pDevice->GetRenderState(D3DRS_SRGBWRITEENABLE, &srgbwrite);
 
 		pDevice->SetRenderState(D3DRS_COLORWRITEENABLE, 0xffffffff);
-		//removes the source engine color correction
 		pDevice->SetRenderState(D3DRS_SRGBWRITEENABLE, false);
 
 		pDevice->SetSamplerState(NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);
@@ -128,8 +129,10 @@ namespace Hooks {
 		{
 			Variables.LegitAimbotEnabled = false;
 			Variables.LegitBacktrackEnabled = false;
+
 			RageAimbot::Get().StoreRecords();
 			RageAimbot::Get().Do(cmd, Weapon, bSendPacket);
+
 			if (Variables.RageAntiaimEnabled)
 				RageAimbot::Get().DoAntiaim(cmd, Weapon, bSendPacket);
 		}
@@ -143,8 +146,8 @@ namespace Hooks {
 		}
 
 		RageAimbot::Get().EndEnginePred();
-
 		MovementFix::Get().End(cmd);
+
 		Math::Normalize3(cmd->viewangles);
 		Math::ClampAngles(cmd->viewangles);
 
@@ -188,16 +191,20 @@ namespace Hooks {
 
 		oPaintTraverse(g_VGuiPanel, edx, panel, forceRepaint, allowForce);
 
-		if (!panelId) {
+		if (!panelId) 
+		{
 			const auto panelName = g_VGuiPanel->GetName(panel);
-			if (!strcmp(panelName, "FocusOverlayPanel")) {
+			if (!strcmp(panelName, "FocusOverlayPanel")) 
+			{
 				panelId = panel;
 			}
 		}
-		else if (panelId == panel) {
+		else if (panelId == panel) 
+		{
 			int ScreenWidth, ScreenHeight;
 			g_EngineClient->GetScreenSize(ScreenWidth, ScreenHeight);
-			Render::Get().Text(1, 1, "Sahara csgo", Render::Get().VerdanaBold12, Color(255, 255, 255, 255), false);
+
+			Render::Get().Text(1, 1, "Sahara csgo", Render::Get().Watermark, Color::White, false);
 
 			if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer)
 				return;
@@ -220,21 +227,14 @@ namespace Hooks {
 				if (!Player)
 					continue;
 
-				//if (entity == g_LocalPlayer)
-				//	continue;
-
 				if (i < 65 && Player->IsAlive())
 				{
 					if (Visuals::Get().Begin(Player)) 
 					{
-						if (Variables.VisualsBox)
-							Visuals::Get().Box();
-						if (Variables.VisualsHealth)
-							Visuals::Get().Health();
-						if (Variables.VisualsName)
-							Visuals::Get().Name();
-						if (Variables.VisualsWeapon)
-							Visuals::Get().Weapon();
+						if (Variables.VisualsBox) Visuals::Get().Box();
+						if (Variables.VisualsHealth) Visuals::Get().Health();
+						if (Variables.VisualsName) Visuals::Get().Name();
+						if (Variables.VisualsWeapon) Visuals::Get().Weapon();
 					}
 				}
 			}

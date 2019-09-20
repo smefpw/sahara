@@ -1,5 +1,6 @@
-#include "menu.hpp"
 #define NOMINMAX
+
+#include "menu.hpp"
 #include <Windows.h>
 #include <chrono>
 #include "../config.hpp"
@@ -8,11 +9,6 @@
 
 void Menu::Initialize()
 {
-	/*D3DXCreateTextureFromFileInMemoryEx(g_D3DDevice9
-		, &SaharaLogo, sizeof(SaharaLogo),
-		101, 101, D3DX_DEFAULT, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_DEFAULT, D3DX_DEFAULT, 0, NULL, NULL, &LogoImage);*/
-	/*D3DXCreateTextureFromFileInMemory(g_D3DDevice9
-		, &SaharaLogo, sizeof(SaharaLogo), &LogoImage);*/
 	Visible = false;
 	LegitAimbot = false;
 	LegitTriggerbot = false;
@@ -51,8 +47,8 @@ void Menu::RenderMenu()
 
 	ImGui::GetIO().MouseDrawCursor = Visible;
 	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Once);
-	//ImGui::SetNextWindowPos(ImVec2{ 0, 0 }, ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2{ 250, 300 }, ImGuiSetCond_Once);
+
 	if (ImGui::Begin("Sahara CS:GO", &Visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
 	{
 		if (ImGui::CollapsingHeader("Ragebot##rageheader"))
@@ -134,213 +130,6 @@ void Menu::RenderMenu()
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 }
-/*//ImGui::SetNextWindowPos(ImVec2{ 0, 0 }, ImGuiSetCond_Once);
-ImGui::SetNextWindowPosCenter(ImGuiSetCond_Once);
-ImGui::SetNextWindowSize(ImVec2{ 580, 380 }, ImGuiSetCond_Once);
-if (ImGui::Begin("Sahara CS:GO", &Visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoScrollbar))
-{
-	ImGui::PushItemWidth(130.f);
-	Style.ItemSpacing = ImVec2(0, 0);
-	if (ImGui::BeginChild("##tabchild", ImVec2(120, -1), true))
-	{
-		//ImGui::Image((void*)LogoImage, ImVec2(131, 131));
-		//for (int i = 0; i < 3; i++)
-		//	ImGui::Spacing();
-		for (int i = 0; i < ARRAYSIZE(MenuTabs); i++)
-		{
-			if (ImGui::Button2(MenuTabs[i], ImVec2(-1, 14), MenuTab == i))
-				MenuTab = i;
-		}
-		ImGui::EndChild();
-	}
-	Style.ItemSpacing = ImVec2(8, 4);
-	ImGui::SameLine();
-	if (ImGui::BeginChild("##featurechild", ImVec2(-1, -1), true))
-	{
-		switch (MenuTab)
-		{
-		case 0:
-		{
-			ImGui::Columns(2, "###aimbotcolumn", true);
-
-			ImGui::Checkbox("Aimbot##legitaim", &Variables.LegitAimbotEnabled);
-			if (Variables.LegitAimbotEnabled)
-			{
-				ImGui::Combo("Type##legitaim", &Variables.LegitAimbotType, LegitAimbotType, ARRAYSIZE(LegitAimbotType));
-				ImGui::Combo("Hitbox##legitaim", &Variables.LegitAimbotHitbox, LegitAimbotHitbox, ARRAYSIZE(LegitAimbotHitbox));
-				ImGui::SliderFloat("FOV##legitaim", &Variables.LegitAimbotFov, 0.f, 30.f, "%.1f");
-				if (Variables.LegitAimbotType == 1)
-					ImGui::SliderInt("Smooth##legitaim", &Variables.LegitAimbotSmooth, 0, 100);
-				ImGui::SliderInt("Rcs##legitaim", &Variables.LegitAimbotRcs, 0, 100);
-			}
-
-			ImGui::NextColumn();
-
-			ImGui::Checkbox("Backtrack##legit", &Variables.LegitBacktrackEnabled);
-			if (Variables.LegitBacktrackEnabled)
-				ImGui::SliderInt("Time(ms)##backtracktime", &Variables.LegitBacktrackDuration, 1, 200);
-		}
-			break;
-		case 1:
-			break;
-		case 2:
-		{
-			for (int i = 0; i < ARRAYSIZE(VisualsTabs); i++)
-			{
-				if (ImGui::Button2(VisualsTabs[i], ImVec2(422 / ARRAYSIZE(VisualsTabs), 14), VisualsTab == i))
-					VisualsTab = i;
-				if (i != 2) ImGui::SameLine(0, 0);
-			}
-			switch (VisualsTab)
-			{
-			case 0:
-				ImGui::Checkbox("Box", &Variables.VisualsBox);
-				ImGui::Checkbox("Health", &Variables.VisualsHealth);
-				break;
-			case 1:
-				ImGui::Columns(2, "###chamscolumn", true);
-
-				ImGui::Checkbox("Chams##chamsenabled", &Variables.VisualsChamsEnabled);
-				if (Variables.VisualsChamsEnabled)
-				{
-					ImGui::SameLine();
-					ImGui::ColorEdit3("##chamscolor", Variables.VisualsChamsColor, ImGuiColorEditFlags_NoInputs);
-					ImGui::Combo("Material##chams", &Variables.VisualsChamsMaterial, ChamsMaterials, ARRAYSIZE(ChamsMaterials));
-					ImGui::SliderInt("Alpha##chamsalpha", &Variables.VisualsChamsAlpha, 0, 255);
-					ImGui::Checkbox("Ignore-Z##chamsingorezenabled", &Variables.VisualsChamsIgnoreZ);
-					ImGui::SameLine();
-					ImGui::ColorEdit3("##chamscolorignorez", Variables.VisualsChamsColorIgnoreZ, ImGuiColorEditFlags_NoInputs);
-
-				}
-				ImGui::NextColumn();
-				if (Variables.VisualsChamsEnabled && Variables.LegitBacktrackEnabled);
-				{
-					ImGui::Text("Backtrack");
-					ImGui::SameLine();
-					ImGui::ColorEdit3("##chamscolorbacktrack", Variables.VisualsChamsBacktrackColor, ImGuiColorEditFlags_NoInputs);
-					ImGui::Combo("Backtrack", &Variables.VisualsChamsBacktrack, ChamsBacktrack, ARRAYSIZE(ChamsBacktrack));
-					ImGui::Combo("Material##backtrack", &Variables.VisualsChamsBacktrackMaterial, ChamsMaterials, ARRAYSIZE(ChamsMaterials));
-					ImGui::SliderInt("Backtrack Alpha##chamsalpha", &Variables.VisualsChamsBacktrackAlpha, 0, 255);
-				}
-
-				break;
-			case 2:
-				ImGui::Checkbox("Enemy Glow##glowenabled", &Variables.VisualsGlowEnabled);
-				if (Variables.VisualsGlowEnabled)
-				{
-					ImGui::SameLine();
-					ImGui::ColorEdit3("##glowcolor", Variables.VisualsGlowColor, ImGuiColorEditFlags_NoInputs);
-					ImGui::Combo("Glowstyle##glow", &Variables.VisualsGlowGlowstyle, GlowStyles, ARRAYSIZE(GlowStyles));
-					ImGui::SliderInt("Alpha##glowalpha", &Variables.VisualsGlowAlpha, 0, 255);
-				}
-				break;
-			}
-		}
-			break;
-		}
-		ImGui::EndChild();
-	}
-	ImGui::SameLine();
-	if (ImGui::BeginChild("##featurechild", ImVec2(-1, -1), true))
-	{
-		switch (MenuTab)
-		{
-		case 0: // legit
-			ImGui::Columns(2, "###aimbotcolumn", true);
-			ImGui::PushItemWidth(130);
-
-			ImGui::Checkbox("Aimbot##legitaim", &Variables.LegitAimbotEnabled);
-			if (Variables.LegitAimbotEnabled)
-			{
-				ImGui::Combo("Type##legitaim", &Variables.LegitAimbotType, LegitAimbotType, ARRAYSIZE(LegitAimbotType));
-				ImGui::Combo("Hitbox##legitaim", &Variables.LegitAimbotHitbox, LegitAimbotHitbox, ARRAYSIZE(LegitAimbotHitbox));
-				ImGui::SliderFloat("FOV##legitaim", &Variables.LegitAimbotFov, 0.f, 10.f, "%.1f");
-				if (Variables.LegitAimbotType == 1)
-					ImGui::SliderInt("Smooth##legitaim", &Variables.LegitAimbotSmooth, 0, 100);
-			}
-
-			ImGui::PopItemWidth();
-			ImGui::NextColumn();
-			ImGui::PushItemWidth(130);
-
-			ImGui::Checkbox("Backtrack##legit", &Variables.LegitBacktrackEnabled);
-			if (Variables.LegitBacktrackEnabled)
-				ImGui::SliderInt("Backtrack Duration##legit", &Variables.LegitBacktrackDuration, 1, 200);
-
-			ImGui::PopItemWidth();
-			break;
-		case 1: // rage
-			ImGui::PushItemWidth(130);
-
-			ImGui::PopItemWidth();
-			break;
-		case 2: // visuals
-			ImGui::Columns(2, "###visualtabcolumn", true);
-
-			ImGui::PushItemWidth(130);
-			ImGui::Checkbox("Chams##chamsenabled", &Variables.VisualsChamsEnabled);
-			if (Variables.VisualsChamsEnabled)
-			{
-				ImGui::SameLine();
-				ImGui::ColorEdit3("##chamscolor", Variables.VisualsChamsColor, ImGuiColorEditFlags_NoInputs);
-				ImGui::Combo("Material##chams", &Variables.VisualsChamsMaterial, ChamsMaterials, ARRAYSIZE(ChamsMaterials));
-				ImGui::SliderInt("Alpha##chamsalpha", &Variables.VisualsChamsAlpha, 0, 255);
-				ImGui::Checkbox("Ignore-Z##chamsingorezenabled", &Variables.VisualsChamsIgnoreZ);
-				ImGui::SameLine();
-				ImGui::ColorEdit3("##chamscolorignorez", Variables.VisualsChamsColorIgnoreZ, ImGuiColorEditFlags_NoInputs);
-				if (Variables.LegitBacktrackEnabled)
-				{
-					ImGui::Combo("Backtrack", &Variables.VisualsChamsBacktrack, ChamsBacktrack, ARRAYSIZE(ChamsBacktrack));
-					ImGui::SameLine();
-					ImGui::ColorEdit3("##chamscolorbacktrack", Variables.VisualsChamsBacktrackColor, ImGuiColorEditFlags_NoInputs);
-					ImGui::Combo("Material##backtrack", &Variables.VisualsChamsBacktrackMaterial, ChamsMaterials, ARRAYSIZE(ChamsMaterials));
-					ImGui::SliderInt("Backtrack Alpha##chamsalpha", &Variables.VisualsChamsBacktrackAlpha, 0, 255);
-				}
-			}
-			ImGui::PopItemWidth();
-			ImGui::PopItemWidth();
-
-			ImGui::NextColumn();
-
-			ImGui::PushItemWidth(130);
-			ImGui::Checkbox("Glow##glowenabled", &Variables.VisualsGlowEnabled);
-			if (Variables.VisualsGlowEnabled)
-			{
-				ImGui::SameLine();
-				ImGui::ColorEdit3("##glowcolor", Variables.VisualsGlowColor, ImGuiColorEditFlags_NoInputs);
-				ImGui::Combo("Glowstyle##glow", &Variables.VisualsGlowGlowstyle, GlowStyles, ARRAYSIZE(GlowStyles));
-				ImGui::SliderInt("Alpha##glowalpha", &Variables.VisualsGlowAlpha, 0, 255);
-			}
-			ImGui::PopItemWidth();
-			break;
-		case 3: // misc
-			ImGui::Columns(2, "###visualtabcolumn", true);
-
-			ImGui::PushItemWidth(130);
-
-			ImGui::PopItemWidth();
-
-			ImGui::NextColumn();
-
-			ImGui::PushItemWidth(150);
-			ImGui::Combo("Config File", &Variables.ConfigFile, ConfigFiles, ARRAYSIZE(ConfigFiles));
-			if (ImGui::Button("Save", ImVec2(150, 18)))
-				SaveConfig();
-			if (ImGui::Button("Load", ImVec2(150, 18)))
-				LoadConfig();
-			ImGui::PopItemWidth();
-			break;
-		case 4: // skins
-			ImGui::PushItemWidth(130);
-
-			ImGui::PopItemWidth();
-			break;
-		}
-		ImGui::EndChild();
-	}
-	ImGui::End();
-}*/
-
 
 void Menu::Show()
 {

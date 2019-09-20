@@ -9,7 +9,7 @@
 class Options
 {
 public:
-	//legit
+#pragma region Legitbot
 	bool LegitAimbotEnabled = false;
 	int LegitAimbotType = 0;
 	int LegitAimbotHitbox = 0;
@@ -19,12 +19,16 @@ public:
 
 	bool LegitBacktrackEnabled = false;
 	int LegitBacktrackDuration = 200;
-	//rage
+#pragma endregion
+
+#pragma region Rage
 	bool RageAimbotEnabled = false;
 	int RageAimbotHitchance = 0;
 	int RageAimbotMinDmg = 0;
 	bool RageAntiaimEnabled = false;
-	//visuals
+#pragma endregion
+
+#pragma region Visuals
 	bool VisualsBox = false;
 	bool VisualsName = false;
 	bool VisualsWeapon = false;
@@ -45,12 +49,13 @@ public:
 	int VisualsGlowGlowstyle = 0;
 	float VisualsGlowColor[3] = { 1.f, 1.f, 1.f };
 	int VisualsGlowAlpha = 255;
-	//misc
+#pragma endregion
+
+#pragma region Misc
 	int MiscFakelagChoke = 0;
 	bool VisualsNoScope = false;
-	//skins
+#pragma endregion
 
-	//menu
 	int ConfigFile = 0;
 };
 inline Options Variables;

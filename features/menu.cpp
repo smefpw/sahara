@@ -3,7 +3,7 @@
 #include "menu.hpp"
 #include <Windows.h>
 #include <chrono>
-#include "../config.hpp"
+#include "..//menuarrays.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 
@@ -116,11 +116,6 @@ void Menu::RenderMenu()
 		}
 		if (ImGui::CollapsingHeader("Misc##mischeader"))
 		{
-			ImGui::Combo("Config", &Variables.ConfigFile, ConfigFiles, ARRAYSIZE(ConfigFiles));
-			if (ImGui::Button("Save", ImVec2(ImGui::GetCurrentWindow()->DC.ItemWidth, 18)))
-				SaveConfig();
-			if (ImGui::Button("Load", ImVec2(ImGui::GetCurrentWindow()->DC.ItemWidth, 18)))
-				LoadConfig();
 			ImGui::SliderInt("Fakelag", &Variables.MiscFakelagChoke, 0, 15);
 			ImGui::Checkbox("No Scope Border", &Variables.VisualsNoScope);
 		}

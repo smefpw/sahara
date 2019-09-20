@@ -11,15 +11,6 @@ const char* LegitAimbotHitbox[] =
 	"Neck",
 	"Chest"
 };
-const char* ConfigFiles[] =
-{
-	"sahara_legit1.ini",
-	"sahara_legit2.ini",
-	"sahara_legit3.ini",
-	"sahara_rage1.ini",
-	"sahara_rage2.ini",
-	"sahara_rage3.ini"
-};
 const char* MenuTabs[]
 {
 	"Legit			",

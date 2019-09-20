@@ -130,7 +130,6 @@
     <ClCompile Include="valve_sdk\netvars.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="config.hpp" />
     <ClInclude Include="features\autowall.hpp" />
     <ClInclude Include="features\legitbot.hpp" />
     <ClInclude Include="features\menu.hpp" />

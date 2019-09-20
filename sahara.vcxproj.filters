@@ -322,9 +322,6 @@
     <ClInclude Include="resource.h">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="config.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="features\visuals.hpp">
       <Filter>Features</Filter>
     </ClInclude>

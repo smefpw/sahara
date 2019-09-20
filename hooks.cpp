@@ -118,7 +118,6 @@ namespace Hooks
 		C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
 		bSendPacket = g_EngineClient->GetNetChannel()->m_nChokedPackets >= Variables.MiscFakelagChoke;
-
 		if (cmd->buttons & IN_ATTACK) bSendPacket = true;
 
 		MovementFix::Get().Start(cmd);

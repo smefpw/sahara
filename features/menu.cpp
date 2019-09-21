@@ -82,22 +82,6 @@ void Menu::RenderMenu()
 			if (ImGui::CollapsingHeader("Chams##visualsheader"))
 			{
 				ImGui::Checkbox("Chams##chamsenabled", &Variables.VisualsChamsEnabled);
-				if (Variables.VisualsChamsEnabled)
-				{
-					ImGui::SameLine();
-					ImGui::ColorEdit3("##chamscolor", Variables.VisualsChamsColor, ImGuiColorEditFlags_NoInputs);
-					ImGui::Combo("Material##chams", &Variables.VisualsChamsMaterial, ChamsMaterials, ARRAYSIZE(ChamsMaterials));
-					ImGui::SliderInt("Alpha##chamsalpha", &Variables.VisualsChamsAlpha, 0, 255);
-					if (Variables.LegitBacktrackEnabled || Variables.RageAimbotEnabled)
-					{
-						ImGui::Text("Backtrack");
-						ImGui::SameLine();
-						ImGui::ColorEdit3("##chamscolorbacktrack", Variables.VisualsChamsBacktrackColor, ImGuiColorEditFlags_NoInputs);
-						ImGui::Combo("Backtrack", &Variables.VisualsChamsBacktrack, ChamsBacktrack, ARRAYSIZE(ChamsBacktrack));
-						ImGui::Combo("Material##backtrack", &Variables.VisualsChamsBacktrackMaterial, ChamsMaterials, ARRAYSIZE(ChamsMaterials));
-						ImGui::SliderInt("Alpha##backtrackchamsalpha", &Variables.VisualsChamsBacktrackAlpha, 0, 255);
-					}
-				}
 			}
 			if (ImGui::CollapsingHeader("Glow##visualsheader"))
 			{
@@ -105,7 +89,6 @@ void Menu::RenderMenu()
 				if (Variables.VisualsGlowEnabled)
 				{
 					ImGui::SameLine();
-					ImGui::ColorEdit3("##glowcolor", Variables.VisualsGlowColor, ImGuiColorEditFlags_NoInputs);
 					ImGui::Combo("Glowstyle##glow", &Variables.VisualsGlowGlowstyle, GlowStyles, ARRAYSIZE(GlowStyles));
 					ImGui::SliderInt("Alpha##glowalpha", &Variables.VisualsGlowAlpha, 0, 255);
 				}

@@ -339,8 +339,13 @@ namespace Hooks
 	{
 		static auto ofunc = mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(index::DrawModelExecute);
 
-		Chams::Get().OnDrawModelExecute(ctx, state, pInfo, pCustomBoneToWorld);
+		if (g_MdlRender->IsForcedMaterialOverride())  return ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
+		if (Variables.VisualsChamsEnabled) Chams::Get().OnDrawModelExecute(ctx, state, pInfo, pCustomBoneToWorld);
+
+		ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
+		g_MdlRender->ForcedMaterialOverride(nullptr);
 	}
+	//--------------------------------------------------------------------------------
 	bool __fastcall hkSvCheatsGetBool(PVOID pConVar, void* edx)
 	{
 		static auto dwCAM_Think = Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "85 C0 75 30 38 86");

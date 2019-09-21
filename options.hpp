@@ -1,59 +1,52 @@
 #pragma once
-
 #include <string>
 #include <memory>
 #include <unordered_map>
 #include <vector>
+
 #include "valve_sdk/Misc/Color.hpp"
+
+#define CONFIG(type, var, val) type var = val
 
 class Options
 {
 public:
 #pragma region Legitbot
-	bool LegitAimbotEnabled = false;
-	int LegitAimbotType = 0;
-	int LegitAimbotHitbox = 0;
-	float LegitAimbotFov = 0.0f;
-	int LegitAimbotSmooth = 0;
-	int LegitAimbotRcs = 0;
+	CONFIG(bool, LegitAimbotEnabled, false);
+	CONFIG(int, LegitAimbotType, 0);
+	CONFIG(int, LegitAimbotHitbox, 0);
+	CONFIG(float, LegitAimbotFov, 0.f);
+	CONFIG(int, LegitAimbotSmooth, 0);
+	CONFIG(int, LegitAimbotRcs, 0);
 
-	bool LegitBacktrackEnabled = false;
-	int LegitBacktrackDuration = 200;
+	CONFIG(bool, LegitBacktrackEnabled, false);
+	CONFIG(int, LegitBacktrackDuration, 200);
 #pragma endregion
 
 #pragma region Rage
-	bool RageAimbotEnabled = false;
-	int RageAimbotHitchance = 0;
-	int RageAimbotMinDmg = 0;
-	bool RageAntiaimEnabled = false;
+	CONFIG(bool, RageAimbotEnabled, false);
+	CONFIG(int, RageAimbotHitchance, 0);
+	CONFIG(int, RageAimbotMinDmg, 0);
+	CONFIG(bool, RageAntiaimEnabled, false);
 #pragma endregion
 
 #pragma region Visuals
-	bool VisualsBox = false;
-	bool VisualsName = false;
-	bool VisualsWeapon = false;
-	bool VisualsHealth = false;
+	CONFIG(bool, VisualsBox, false);
+	CONFIG(bool, VisualsName, false);
+	CONFIG(bool, VisualsWeapon, false);
+	CONFIG(bool, VisualsHealth, false);
+	CONFIG(bool, VisualsChamsEnabled, false);
 
-	bool VisualsChamsEnabled = false;
-	float VisualsChamsColor[3] = { 1.f, 1.f, 1.f };
-	int VisualsChamsMaterial = 2;
-	int VisualsChamsAlpha = 255;
-	int VisualsChamsBacktrack = 0;
-	int VisualsChamsBacktrackMaterial = 2;
-	float VisualsChamsBacktrackColor[3] = { 1.f, 1.f, 1.f };
-	int VisualsChamsBacktrackAlpha = 255;
-
-	bool VisualsGlowEnabled = false;
-	int VisualsGlowGlowstyle = 0;
-	float VisualsGlowColor[3] = { 1.f, 1.f, 1.f };
-	int VisualsGlowAlpha = 255;
+	CONFIG(bool, VisualsGlowEnabled, false);
+	CONFIG(int, VisualsGlowGlowstyle, 0);
+	CONFIG(int, VisualsGlowAlpha, 255);
 #pragma endregion
 
 #pragma region Misc
-	int MiscFakelagChoke = 0;
-	bool VisualsNoScope = false;
+	CONFIG(int, MiscFakelagChoke, 0);
+	CONFIG(bool, VisualsNoScope, false);
 #pragma endregion
 
-	int ConfigFile = 0;
+	CONFIG(int, ConfigFile, 0);
 };
 inline Options Variables;

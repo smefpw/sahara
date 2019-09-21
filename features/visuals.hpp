@@ -36,8 +36,6 @@ public:
 		const ModelRenderInfo_t& pInfo,
 		matrix3x4_t* pCustomBoneToWorld);
 private:
-	IMaterial* materialMetallic = nullptr;
-	IMaterial* materialMetallicZ = nullptr;
 };
 
 class Glow

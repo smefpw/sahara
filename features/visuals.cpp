@@ -5,11 +5,11 @@
 
 void Render::CreateFonts()
 {
-	Watermark = g_VGuiSurface->CreateFont_();
-	g_VGuiSurface->SetFontGlyphSet(Watermark, "Verdana", 16, 600, 0, 0, FONTFLAG_OUTLINE);
-
 	Visuals = g_VGuiSurface->CreateFont_();
+	Watermark = g_VGuiSurface->CreateFont_();
+
 	g_VGuiSurface->SetFontGlyphSet(Visuals, "Tahoma", 12, 400, 0, 0, FONTFLAG_OUTLINE);
+	g_VGuiSurface->SetFontGlyphSet(Watermark, "Verdana", 16, 600, 0, 0, FONTFLAG_OUTLINE);
 }
 void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawColor, bool Center)
 {
@@ -50,7 +50,7 @@ void Render::Line(int X1, int Y1, int X2, int Y2, Color DrawColor)
 }
 Chams::Chams()
 {
-	std::ofstream("csgo\\materials\\reflective.vmt") << (R"#("VertexLitGeneric" {
+	std::ofstream("csgo\\materials\\metallic.vmt") << (R"#("VertexLitGeneric" {
 	  "$basetexture" "vgui/white"
       "$envmap" "env_cubemap"
       "$normalmapalphaenvmapmask" "1"
@@ -64,122 +64,29 @@ Chams::Chams()
       "$flat" "1" 
 }
 )#");
-	materialMetallic = g_MatSystem->FindMaterial("reflective", TEXTURE_GROUP_MODEL);
 }
 Chams::~Chams()
 {
-	std::remove("csgo\\materials\\material_reflective.vmt");
+	std::remove("csgo\\materials\\metallic.vmt");
 }
 void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& info, matrix3x4_t* matrix)
 {
-	static auto fnDME = Hooks::mdlrender_hook.get_original<decltype(&Hooks::hkDrawModelExecute)>(index::DrawModelExecute);
+	// Thanks smef *insert lenny face*
+ 
 	const auto mdl = info.pModel;
+	static auto vis = Color(150, 200, 60); //big skeet color
+	static auto normal = g_MatSystem->FindMaterial("metallic", TEXTURE_GROUP_MODEL);
 
-	if (g_MdlRender->IsForcedMaterialOverride()) return fnDME(g_MdlRender, 0, ctx, state, info, matrix);
-	bool is_player = strstr(mdl->szName, "models/player") != nullptr;
+	C_BasePlayer* entity = C_BasePlayer::GetPlayerByIndex(info.entity_index);
 
-	static IMaterial* normal = nullptr;
-	static IMaterial* znormal = nullptr;
-	static IMaterial* backtrack = nullptr;
-	static IMaterial* zbacktrack = nullptr;
-
-	// this could be a if statement but i'm fucking retarded :/
-	switch (Variables.VisualsChamsMaterial)
+	if (strstr(mdl->szName, "models/player") != nullptr);
 	{
-	case 0:
-		normal = materialMetallic;
-		znormal = materialMetallicZ;
-		break;
-	}
-	switch (Variables.VisualsChamsBacktrackMaterial)
-	{
-	case 0:
-		backtrack = materialMetallic;
-		zbacktrack = materialMetallicZ;
-		break;
-	}
-	float color[3] = 
-	{
-		Variables.VisualsChamsColor[0],
-		Variables.VisualsChamsColor[1],
-		Variables.VisualsChamsColor[2] 
-	};
-	float backtrackcolor[3] = 
-	{
-		Variables.VisualsChamsBacktrackColor[0],
-		Variables.VisualsChamsBacktrackColor[1],
-		Variables.VisualsChamsBacktrackColor[2] 
-	};
-
-	if (is_player)
-	{
-		C_BasePlayer* entity = C_BasePlayer::GetPlayerByIndex(info.entity_index);
-
 		if (g_LocalPlayer && entity && entity->IsAlive() && !entity->IsDormant())
 		{
-			if (entity->IsEnemy() && Variables.VisualsChamsEnabled)
-			{
-				if (Variables.RageAimbotEnabled && RageAimbot::Get().BacktrackRecords[info.entity_index].size() > 0)
-				{
-					switch (Variables.VisualsChamsBacktrack)
-					{
-					case 1:
-						for (int t = 0; t < RageAimbot::Get().BacktrackRecords[info.entity_index].size(); t++)
-						{
-							if (!RageAimbot::Get().BacktrackRecords[info.entity_index].at(t).MatrixBuilt
-								|| !RageAimbot::Get().BacktrackRecords[info.entity_index].at(t).BoneMatrix)
-								continue;
-							g_RenderView->SetColorModulation(backtrackcolor);
-							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							fnDME(g_MdlRender, 0, ctx, state, info, RageAimbot::Get().BacktrackRecords[info.entity_index].at(t).BoneMatrix);
-						}
-						break;
-					case 2:
-						if (RageAimbot::Get().BacktrackRecords[info.entity_index].back().MatrixBuilt
-							&& RageAimbot::Get().BacktrackRecords[info.entity_index].back().BoneMatrix)
-						{
-							g_RenderView->SetColorModulation(backtrackcolor);
-							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							fnDME(g_MdlRender, 0, ctx, state, info, RageAimbot::Get().BacktrackRecords[info.entity_index].back().BoneMatrix);
-						}
-						break;
-					}
-				}
-				else if (Variables.LegitBacktrackEnabled && LegitBacktrack::Get().BacktrackRecords[info.entity_index].size() > 0)
-				{
-					switch (Variables.VisualsChamsBacktrack)
-					{
-					case 1:
-						for (int t = 0; t < LegitBacktrack::Get().BacktrackRecords[info.entity_index].size(); t++)
-						{
-							if (!LegitBacktrack::Get().BacktrackRecords[info.entity_index].at(t).MatrixBuilt
-								|| !LegitBacktrack::Get().BacktrackRecords[info.entity_index].at(t).BoneMatrix)
-								continue;
-							g_RenderView->SetColorModulation(backtrackcolor);
-							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							fnDME(g_MdlRender, 0, ctx, state, info, LegitBacktrack::Get().BacktrackRecords[info.entity_index].at(t).BoneMatrix);
-						}
-						break;
-					case 2:
-						if (LegitBacktrack::Get().BacktrackRecords[info.entity_index].back().MatrixBuilt
-							&& LegitBacktrack::Get().BacktrackRecords[info.entity_index].back().BoneMatrix)
-						{
-							g_RenderView->SetColorModulation(backtrackcolor);
-							g_RenderView->SetBlend(float(Variables.VisualsChamsBacktrackAlpha) / 255.f);
-							fnDME(g_MdlRender, 0, ctx, state, info, LegitBacktrack::Get().BacktrackRecords[info.entity_index].back().BoneMatrix);
-						}
-						break;
-					}
-				}
-				g_RenderView->SetColorModulation(color);
-				g_RenderView->SetBlend(float(Variables.VisualsChamsAlpha) / 255.f);
-				g_MdlRender->ForcedMaterialOverride(normal);
-				fnDME(g_MdlRender, 0, ctx, state, info, matrix);
-			}
+			g_RenderView->SetColorModulation(vis[0] / 255.f, vis[1] / 255.f, vis[2] / 255.f);
+			g_MdlRender->ForcedMaterialOverride(normal);
 		}
 	}
-	fnDME(g_MdlRender, 0, ctx, state, info, matrix);
-	g_MdlRender->ForcedMaterialOverride(nullptr);
 }
 
 Glow::Glow()
@@ -248,10 +155,10 @@ void Glow::Run()
 					continue;
 
 				color = Color(
-					int(Variables.VisualsGlowColor[0] * 255),
-					int(Variables.VisualsGlowColor[1] * 255),
-					int(Variables.VisualsGlowColor[2] * 255),
-					int(Variables.VisualsGlowAlpha));
+					int(255 * 255),
+					int(255 * 255),
+					int(255 * 255),
+					int(255));
 				break;
 			}
 

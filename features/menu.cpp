@@ -50,39 +50,39 @@ void Menu::RenderMenu()
 	{
 		if (ImGui::CollapsingHeader("Ragebot##rageheader"))
 		{
-			ImGui::Checkbox("Enabled##rageaimbot", &Variables.RageAimbotEnabled);
-			ImGui::SliderInt("Hitchance", &Variables.RageAimbotHitchance, 0, 100);
-			ImGui::SliderInt("Min Dmg", &Variables.RageAimbotMinDmg, 0, 100);
-			ImGui::Checkbox("Antiaim##aaenable", &Variables.RageAntiaimEnabled);
+			ImGui::Checkbox("Enabled##rageaimbot", &Feature.RageAimbotEnabled);
+			ImGui::SliderInt("Hitchance", &Feature.RageAimbotHitchance, 0, 100);
+			ImGui::SliderInt("Min Dmg", &Feature.RageAimbotMinDmg, 0, 100);
+			ImGui::Checkbox("Antiaim##aaenable", &Feature.RageAntiaimEnabled);
 		}
 		if (ImGui::CollapsingHeader("Legitbot##legitheader"))
 		{
-			ImGui::Checkbox("Aimbot##legitaim", &Variables.LegitAimbotEnabled);
-			if (Variables.LegitAimbotEnabled)
+			ImGui::Checkbox("Aimbot##legitaim", &Feature.LegitAimbotEnabled);
+			if (Feature.LegitAimbotEnabled)
 			{
-				ImGui::Combo("Type##legitaim", &Variables.LegitAimbotType, LegitAimbotType, ARRAYSIZE(LegitAimbotType));
-				ImGui::Combo("Hitbox##legitaim", &Variables.LegitAimbotHitbox, LegitAimbotHitbox, ARRAYSIZE(LegitAimbotHitbox));
-				ImGui::SliderFloat("FOV##legitaim", &Variables.LegitAimbotFov, 0.f, 30.f, "%.1f");
-				if (Variables.LegitAimbotType == 1)
-					ImGui::SliderInt("Smooth##legitaim", &Variables.LegitAimbotSmooth, 0, 100);
-				ImGui::SliderInt("Rcs##legitaim", &Variables.LegitAimbotRcs, 0, 100);
+				ImGui::Combo("Type##legitaim", &Feature.LegitAimbotType, LegitAimbotType, ARRAYSIZE(LegitAimbotType));
+				ImGui::Combo("Hitbox##legitaim", &Feature.LegitAimbotHitbox, LegitAimbotHitbox, ARRAYSIZE(LegitAimbotHitbox));
+				ImGui::SliderFloat("FOV##legitaim", &Feature.LegitAimbotFov, 0.f, 30.f, "%.1f");
+				if (Feature.LegitAimbotType == 1)
+					ImGui::SliderInt("Smooth##legitaim", &Feature.LegitAimbotSmooth, 0, 100);
+				ImGui::SliderInt("Rcs##legitaim", &Feature.LegitAimbotRcs, 0, 100);
 			}
-			ImGui::Checkbox("Backtrack##legit", &Variables.LegitBacktrackEnabled);
-			if (Variables.LegitBacktrackEnabled)
-				ImGui::SliderInt("Time(ms)##backtracktime", &Variables.LegitBacktrackDuration, 1, 200);
+			ImGui::Checkbox("Backtrack##legit", &Feature.LegitBacktrackEnabled);
+			if (Feature.LegitBacktrackEnabled)
+				ImGui::SliderInt("Time(ms)##backtracktime", &Feature.LegitBacktrackDuration, 1, 200);
 		}
 		if (ImGui::CollapsingHeader("Visuals##visualsheader"))
 		{
-			ImGui::Checkbox("Box", &Variables.VisualsBox);
-			ImGui::Checkbox("Health", &Variables.VisualsHealth);
-			ImGui::Checkbox("Name", &Variables.VisualsName);
-			ImGui::Checkbox("Weapon", &Variables.VisualsWeapon);
-			ImGui::Checkbox("Chams", &Variables.VisualsChams);
+			ImGui::Checkbox("Box", &Feature.VisualsBox);
+			ImGui::Checkbox("Health", &Feature.VisualsHealth);
+			ImGui::Checkbox("Name", &Feature.VisualsName);
+			ImGui::Checkbox("Chams", &Feature.VisualsChams);
+			ImGui::Checkbox("Weapon", &Feature.VisualsWeapon);
 		}
 		if (ImGui::CollapsingHeader("Misc##mischeader"))
 		{
-			ImGui::SliderInt("Fakelag", &Variables.MiscFakelagChoke, 0, 15);
-			ImGui::Checkbox("No Scope Border", &Variables.VisualsNoScope);
+			ImGui::SliderInt("Fakelag", &Feature.MiscFakelagChoke, 0, 15);
+			ImGui::Checkbox("No Scope Border", &Feature.VisualsNoScope);
 		}
 		ImGui::End();
 	}

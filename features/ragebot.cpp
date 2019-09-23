@@ -151,7 +151,7 @@ bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack
 	{
 		float highestDamage;
 
-		highestDamage = Variables.RageAimbotMinDmg;
+		highestDamage = Feature.RageAimbotMinDmg;
 
 		for (int HitBoxID : HitBoxesToScan)
 		{
@@ -210,7 +210,7 @@ float Hitchance2(C_BaseCombatWeapon* Weapon)
 {
 	float Hitchance = 101;
 	if (!Weapon) return 0;
-	if (Variables.RageAimbotHitchance > 1)
+	if (Feature.RageAimbotHitchance > 1)
 	{
 		float Inaccuracy = Weapon->GetInaccuracy();
 		if (Inaccuracy == 0) Inaccuracy = 0.0000001;
@@ -228,7 +228,7 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 		!Weapon ||
 		Weapon->IsKnife() ||
 		Weapon->IsGrenade() ||
-		!Variables.RageAimbotEnabled)
+		!Feature.RageAimbotEnabled)
 		return;
 
 	int BestTargetIndex = -1;
@@ -282,9 +282,9 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 
 		cmd->viewangles = AimAngle;
 
-		if (Hitchance(Weapon, cmd->viewangles, Target, float(Variables.RageAimbotHitchance)) || 
-			Backtrack && Variables.RageAimbotHitchance * 1.5 <= Hitchance2(Weapon) || 
-			Variables.RageAimbotHitchance == 0)
+		if (Hitchance(Weapon, cmd->viewangles, Target, float(Feature.RageAimbotHitchance)) ||
+			Backtrack && Feature.RageAimbotHitchance * 1.5 <= Hitchance2(Weapon) ||
+			Feature.RageAimbotHitchance == 0)
 		{
 			if (!(cmd->buttons & IN_ATTACK) && Weapon->CanFire())
 			{

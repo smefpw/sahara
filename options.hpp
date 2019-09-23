@@ -44,4 +44,4 @@ public:
 #pragma endregion
 };
 
-inline Options Variables;
+inline Options Feature;

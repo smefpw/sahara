@@ -26,7 +26,7 @@ void LegitBacktrack::Do(CUserCmd* cmd)
 
 		BacktrackRecords[i].insert(BacktrackRecords[i].begin(), TickInfo(Player));
 		for (auto Tick : BacktrackRecords[i])
-			if (!Utils::IsTickValid(Tick.SimulationTime, float(Variables.LegitBacktrackDuration) / 1000.f))
+			if (!Utils::IsTickValid(Tick.SimulationTime, float(Feature.LegitBacktrackDuration) / 1000.f))
 				BacktrackRecords[i].pop_back();
 
 		Vector ViewAngles;
@@ -66,11 +66,11 @@ void LegitAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon)
 		!Weapon ||
 		Weapon->IsKnife() ||
 		Weapon->IsGrenade() ||
-		!Variables.LegitAimbotEnabled ||
-		!Variables.LegitAimbotFov)
+		!Feature.LegitAimbotEnabled ||
+		!Feature.LegitAimbotFov)
 		return;
 
-	float MaxPlayerFov = Variables.LegitAimbotFov;
+	float MaxPlayerFov = Feature.LegitAimbotFov;
 	int ClosestPlayerIndex = -1;
 	QAngle AimAngle = QAngle{};
 	QAngle ViewAngle = QAngle{};
@@ -88,15 +88,15 @@ void LegitAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon)
 
 		Vector Hitbox;
 		bool Backtrack = false;
-		if (Variables.LegitBacktrackEnabled && LegitBacktrack::Get().ClosestTick != -1 && LegitBacktrack::Get().ClosestTick < LegitBacktrack::Get().BacktrackRecords[i].size() && LegitBacktrack::Get().BacktrackRecords[i].at(LegitBacktrack::Get().ClosestTick).MatrixBuilt)
+		if (Feature.LegitBacktrackEnabled && LegitBacktrack::Get().ClosestTick != -1 && LegitBacktrack::Get().ClosestTick < LegitBacktrack::Get().BacktrackRecords[i].size() && LegitBacktrack::Get().BacktrackRecords[i].at(LegitBacktrack::Get().ClosestTick).MatrixBuilt)
 		{
-			Hitbox = Player->GetHitboxPos(GetHitboxFromInt(Variables.LegitAimbotHitbox),
+			Hitbox = Player->GetHitboxPos(GetHitboxFromInt(Feature.LegitAimbotHitbox),
 				LegitBacktrack::Get().BacktrackRecords[i].at(LegitBacktrack::Get().ClosestTick).BoneMatrix);
 			
 			Backtrack = true;
 		}
 		if (!Backtrack)
-			Hitbox = Player->GetHitboxPos(GetHitboxFromInt(Variables.LegitAimbotHitbox));
+			Hitbox = Player->GetHitboxPos(GetHitboxFromInt(Feature.LegitAimbotHitbox));
 
 		float FovDistance = Math::GetFOV(ViewAngle + (g_LocalPlayer->m_aimPunchAngle() * g_CVar->FindVar("weapon_recoil_scale")->GetFloat()), Math::CalcAngle(g_LocalPlayer->GetEyePos(), Hitbox));
 
@@ -115,23 +115,23 @@ void LegitAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon)
 		if (!ClosestPlayer) return;
 		Vector Hitbox;
 		bool Backtrack = false;
-		if (Variables.LegitBacktrackEnabled && LegitBacktrack::Get().ClosestTick != -1 && LegitBacktrack::Get().ClosestTick < LegitBacktrack::Get().BacktrackRecords[ClosestPlayerIndex].size() && LegitBacktrack::Get().BacktrackRecords[ClosestPlayerIndex].at(LegitBacktrack::Get().ClosestTick).MatrixBuilt)
+		if (Feature.LegitBacktrackEnabled && LegitBacktrack::Get().ClosestTick != -1 && LegitBacktrack::Get().ClosestTick < LegitBacktrack::Get().BacktrackRecords[ClosestPlayerIndex].size() && LegitBacktrack::Get().BacktrackRecords[ClosestPlayerIndex].at(LegitBacktrack::Get().ClosestTick).MatrixBuilt)
 		{
-			Hitbox = ClosestPlayer->GetHitboxPos(GetHitboxFromInt(Variables.LegitAimbotHitbox),
+			Hitbox = ClosestPlayer->GetHitboxPos(GetHitboxFromInt(Feature.LegitAimbotHitbox),
 				LegitBacktrack::Get().BacktrackRecords[ClosestPlayerIndex].at(LegitBacktrack::Get().ClosestTick).BoneMatrix);
 
 			Backtrack = true;
 		}
 		if (!Backtrack)
-			Hitbox = ClosestPlayer->GetHitboxPos(GetHitboxFromInt(Variables.LegitAimbotHitbox));
+			Hitbox = ClosestPlayer->GetHitboxPos(GetHitboxFromInt(Feature.LegitAimbotHitbox));
 		AimAngle = Math::CalcAngle(g_LocalPlayer->GetEyePos(), Hitbox);
-		AimAngle -= (g_LocalPlayer->m_aimPunchAngle() * g_CVar->FindVar("weapon_recoil_scale")->GetFloat()) * (float(Variables.LegitAimbotRcs) / 100.f);
+		AimAngle -= (g_LocalPlayer->m_aimPunchAngle() * g_CVar->FindVar("weapon_recoil_scale")->GetFloat()) * (float(Feature.LegitAimbotRcs) / 100.f);
 		Math::Normalize3(AimAngle);
 		Math::ClampAngles(AimAngle);
 		QAngle DeltaAngle = ViewAngle - AimAngle;
 		Math::Normalize3(DeltaAngle);
 		Math::ClampAngles(DeltaAngle);
-		float Smoothing = (Variables.LegitAimbotType == 1 && Variables.LegitAimbotSmooth > 1) ? Variables.LegitAimbotSmooth : 1;
+		float Smoothing = (Feature.LegitAimbotType == 1 && Feature.LegitAimbotSmooth > 1) ? Feature.LegitAimbotSmooth : 1;
 		QAngle FinalAngle = ViewAngle - DeltaAngle / Smoothing;
 		Math::Normalize3(FinalAngle);
 		Math::ClampAngles(FinalAngle);
@@ -140,7 +140,7 @@ void LegitAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon)
 			cmd->tick_count = TIME_TO_TICKS(LegitBacktrack::Get().BacktrackRecords[ClosestPlayerIndex].at(LegitBacktrack::Get().ClosestTick).SimulationTime + Utils::GetLerpTime());
 		}
 		cmd->viewangles = FinalAngle;
-		if (Variables.LegitAimbotType != 2)
+		if (Feature.LegitAimbotType != 2)
 			g_EngineClient->SetViewAngles(cmd->viewangles);
 
 		/*if (!(cmd->buttons & IN_ATTACK) && Weapon->CanFire())

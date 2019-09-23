@@ -116,29 +116,29 @@ namespace Hooks
 
 		C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
-		bSendPacket = g_EngineClient->GetNetChannel()->m_nChokedPackets >= Variables.MiscFakelagChoke;
+		bSendPacket = g_EngineClient->GetNetChannel()->m_nChokedPackets >= Feature.MiscFakelagChoke;
 		if (cmd->buttons & IN_ATTACK) bSendPacket = true;
 
 		MovementFix::Get().Start(cmd);
 		RageAimbot::Get().StartEnginePred(cmd);
 
-		if (Variables.RageAimbotEnabled)
+		if (Feature.RageAimbotEnabled)
 		{
-			Variables.LegitAimbotEnabled = false;
-			Variables.LegitBacktrackEnabled = false;
+			Feature.LegitAimbotEnabled = false;
+			Feature.LegitBacktrackEnabled = false;
 
 			RageAimbot::Get().StoreRecords();
 			RageAimbot::Get().Do(cmd, Weapon, bSendPacket);
 
-			if (Variables.RageAntiaimEnabled)
+			if (Feature.RageAntiaimEnabled)
 				RageAimbot::Get().DoAntiaim(cmd, Weapon, bSendPacket);
 		}
 		else
 		{
-			if (Variables.LegitBacktrackEnabled)
+			if (Feature.LegitBacktrackEnabled)
 				LegitBacktrack::Get().Do(cmd);
 
-			if (Variables.LegitAimbotEnabled)
+			if (Feature.LegitAimbotEnabled)
 				LegitAimbot::Get().Do(cmd, Weapon);
 		}
 
@@ -183,7 +183,7 @@ namespace Hooks
 		static auto panelId = vgui::VPANEL{ 0 };
 		static auto oPaintTraverse = vguipanel_hook.get_original<decltype(&hkPaintTraverse)>(index::PaintTraverse);
 
-		if (Variables.VisualsNoScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0)
+		if (Feature.VisualsNoScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0)
 			return;
 
 		oPaintTraverse(g_VGuiPanel, edx, panel, forceRepaint, allowForce);
@@ -211,7 +211,7 @@ namespace Hooks
 			if (InputSys::Get().IsKeyDown(VK_TAB))
 				Utils::RankRevealAll();
 
-			if (Weapon && Variables.VisualsNoScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
+			if (Weapon && Feature.VisualsNoScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
 			{
 				Render::Get().Line(ScreenWidth / 2, 0, ScreenWidth / 2, ScreenHeight, Color(0, 0, 0, 150));
 				Render::Get().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
@@ -228,10 +228,10 @@ namespace Hooks
 				{
 					if (Visuals::Get().Begin(Player)) 
 					{
-						if (Variables.VisualsBox) Visuals::Get().Box();
-						if (Variables.VisualsHealth) Visuals::Get().Health();
-						if (Variables.VisualsName) Visuals::Get().Name();
-						if (Variables.VisualsWeapon) Visuals::Get().Weapon();
+						if (Feature.VisualsBox) Visuals::Get().Box();
+						if (Feature.VisualsHealth) Visuals::Get().Health();
+						if (Feature.VisualsName) Visuals::Get().Name();
+						if (Feature.VisualsWeapon) Visuals::Get().Weapon();
 					}
 				}
 			}
@@ -323,7 +323,8 @@ namespace Hooks
 	{
 		static auto ofunc = vguisurf_hook.get_original<decltype(&hkLockCursor)>(index::LockCursor);
 
-		if (Menu::Get().IsVisible()) {
+		if (Menu::Get().IsVisible()) 
+		{
 			g_VGuiSurface->UnlockCursor();
 			g_InputSystem->ResetInputState();
 			return;
@@ -336,7 +337,7 @@ namespace Hooks
 		static auto ofunc = mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(index::DrawModelExecute);
 
 		if (g_MdlRender->IsForcedMaterialOverride())  return ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
-		if (Variables.VisualsChams) Chams::Get().OnDrawModelExecute(ctx, state, pInfo, pCustomBoneToWorld);
+		if (Feature.VisualsChams) Chams::Get().OnDrawModelExecute(ctx, state, pInfo, pCustomBoneToWorld);
 
 		ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
 		g_MdlRender->ForcedMaterialOverride(nullptr);

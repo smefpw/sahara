@@ -56,7 +56,6 @@ namespace Hooks
 		mdlrender_hook.unhook_all();
 		clientmode_hook.unhook_all();
 		sv_cheats.unhook_all(); 
-		Glow::Get().Shutdown();
 
 		g_InputSystem->EnableInput(true);
 	}
@@ -242,9 +241,6 @@ namespace Hooks
 	int __fastcall hkDoPostScreenEffects(void* _this, int edx, int a1)
 	{
 		static auto oDoPostScreenEffects = clientmode_hook.get_original<decltype(&hkDoPostScreenEffects)>(index::DoPostScreenSpaceEffects);
-		
-		Glow::Get().Run();
-
 		return oDoPostScreenEffects(g_ClientMode, edx, a1);
 	}
 	//--------------------------------------------------------------------------------
@@ -340,7 +336,7 @@ namespace Hooks
 		static auto ofunc = mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(index::DrawModelExecute);
 
 		if (g_MdlRender->IsForcedMaterialOverride())  return ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
-		if (Variables.VisualsChamsEnabled) Chams::Get().OnDrawModelExecute(ctx, state, pInfo, pCustomBoneToWorld);
+		if (Variables.VisualsChams) Chams::Get().OnDrawModelExecute(ctx, state, pInfo, pCustomBoneToWorld);
 
 		ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
 		g_MdlRender->ForcedMaterialOverride(nullptr);

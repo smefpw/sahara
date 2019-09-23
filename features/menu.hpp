@@ -43,5 +43,4 @@ private:
 	bool		LegitTriggerbot;
 	bool		LegitBacktrack;
 	bool		VisualsChams;
-	bool		VisualsGlow;
 };

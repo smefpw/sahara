@@ -38,19 +38,6 @@ public:
 private:
 };
 
-class Glow
-	: public Singleton<Glow>
-{
-	friend class Singleton<Glow>;
-
-	Glow();
-	~Glow();
-
-public:
-	void Run();
-	void Shutdown();
-};
-
 class Visuals
 	: public Singleton<Visuals>
 {

@@ -35,18 +35,13 @@ public:
 	CONFIG(bool, VisualsName, false);
 	CONFIG(bool, VisualsWeapon, false);
 	CONFIG(bool, VisualsHealth, false);
-	CONFIG(bool, VisualsChamsEnabled, false);
-
-	CONFIG(bool, VisualsGlowEnabled, false);
-	CONFIG(int, VisualsGlowGlowstyle, 0);
-	CONFIG(int, VisualsGlowAlpha, 255);
+	CONFIG(bool, VisualsChams, false);
 #pragma endregion
 
 #pragma region Misc
 	CONFIG(int, MiscFakelagChoke, 0);
 	CONFIG(bool, VisualsNoScope, false);
 #pragma endregion
-
-	CONFIG(int, ConfigFile, 0);
 };
+
 inline Options Variables;

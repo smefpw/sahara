@@ -14,10 +14,8 @@ void Menu::Initialize()
 	LegitTriggerbot = false;
 	LegitBacktrack = false;
 	VisualsChams = false;
-	VisualsGlow = false;
 
 	ImGui::CreateContext();
-
 	ImGui_ImplDX9_Init(InputSys::Get().GetMainWindow(), g_D3DDevice9);
 
 	CreateStyle();
@@ -79,20 +77,7 @@ void Menu::RenderMenu()
 			ImGui::Checkbox("Health", &Variables.VisualsHealth);
 			ImGui::Checkbox("Name", &Variables.VisualsName);
 			ImGui::Checkbox("Weapon", &Variables.VisualsWeapon);
-			if (ImGui::CollapsingHeader("Chams##visualsheader"))
-			{
-				ImGui::Checkbox("Chams##chamsenabled", &Variables.VisualsChamsEnabled);
-			}
-			if (ImGui::CollapsingHeader("Glow##visualsheader"))
-			{
-				ImGui::Checkbox("Enemy Glow##glowenabled", &Variables.VisualsGlowEnabled);
-				if (Variables.VisualsGlowEnabled)
-				{
-					ImGui::SameLine();
-					ImGui::Combo("Glowstyle##glow", &Variables.VisualsGlowGlowstyle, GlowStyles, ARRAYSIZE(GlowStyles));
-					ImGui::SliderInt("Alpha##glowalpha", &Variables.VisualsGlowAlpha, 0, 255);
-				}
-			}
+			ImGui::Checkbox("Chams", &Variables.VisualsChams);
 		}
 		if (ImGui::CollapsingHeader("Misc##mischeader"))
 		{

@@ -4,10 +4,11 @@
 
 bool C_BaseEntity::IsPlayer()
 {
-	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 156)(this);
+	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 157)(this);
 }
 
-bool C_BaseEntity::IsLoot() {
+bool C_BaseEntity::IsLoot() 
+{
 	return GetClientClass()->m_ClassID == ClassId_CPhysPropAmmoBox ||
 		GetClientClass()->m_ClassID == ClassId_CPhysPropLootCrate ||
 		GetClientClass()->m_ClassID == ClassId_CPhysPropRadarJammer ||
@@ -21,7 +22,7 @@ bool C_BaseEntity::IsLoot() {
 
 bool C_BaseEntity::IsWeapon()
 {
-	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 164)(this);
+	return CallVFunction<bool(__thiscall*)(C_BaseEntity*)>(this, 165)(this);
 }
 
 
@@ -37,7 +38,7 @@ bool C_BaseEntity::IsDefuseKit()
 
 CCSWeaponInfo* C_BaseCombatWeapon::GetCSWeaponData()
 {
-	return CallVFunction<CCSWeaponInfo*(__thiscall*)(void*)>(this, 455)(this);
+	return CallVFunction<CCSWeaponInfo*(__thiscall*)(void*)>(this, 456)(this);
 }
 
 bool C_BaseCombatWeapon::HasBullets()
@@ -54,7 +55,7 @@ bool C_BaseCombatWeapon::CanFire()
 	{
 		stored_weapon = this;
 		stored_tick = g_LocalPlayer->m_nTickBase();
-		return false; //cannot shoot first tick after switch
+		return false;
 	}
 
 	if (IsReloading() || m_iClip1() <= 0 || !g_LocalPlayer)
@@ -145,17 +146,17 @@ bool C_BaseCombatWeapon::IsReloading()
 
 float C_BaseCombatWeapon::GetInaccuracy()
 {
-	return CallVFunction<float(__thiscall*)(void*)>(this, 477)(this);
+	return CallVFunction<float(__thiscall*)(void*)>(this, 478)(this);
 }
 
 float C_BaseCombatWeapon::GetSpread()
 {
-	return CallVFunction<float(__thiscall*)(void*)>(this, 447)(this);
+	return CallVFunction<float(__thiscall*)(void*)>(this, 448)(this);
 }
 
 void C_BaseCombatWeapon::UpdateAccuracyPenalty()
 {
-	CallVFunction<void(__thiscall*)(void*)>(this, 478)(this);
+	CallVFunction<void(__thiscall*)(void*)>(this, 479)(this);
 }
 
 CUtlVector<IRefCounted*>& C_BaseCombatWeapon::m_CustomMaterials()

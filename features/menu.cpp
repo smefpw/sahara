@@ -83,6 +83,7 @@ void Menu::RenderMenu()
 		{
 			ImGui::SliderInt("Fakelag", &Feature.MiscFakelagChoke, 0, 15);
 			ImGui::Checkbox("No Scope Border", &Feature.VisualsNoScope);
+			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBhop);
 		}
 		ImGui::End();
 	}

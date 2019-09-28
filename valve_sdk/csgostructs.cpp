@@ -484,7 +484,7 @@ void C_BaseAttributableItem::SetGloveModelIndex(int modelIndex)
 
 void C_BaseViewModel::SendViewModelMatchingSequence(int sequence)
 {
-	return CallVFunction<void(__thiscall*)(void*, int)>(this, 244)(this, sequence);
+	return CallVFunction<void(__thiscall*)(void*, int)>(this, 246)(this, sequence);
 }
 
 float_t C_BasePlayer::m_flSpawnTime()

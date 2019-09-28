@@ -333,17 +333,20 @@ public:
 	NETVAR(int, m_nSequence, "DT_BaseViewModel", "m_nSequence");
 	PNETVAR(char, m_szLastPlaceName, "DT_BasePlayer", "m_szLastPlaceName");
 	NETPROP(m_flLowerBodyYawTargetProp, "DT_CSPlayer", "m_flLowerBodyYawTarget");
-
-	//NETVAR(int, m_iAccount, "DT_CSPlayer", "m_iAccount");
-
-
 	NETVAR(QAngle, m_angAbsAngles, "DT_BaseEntity", "m_angAbsAngles");
 	NETVAR(Vector, m_angAbsOrigin, "DT_BaseEntity", "m_angAbsOrigin");
 	NETVAR(float, m_flDuckSpeed, "DT_BaseEntity", "m_flDuckSpeed");
 	NETVAR(float, m_flDuckAmount, "DT_BaseEntity", "m_flDuckAmount");
-	std::array<float, 24> m_flPoseParameter() const {
+
+	std::array<float, 24> m_flPoseParameter() const 
+	{
 		static int _m_flPoseParameter = NetvarSys::Get().GetOffset("DT_BaseAnimating", "m_flPoseParameter");
 		return *(std::array<float, 24>*)((uintptr_t)this + _m_flPoseParameter);
+	}
+
+	int GetMoveType() 
+	{
+		return *(int*)((DWORD)this + 0x258);
 	}
 
 
@@ -352,7 +355,6 @@ public:
 
 	CUserCmd*& m_pCurrentCommand();
 
-	/*gladiator v2*/
 	void InvalidateBoneCache();
 	int GetNumAnimOverlays();
 	bool& ClientAnimations();

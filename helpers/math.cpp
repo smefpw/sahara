@@ -11,15 +11,6 @@ namespace Math
 	QAngle CalcAngle(const Vector& src, const Vector& dst)
 	{
 		QAngle vAngle;
-		/*Vector delta((src.x - dst.x), (src.y - dst.y), (src.z - dst.z));
-		double hyp = sqrt(delta.x*delta.x + delta.y*delta.y);
-
-		vAngle.pitch = float(atanf(float(delta.z / hyp)) * 57.295779513082f);
-		vAngle.yaw = float(atanf(float(delta.y / delta.x)) * 57.295779513082f);
-		vAngle.roll = 0.0f;
-
-		if (delta.x >= 0.0)
-			vAngle.yaw += 180.0f;*/
 		VectorAngles(dst - src, vAngle);
 
 		return vAngle;
@@ -32,7 +23,11 @@ namespace Math
 		AngleVectors(viewAngle, aim);
 		AngleVectors(aimAngle, ang);
 
-		return RAD2DEG(acos(aim.Dot(ang) / aim.LengthSqr()));
+		//return RAD2DEG(acos(aim.Dot(ang) / aim.LengthSqr()));
+		auto res = RAD2DEG(acos(aim.Dot(ang) / aim.LengthSqr()));
+		if (std::isnan(res))
+			res = 0.f;
+		return res;
 	}
     //--------------------------------------------------------------------------------
     void ClampAngles(QAngle& angles)

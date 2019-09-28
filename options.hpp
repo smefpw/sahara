@@ -39,6 +39,7 @@ public:
 #pragma endregion
 
 #pragma region Misc
+	CONFIG(bool, AutoBhop, false);
 	CONFIG(int, MiscFakelagChoke, 0);
 	CONFIG(bool, VisualsNoScope, false);
 #pragma endregion

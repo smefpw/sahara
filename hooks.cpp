@@ -114,6 +114,11 @@ namespace Hooks
 		if (!cmd || !cmd->command_number)
 			return;
 
+		if (g_LocalPlayer->IsAlive() && g_EngineClient->IsInGame())
+		{
+			Utils::autoBhop(cmd);
+		}
+
 		C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
 		bSendPacket = g_EngineClient->GetNetChannel()->m_nChokedPackets >= Feature.MiscFakelagChoke;

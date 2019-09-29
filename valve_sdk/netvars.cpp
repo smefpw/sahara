@@ -44,13 +44,6 @@ NetvarSys::netvar_table NetvarSys::LoadTable(RecvTable* recvTable)
     return table;
 }
 
-void NetvarSys::Dump()
-{
-    auto outfile = std::ofstream("netvar_dump.txt");
-
-    Dump(outfile);
-}
-
 void NetvarSys::Dump(std::ostream& stream)
 {
     for(const auto& table : database) {

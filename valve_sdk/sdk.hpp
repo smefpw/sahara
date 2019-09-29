@@ -51,7 +51,6 @@ struct IDirect3DDevice9;
 namespace Interfaces
 {
     void Initialize();
-    void Dump();
 }
 
 inline IVEngineClient*       g_EngineClient;

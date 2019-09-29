@@ -14,7 +14,6 @@ DWORD WINAPI OnDllAttach(LPVOID base)
 	if (Utils::WaitForModules(10000, { L"client_panorama.dll", L"engine.dll", L"shaderapidx9.dll" }) == WAIT_TIMEOUT) return FALSE;
 
 		Interfaces::Initialize();
-		Interfaces::Dump();
 
 		NetvarSys::Get().Initialize();
 		InputSys::Get().Initialize();

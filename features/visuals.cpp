@@ -10,6 +10,7 @@ void Render::CreateFonts()
 	g_VGuiSurface->SetFontGlyphSet(Visuals, "Tahoma", 12, 400, 0, 0, FONTFLAG_OUTLINE);
 	g_VGuiSurface->SetFontGlyphSet(Watermark, "Verdana", 16, 600, 0, 0, FONTFLAG_OUTLINE);
 }
+
 void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawColor, bool Center)
 {
 	std::wstring WText = std::wstring(std::string_view(Text).begin(), std::string_view(Text).end());
@@ -27,33 +28,37 @@ void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawCo
 		g_VGuiSurface->DrawSetTextPos(X, Y);
 	g_VGuiSurface->DrawPrintText(WText.c_str(), wcslen(WText.c_str()));
 }
+
 void Render::TextSize(int& Width, int& Height, const char* Text, vgui::HFont Font)
 {
 	std::wstring WText = std::wstring(std::string_view(Text).begin(), std::string_view(Text).end());
 	g_VGuiSurface->GetTextSize(Font, WText.c_str(), Width, Height);
 }
+
 void Render::FilledRectange(int X1, int Y1, int X2, int Y2, Color DrawColor)
 {
 	g_VGuiSurface->DrawSetColor(DrawColor);
 	g_VGuiSurface->DrawFilledRect(X1, Y1, X2, Y2);
 }
+
 void Render::OutlinedRectange(int X1, int Y1, int X2, int Y2, Color DrawColor)
 {
 	g_VGuiSurface->DrawSetColor(DrawColor);
 	g_VGuiSurface->DrawOutlinedRect(X1, Y1, X2, Y2);
 }
+
 void Render::Line(int X1, int Y1, int X2, int Y2, Color DrawColor)
 {
 	g_VGuiSurface->DrawSetColor(DrawColor);
 	g_VGuiSurface->DrawLine(X1, Y1, X2, Y2);
 }
+
 RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[])
 {
 	RECT rect{};
 	ICollideable* collideable = Player->GetCollideable();
 
-	if (!collideable)
-		return rect;
+	if (!collideable) return rect;
 
 	Vector min = collideable->OBBMins();
 	Vector max = collideable->OBBMaxs();
@@ -81,11 +86,8 @@ RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[])
 	Vector pos = Player->GetAbsOrigin();
 	Vector screen_points[8] = {};
 
-	for (int i = 0; i < 8; i++)
-		if (!Math::WorldToScreen(pointsTransformed[i], screen_points[i]))
-			return rect;
-		else
-			TransformedPoints[i] = screen_points[i];
+	for (int i = 0; i < 8; i++) if (!Math::WorldToScreen(pointsTransformed[i], screen_points[i])) return rect;
+		else TransformedPoints[i] = screen_points[i];
 
 	float left = screen_points[0].x;
 	float top = screen_points[0].y;
@@ -94,17 +96,14 @@ RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[])
 
 	for (int i = 1; i < 8; i++)
 	{
-		if (left > screen_points[i].x)
-			left = screen_points[i].x;
-		if (top < screen_points[i].y)
-			top = screen_points[i].y;
-		if (right < screen_points[i].x)
-			right = screen_points[i].x;
-		if (bottom > screen_points[i].y)
-			bottom = screen_points[i].y;
+		if (left > screen_points[i].x) left = screen_points[i].x;
+		if (top < screen_points[i].y) top = screen_points[i].y;
+		if (right < screen_points[i].x) right = screen_points[i].x;
+		if (bottom > screen_points[i].y) bottom = screen_points[i].y;
 	}
 	return RECT{ (long)left, (long)top, (long)right, (long)bottom };
 }
+
 bool Visuals::Begin(C_BasePlayer* Player)
 {
 	Context.Player = Player;
@@ -135,6 +134,7 @@ void Visuals::Box()
 	Render::Get().OutlinedRectange(Context.Box.left + 1, Context.Box.top + 1, Context.Box.right - 1, Context.Box.bottom - 1, Color::Black);
 	Render::Get().OutlinedRectange(Context.Box.left, Context.Box.top, Context.Box.right, Context.Box.bottom, Color::White);
 }
+
 void Visuals::Name()
 {
 	player_info_t PlayerInfo;
@@ -144,6 +144,7 @@ void Visuals::Name()
 	Render::Get().TextSize(TextWidth, TextHeight, PlayerInfo.szName, Render::Get().Visuals);
 	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.top - TextHeight, PlayerInfo.szName, Render::Get().Visuals, Color(255, 255, 255, 255), true);
 }
+
 void Visuals::Health()
 {
 	int HealthValue = Context.Player->m_iHealth();
@@ -152,5 +153,5 @@ void Visuals::Health()
 	float Height = (Context.Box.bottom - Context.Box.top) * float(HealthValue / 100.f);
 
 	Render::Get().FilledRectange(Context.Box.left - 7, Context.Box.top - 1, Context.Box.left - 2, Context.Box.bottom + 1, Color(0, 0, 0, 150));
-	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(0, 220, 50, 255));
+	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(200, 200, 200, 255));
 }

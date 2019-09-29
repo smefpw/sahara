@@ -268,20 +268,3 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 		}
 	}
 }
-bool LbyUpdate() 
-{
-	auto speed = g_LocalPlayer->m_vecVelocity().Length2D();
-	static float next_lby = 0.00f;
-	float curtime = g_GlobalVars->curtime;
-
-	if (!(g_LocalPlayer->m_fFlags() & FL_ONGROUND)) return false;
-
-	if (speed > 0.1f) next_lby = curtime + 0.22;
-
-	if (next_lby < curtime)
-	{
-		next_lby = curtime + 1.1;
-		return true;
-	}
-	else return false;
-}

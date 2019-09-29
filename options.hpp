@@ -11,20 +11,20 @@ class Options
 {
 public:
 #pragma region Rage
-	CONFIG(bool, RageAimbotEnabled, false);
-	CONFIG(int, RageAimbotHitchance, 0);
-	CONFIG(int, RageAimbotMinDmg, 0);
+	CONFIG(bool, AimbotEnabled, false);
+	CONFIG(int, AimbotHitchance, 0);
+	CONFIG(int, AimbotMinDmg, 0);
 #pragma endregion
 
 #pragma region Visuals
-	CONFIG(bool, VisualsBox, false);
-	CONFIG(bool, VisualsName, false);
-	CONFIG(bool, VisualsHealth, false);
+	CONFIG(bool, Box, false);
+	CONFIG(bool, Name, false);
+	CONFIG(bool, Health, false);
 #pragma endregion
 
 #pragma region Misc
-	CONFIG(bool, MiscAutoBhop, false);
-	CONFIG(bool, MiscVisualsNoScope, false);
+	CONFIG(bool, AutoBhop, false);
+	CONFIG(bool, NoScope, false);
 #pragma endregion
 };
 

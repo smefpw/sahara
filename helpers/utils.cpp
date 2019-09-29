@@ -302,7 +302,7 @@ namespace Utils
 	}
 	void autoBhop(CUserCmd* cmd)
 	{
-		if (Feature.MiscAutoBhop)
+		if (Feature.AutoBhop)
 		{
 			auto moveType = g_LocalPlayer->GetMoveType();
 			static auto bLastJumped = false, bShouldFake = false;

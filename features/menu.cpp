@@ -40,20 +40,20 @@ void Menu::RenderMenu()
 	{
 		if (ImGui::CollapsingHeader("Rage"))
 		{
-			ImGui::Checkbox("Enabled", &Feature.RageAimbotEnabled);
-			ImGui::SliderInt("Hitchance", &Feature.RageAimbotHitchance, 0, 100);
-			ImGui::SliderInt("Min Dmg", &Feature.RageAimbotMinDmg, 0, 100);
+			ImGui::Checkbox("Enabled", &Feature.AimbotEnabled);
+			ImGui::SliderInt("Hitchance", &Feature.AimbotHitchance, 0, 100);
+			ImGui::SliderInt("Min Dmg", &Feature.AimbotMinDmg, 0, 100);
 		}
 		if (ImGui::CollapsingHeader("Visuals"))
 		{
-			ImGui::Checkbox("Box", &Feature.VisualsBox);
-			ImGui::Checkbox("Name", &Feature.VisualsName);
-			ImGui::Checkbox("Health", &Feature.VisualsHealth);
+			ImGui::Checkbox("Box", &Feature.Box);
+			ImGui::Checkbox("Name", &Feature.Name);
+			ImGui::Checkbox("Health", &Feature.Health);
 		}
 		if (ImGui::CollapsingHeader("Misc"))
 		{
-			ImGui::Checkbox("No scope border", &Feature.MiscVisualsNoScope);
-			ImGui::Checkbox("Automatic bunnyhop", &Feature.MiscAutoBhop);
+			ImGui::Checkbox("No scope border", &Feature.NoScope);
+			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBhop);
 		}
 		ImGui::End();
 	}

@@ -102,7 +102,7 @@ namespace Hooks
 		MovementFix::Get().Start(cmd);
 		RageAimbot::Get().StartEnginePred(cmd);
 
-		if (Feature.RageAimbotEnabled)
+		if (Feature.AimbotEnabled)
 		{
 			RageAimbot::Get().StoreRecords();
 			RageAimbot::Get().Do(cmd, Weapon, bSendPacket);
@@ -142,7 +142,7 @@ namespace Hooks
 		static auto panelId = vgui::VPANEL{ 0 };
 		static auto oPaintTraverse = vguipanel_hook.get_original<decltype(&hkPaintTraverse)>(index::PaintTraverse);
 
-		if (Feature.MiscVisualsNoScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0)
+		if (Feature.NoScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0)
 			return;
 
 		oPaintTraverse(g_VGuiPanel, edx, panel, forceRepaint, allowForce);
@@ -166,7 +166,7 @@ namespace Hooks
 
 			if (InputSys::Get().IsKeyDown(VK_TAB)) Utils::RankRevealAll();
 
-			if (Weapon && Feature.MiscVisualsNoScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
+			if (Weapon && Feature.NoScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
 			{
 				Render::Get().Line(ScreenWidth / 2, 0, ScreenWidth / 2, ScreenHeight, Color(0, 0, 0, 150));
 				Render::Get().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
@@ -182,9 +182,9 @@ namespace Hooks
 				{
 					if (Visuals::Get().Begin(Player)) 
 					{
-						if (Feature.VisualsHealth) Visuals::Get().Health();
-						if (Feature.VisualsName) Visuals::Get().Name();
-						if (Feature.VisualsBox) Visuals::Get().Box();
+						if (Feature.Health) Visuals::Get().Health();
+						if (Feature.Name) Visuals::Get().Name();
+						if (Feature.Box) Visuals::Get().Box();
 					}
 				}
 			}

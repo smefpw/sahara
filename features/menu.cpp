@@ -26,13 +26,12 @@ void Menu::OnDeviceReset()
 {
 	ImGui_ImplDX9_CreateDeviceObjects();
 }
+
 void Menu::RenderMenu()
 {
-	if (!Visible)
-		return;
+	if (!Visible) return;
 
 	ImGui_ImplDX9_NewFrame();
-
 	ImGui::GetIO().MouseDrawCursor = Visible;
 	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2{ 250, 300 }, ImGuiSetCond_Once);

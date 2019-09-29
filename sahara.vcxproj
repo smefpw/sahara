@@ -100,7 +100,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="features\autowall.cpp" />
-    <ClCompile Include="features\legitbot.cpp" />
     <ClCompile Include="features\menu.cpp" />
     <ClCompile Include="features\ragebot.cpp" />
     <ClCompile Include="features\visuals.cpp" />
@@ -131,7 +130,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="features\autowall.hpp" />
-    <ClInclude Include="features\legitbot.hpp" />
     <ClInclude Include="features\menu.hpp" />
     <ClInclude Include="features\ragebot.hpp" />
     <ClInclude Include="features\visuals.hpp" />

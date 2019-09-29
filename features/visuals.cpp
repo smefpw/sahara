@@ -1,6 +1,5 @@
 #include "visuals.hpp"
 #include "../hooks.hpp"
-#include "legitbot.hpp"
 #include "ragebot.hpp"
 
 void Render::CreateFonts()
@@ -48,47 +47,6 @@ void Render::Line(int X1, int Y1, int X2, int Y2, Color DrawColor)
 	g_VGuiSurface->DrawSetColor(DrawColor);
 	g_VGuiSurface->DrawLine(X1, Y1, X2, Y2);
 }
-Chams::Chams()
-{
-	std::ofstream("csgo\\materials\\metallic.vmt") << (R"#("VertexLitGeneric" {
-	  "$basetexture" "vgui/white"
-      "$envmap" "env_cubemap"
-      "$normalmapalphaenvmapmask" "1"
-      "$envmapcontrast"  "1"
-      "$nofog" "1"
-      "$model" "1"
-      "$nocull" "0"
-      "$selfillum" "1"
-      "$halflambert" "1"
-      "$znearer" "0"
-      "$flat" "1" 
-}
-)#");
-}
-Chams::~Chams()
-{
-	std::remove("csgo\\materials\\metallic.vmt");
-}
-void Chams::OnDrawModelExecute(IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& info, matrix3x4_t* matrix)
-{
-	// Thanks smef *insert lenny face*
- 
-	const auto mdl = info.pModel;
-	static auto vis = Color(150, 200, 60); //big skeet color
-	static auto normal = g_MatSystem->FindMaterial("metallic", TEXTURE_GROUP_MODEL);
-
-	C_BasePlayer* entity = C_BasePlayer::GetPlayerByIndex(info.entity_index);
-
-	if (strstr(mdl->szName, "models/player") != nullptr);
-	{
-		if (g_LocalPlayer && entity && entity->IsAlive() && !entity->IsDormant())
-		{
-			g_RenderView->SetColorModulation(vis[0] / 255.f, vis[1] / 255.f, vis[2] / 255.f);
-			g_MdlRender->ForcedMaterialOverride(normal);
-		}
-	}
-}
-
 RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[])
 {
 	RECT rect{};
@@ -151,19 +109,15 @@ bool Visuals::Begin(C_BasePlayer* Player)
 {
 	Context.Player = Player;
 
-	if (!Context.Player->IsEnemy())
-		return false;
-
-	if (Context.Player->IsDormant())
-		return false;
+	if (!Context.Player->IsEnemy()) return false;
+	if (Context.Player->IsDormant()) return false;
 
 	Vector head = Context.Player->GetHitboxPos(HITBOX_HEAD);
 	Vector origin = Context.Player->GetAbsOrigin();
 
 	head.z += 15;
 
-	if (!Math::WorldToScreen(head, Context.HeadPos) || !Math::WorldToScreen(origin, Context.Origin))
-		return false;
+	if (!Math::WorldToScreen(head, Context.HeadPos) || !Math::WorldToScreen(origin, Context.Origin)) return false;
 
 	Vector points_transformed[8];
 	RECT Box = GetBBox(Context.Player, points_transformed);
@@ -189,18 +143,6 @@ void Visuals::Name()
 	int TextWidth, TextHeight;
 	Render::Get().TextSize(TextWidth, TextHeight, PlayerInfo.szName, Render::Get().Visuals);
 	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.top - TextHeight, PlayerInfo.szName, Render::Get().Visuals, Color(255, 255, 255, 255), true);
-}
-void Visuals::Weapon()
-{
-	C_BaseCombatWeapon* Weapon = Context.Player->m_hActiveWeapon();
-	if (!Weapon) return;
-
-	std::string WeaponName = std::string(Weapon->GetCSWeaponData()->szHudName + std::string("(") + std::to_string(Weapon->m_iClip1()) + std::string("/") + std::to_string(Weapon->m_iPrimaryReserveAmmoCount()) + std::string(")"));
-	WeaponName.erase(0, 13);
-	int TextWidth, TextHeight;
-
-	Render::Get().TextSize(TextWidth, TextHeight, WeaponName.c_str(), Render::Get().Visuals);
-	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.bottom - 1, WeaponName.c_str(), Render::Get().Visuals, Color(255, 255, 255, 255), true);
 }
 void Visuals::Health()
 {

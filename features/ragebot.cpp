@@ -1,6 +1,7 @@
 #include "ragebot.hpp"
 #include "../hooks.hpp"
 #include "autowall.hpp"
+#include "../features/visuals.hpp"
 
 float flOldCurtime;
 float flOldFrametime;
@@ -18,20 +19,14 @@ void MovementFix::End(CUserCmd* cmd)
 	float f1;
 	float f2;
 
-	if (m_oldangle.yaw < 0.f)
-		f1 = 360.0f + m_oldangle.yaw;
-	else
-		f1 = m_oldangle.yaw;
+	if (m_oldangle.yaw < 0.f) f1 = 360.0f + m_oldangle.yaw;
+	else f1 = m_oldangle.yaw;
 
-	if (cmd->viewangles.yaw < 0.0f)
-		f2 = 360.0f + cmd->viewangles.yaw;
-	else
-		f2 = cmd->viewangles.yaw;
+	if (cmd->viewangles.yaw < 0.0f) f2 = 360.0f + cmd->viewangles.yaw;
+	else f2 = cmd->viewangles.yaw;
 
-	if (f2 < f1)
-		yaw_delta = abs(f2 - f1);
-	else
-		yaw_delta = 360.0f - abs(f1 - f2);
+	if (f2 < f1) yaw_delta = abs(f2 - f1);
+	else yaw_delta = 360.0f - abs(f1 - f2);
 	yaw_delta = 360.0f - yaw_delta;
 
 	cmd->forwardmove = cos(DEG2RAD(yaw_delta)) * m_oldforward + cos(DEG2RAD(yaw_delta + 90.f)) * m_oldsidemove;
@@ -45,10 +40,8 @@ void RageAimbot::StartEnginePred(CUserCmd* cmd)
 
 	if (pLastCmd)
 	{
-		if (pLastCmd->hasbeenpredicted)
-			nTickBase = g_LocalPlayer->m_nTickBase();
-		else
-			++nTickBase;
+		if (pLastCmd->hasbeenpredicted) nTickBase = g_LocalPlayer->m_nTickBase();
+		else ++nTickBase;
 	}
 
 	pLastCmd = cmd;
@@ -82,12 +75,14 @@ bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlay
 {
 	Vector forward, right, up;
 	Vector src = g_LocalPlayer->GetEyePos();
+
 	Math::AngleVectors(angles, forward, right, up);
 
 	int cHits = 0;
 	int cNeededHits = static_cast<int> (150.f * (chance / 100.f));
 
 	weapon->UpdateAccuracyPenalty();
+
 	float weap_spread = weapon->GetSpread();
 	float weap_inaccuracy = weapon->GetInaccuracy();
 
@@ -130,14 +125,10 @@ bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlay
 		ray.Init(src, viewForward);
 		g_EngineTrace->ClipRayToEntity(ray, MASK_SHOT | CONTENTS_GRATE, ent, &tr);
 
-		if (tr.hit_entity == ent)
-			++cHits;
+		if (tr.hit_entity == ent) ++cHits;
 
-		if (static_cast<int> ((static_cast<float> (cHits) / 150.f) * 100.f) >= chance)
-			return true;
-
-		if ((150 - i + cHits) < cNeededHits)
-			return false;
+		if (static_cast<int> ((static_cast<float> (cHits) / 150.f) * 100.f) >= chance) return true;
+		if ((150 - i + cHits) < cNeededHits) return false;
 	}
 
 	return false;
@@ -188,22 +179,15 @@ void RageAimbot::StoreRecords()
 	for (int i = 1; i <= 64; i++)
 	{
 		C_BasePlayer* Player = C_BasePlayer::GetPlayerByIndex(i);
-		if (!Player ||
-			Player->IsDormant() ||
-			!Player->IsPlayer() ||
-			!Player->IsAlive() ||
-			!Player->IsEnemy())
+		if (!Player || Player->IsDormant() || !Player->IsPlayer() || !Player->IsAlive() || !Player->IsEnemy())
 		{
 			if (BacktrackRecords[i].size() > 0)
-				for (int Tick = 0; Tick < BacktrackRecords[i].size(); Tick++)
-					BacktrackRecords[i].erase(BacktrackRecords[i].begin() + Tick);
+				for (int Tick = 0; Tick < BacktrackRecords[i].size(); Tick++) BacktrackRecords[i].erase(BacktrackRecords[i].begin() + Tick);
 			continue;
 		}
 
 		BacktrackRecords[i].insert(BacktrackRecords[i].begin(), TickInfo(Player));
-		for (auto Tick : BacktrackRecords[i])
-			if (!Utils::IsTickValid(Tick.SimulationTime, 0.2f))
-				BacktrackRecords[i].pop_back();
+		for (auto Tick : BacktrackRecords[i]) if (!Utils::IsTickValid(Tick.SimulationTime, 0.2f)) BacktrackRecords[i].pop_back();
 	}
 }
 float Hitchance2(C_BaseCombatWeapon* Weapon)
@@ -213,6 +197,7 @@ float Hitchance2(C_BaseCombatWeapon* Weapon)
 	if (Feature.RageAimbotHitchance > 1)
 	{
 		float Inaccuracy = Weapon->GetInaccuracy();
+
 		if (Inaccuracy == 0) Inaccuracy = 0.0000001;
 		Inaccuracy = 1 / Inaccuracy;
 		Hitchance = Inaccuracy;
@@ -223,13 +208,7 @@ float Hitchance2(C_BaseCombatWeapon* Weapon)
 
 void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket)
 {
-	if (!g_LocalPlayer ||
-		!g_LocalPlayer->IsAlive() ||
-		!Weapon ||
-		Weapon->IsKnife() ||
-		Weapon->IsGrenade() ||
-		!Feature.RageAimbotEnabled)
-		return;
+	if (!g_LocalPlayer || !g_LocalPlayer->IsAlive() || !Weapon || Weapon->IsKnife() || Weapon->IsGrenade() || !Feature.RageAimbotEnabled) return;
 
 	int BestTargetIndex = -1;
 	float BestTargetDistance = FLT_MAX;
@@ -241,16 +220,10 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 	for (int i = 1; i <= 64; i++)
 	{
 		C_BasePlayer* Player = C_BasePlayer::GetPlayerByIndex(i);
-		if (!Player ||
-			!Player->IsPlayer() ||
-			Player->IsDormant() ||
-			!Player->IsAlive() ||
-			!Player->IsEnemy() ||
-			BacktrackRecords[i].size() < 1)
-			continue;
-
+		if (!Player || !Player->IsPlayer() || Player->IsDormant() || !Player->IsAlive() || !Player->IsEnemy() || BacktrackRecords[i].size() < 1) continue;
 
 		float PlayerDistance = Math::VectorDistance(g_LocalPlayer->m_vecOrigin(), Player->m_vecOrigin());
+
 		if (BestTargetDistance > PlayerDistance)
 		{
 			if (BacktrackRecords[i].front().MatrixBuilt && BacktrackRecords[i].front().BoneMatrix != nullptr &&
@@ -295,58 +268,20 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 		}
 	}
 }
-bool LbyUpdate() {
-
+bool LbyUpdate() 
+{
 	auto speed = g_LocalPlayer->m_vecVelocity().Length2D();
 	static float next_lby = 0.00f;
 	float curtime = g_GlobalVars->curtime;
 
-	if (!(g_LocalPlayer->m_fFlags() & FL_ONGROUND))
-		return false;
+	if (!(g_LocalPlayer->m_fFlags() & FL_ONGROUND)) return false;
 
-	if (speed > 0.1f)
-		next_lby = curtime + 0.22;
+	if (speed > 0.1f) next_lby = curtime + 0.22;
 
 	if (next_lby < curtime)
 	{
 		next_lby = curtime + 1.1;
 		return true;
 	}
-	else
-		return false;
-}
-void RageAimbot::DoAntiaim(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket)
-{
-	if (!g_LocalPlayer ||
-		!g_LocalPlayer->IsAlive() ||
-		!Weapon ||
-		Weapon->IsKnife() && cmd->buttons & IN_ATTACK ||
-		!Weapon->IsGrenade() && cmd->buttons & IN_ATTACK && Weapon->CanFire() ||
-		cmd->buttons & IN_USE ||
-		Weapon->IsGrenade() && Weapon->m_fThrowTime() > 0.f ||
-		g_LocalPlayer->m_nMoveType() == MOVETYPE_LADDER ||
-		g_LocalPlayer->m_nMoveType() == MOVETYPE_NOCLIP)
-		return;
-
-	static int AASide = 1;
-	if (InputSys::Get().IsKeyDown(VK_LEFT))
-		AASide = 0;
-	if (InputSys::Get().IsKeyDown(VK_DOWN))
-		AASide = 1;
-	if (InputSys::Get().IsKeyDown(VK_RIGHT))
-		AASide = 2;
-
-	cmd->viewangles.pitch = 89.f;
-	cmd->viewangles.yaw += 90.f + 90.f * AASide;
-
-	if (LbyUpdate())
-	{
-		bSendPacket = false;
-		cmd->viewangles.yaw -= 125.f;
-		return;
-	}
-	if (bSendPacket)
-		cmd->viewangles.yaw += g_LocalPlayer->MaxDesyncDelta();
-
-	cmd->buttons &= ~(IN_FORWARD | IN_BACK | IN_MOVERIGHT | IN_MOVELEFT);
+	else return false;
 }

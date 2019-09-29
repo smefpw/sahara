@@ -1,4 +1,5 @@
 #pragma once
+
 const char* LegitAimbotType[] =
 {
 	"Normal",
@@ -21,24 +22,5 @@ const char* MenuTabs[]
 };
 const char* VisualsTabs[]
 {
-	"Esp",
-	"Chams",
-	"Glow"
-};
-const char* ChamsMaterials[]
-{
-	"Metallic"
-};
-const char* ChamsBacktrack[]
-{
-	"Off",
-	"All Ticks",
-	"Last Tick"
-};
-const char* GlowStyles[]
-{
-	"Normal",
-	"Pulsing",
-	"Outline",
-	"Pulsing Outline"
+	"Esp"
 };

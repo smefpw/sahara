@@ -21,7 +21,6 @@ class Menu
 {
 public:
 	void Initialize();
-	void Shutdown();
 
 	void OnDeviceLost();
 	void OnDeviceReset();
@@ -39,8 +38,4 @@ private:
 
 	ImGuiStyle	Style;
 	bool		Visible;
-	bool		LegitAimbot;
-	bool		LegitTriggerbot;
-	bool		LegitBacktrack;
-	bool		VisualsChams;
 };

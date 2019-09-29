@@ -127,13 +127,6 @@ void ConCommandBase::Init()
     }
 }
 
-void ConCommandBase::Shutdown()
-{
-    if(g_CVar) {
-        g_CVar->UnregisterConCommand(this);
-    }
-}
-
 const char *ConCommandBase::GetName(void) const
 {
     return m_pszName;

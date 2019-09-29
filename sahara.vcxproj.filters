@@ -77,9 +77,6 @@
     <ClCompile Include="features\visuals.cpp">
       <Filter>Features</Filter>
     </ClCompile>
-    <ClCompile Include="features\legitbot.cpp">
-      <Filter>Features</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
@@ -323,9 +320,6 @@
       <Filter>SDK Header Files</Filter>
     </ClInclude>
     <ClInclude Include="features\visuals.hpp">
-      <Filter>Features</Filter>
-    </ClInclude>
-    <ClInclude Include="features\legitbot.hpp">
       <Filter>Features</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">

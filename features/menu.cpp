@@ -10,20 +10,11 @@
 void Menu::Initialize()
 {
 	Visible = false;
-	LegitAimbot = false;
-	LegitTriggerbot = false;
-	LegitBacktrack = false;
-	VisualsChams = false;
 
 	ImGui::CreateContext();
 	ImGui_ImplDX9_Init(InputSys::Get().GetMainWindow(), g_D3DDevice9);
 
 	CreateStyle();
-}
-
-void Menu::Shutdown()
-{
-	ImGui_ImplDX9_Shutdown();
 }
 
 void Menu::OnDeviceLost()
@@ -46,44 +37,24 @@ void Menu::RenderMenu()
 	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2{ 250, 300 }, ImGuiSetCond_Once);
 
-	if (ImGui::Begin("Sahara CS:GO", &Visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
+	if (ImGui::Begin("Sahara", &Visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
 	{
-		if (ImGui::CollapsingHeader("Ragebot##rageheader"))
+		if (ImGui::CollapsingHeader("Rage"))
 		{
-			ImGui::Checkbox("Enabled##rageaimbot", &Feature.RageAimbotEnabled);
+			ImGui::Checkbox("Enabled", &Feature.RageAimbotEnabled);
 			ImGui::SliderInt("Hitchance", &Feature.RageAimbotHitchance, 0, 100);
 			ImGui::SliderInt("Min Dmg", &Feature.RageAimbotMinDmg, 0, 100);
-			ImGui::Checkbox("Antiaim##aaenable", &Feature.RageAntiaimEnabled);
 		}
-		if (ImGui::CollapsingHeader("Legitbot##legitheader"))
-		{
-			ImGui::Checkbox("Aimbot##legitaim", &Feature.LegitAimbotEnabled);
-			if (Feature.LegitAimbotEnabled)
-			{
-				ImGui::Combo("Type##legitaim", &Feature.LegitAimbotType, LegitAimbotType, ARRAYSIZE(LegitAimbotType));
-				ImGui::Combo("Hitbox##legitaim", &Feature.LegitAimbotHitbox, LegitAimbotHitbox, ARRAYSIZE(LegitAimbotHitbox));
-				ImGui::SliderFloat("FOV##legitaim", &Feature.LegitAimbotFov, 0.f, 30.f, "%.1f");
-				if (Feature.LegitAimbotType == 1)
-					ImGui::SliderInt("Smooth##legitaim", &Feature.LegitAimbotSmooth, 0, 100);
-				ImGui::SliderInt("Rcs##legitaim", &Feature.LegitAimbotRcs, 0, 100);
-			}
-			ImGui::Checkbox("Backtrack##legit", &Feature.LegitBacktrackEnabled);
-			if (Feature.LegitBacktrackEnabled)
-				ImGui::SliderInt("Time(ms)##backtracktime", &Feature.LegitBacktrackDuration, 1, 200);
-		}
-		if (ImGui::CollapsingHeader("Visuals##visualsheader"))
+		if (ImGui::CollapsingHeader("Visuals"))
 		{
 			ImGui::Checkbox("Box", &Feature.VisualsBox);
-			ImGui::Checkbox("Health", &Feature.VisualsHealth);
 			ImGui::Checkbox("Name", &Feature.VisualsName);
-			ImGui::Checkbox("Chams", &Feature.VisualsChams);
-			ImGui::Checkbox("Weapon", &Feature.VisualsWeapon);
+			ImGui::Checkbox("Health", &Feature.VisualsHealth);
 		}
-		if (ImGui::CollapsingHeader("Misc##mischeader"))
+		if (ImGui::CollapsingHeader("Misc"))
 		{
-			ImGui::SliderInt("Fakelag", &Feature.MiscFakelagChoke, 0, 15);
-			ImGui::Checkbox("No Scope Border", &Feature.VisualsNoScope);
-			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBhop);
+			ImGui::Checkbox("No scope border", &Feature.MiscVisualsNoScope);
+			ImGui::Checkbox("Automatic bunnyhop", &Feature.MiscAutoBhop);
 		}
 		ImGui::End();
 	}
@@ -141,7 +112,7 @@ void Menu::CreateStyle()
 	Style.WindowBorderSize = 1.2f;
 
 	Style.Colors[ImGuiCol_Text] = ImVec4(col_text.x, col_text.y, col_text.z, 1.f);
-	Style.Colors[ImGuiCol_Text2] = ImColor(200, 80, 150, 255);
+	Style.Colors[ImGuiCol_Text2] = ImColor(200, 200, 200, 255);
 	Style.Colors[ImGuiCol_TextDisabled] = ImVec4(col_text.x, col_text.y, col_text.z, 1.f);
 	Style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(col_text.x, col_text.y, col_text.z, 1.f);
 	Style.Colors[ImGuiCol_WindowBg] = ImColor(9, 9, 9, 255);
@@ -155,14 +126,14 @@ void Menu::CreateStyle()
 	Style.Colors[ImGuiCol_TitleBg] = ImColor(37, 40, 47, 255);
 	Style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(37, 40, 47, 255);
 	Style.Colors[ImGuiCol_TitleBgActive] = ImColor(37, 40, 47, 255);
-	Style.Colors[ImGuiCol_MenuBarBg] = ImColor(200, 80, 150, 255);
+	Style.Colors[ImGuiCol_MenuBarBg] = ImColor(200, 200, 200, 255);
 	Style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.1f, 0.1f, 0.1f, 0.95f);
-	Style.Colors[ImGuiCol_ScrollbarGrab] = ImColor(200, 80, 150, 255);
-	Style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImColor(200, 80, 150, 255);
-	Style.Colors[ImGuiCol_ScrollbarGrabActive] = ImColor(200, 80, 150, 255);
-	Style.Colors[ImGuiCol_CheckMark] = ImColor(200, 80, 150, 255);
-	Style.Colors[ImGuiCol_SliderGrab] = ImColor(200, 80, 150, 255);
-	Style.Colors[ImGuiCol_SliderGrabActive] = ImColor(200, 80, 150, 255);
+	Style.Colors[ImGuiCol_ScrollbarGrab] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_ScrollbarGrabActive] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_CheckMark] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_SliderGrab] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_SliderGrabActive] = ImColor(200, 200, 200, 255);
 	Style.Colors[ImGuiCol_Button] = ImColor(37, 40, 47, 255);
 	Style.Colors[ImGuiCol_ButtonHovered] = ImColor(57, 60, 67, 255);
 	Style.Colors[ImGuiCol_ButtonActive] = ImColor(57, 60, 67, 255);

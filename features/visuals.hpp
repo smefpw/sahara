@@ -22,21 +22,6 @@ public:
 	void OutlinedRectange(int X1, int Y1, int X2, int Y2, Color DrawColor);
 	void Line(int X1, int Y1, int X2, int Y2, Color DrawColor);
 };
-class Chams
-	: public Singleton<Chams>{
-	friend class Singleton<Chams>;
-
-	Chams();
-	~Chams();
-
-public:
-	void OnDrawModelExecute(
-		IMatRenderContext* ctx,
-		const DrawModelState_t& state,
-		const ModelRenderInfo_t& pInfo,
-		matrix3x4_t* pCustomBoneToWorld);
-private:
-};
 
 class Visuals
 	: public Singleton<Visuals>
@@ -55,6 +40,5 @@ public:
 	bool Begin(C_BasePlayer* Player);
 	void Box();
 	void Name();
-	void Weapon();
 	void Health();
 };

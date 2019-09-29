@@ -51,5 +51,4 @@ public:
 	void StartEnginePred(CUserCmd* cmd);
 	void EndEnginePred();
 	void Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket);
-	void DoAntiaim(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket);
 };

@@ -293,7 +293,7 @@ public:
 	void SetAbsOrigin(const Vector& origin)
 	{
 		using SetAbsOriginFn = void(__thiscall*)(void*, const Vector & origin);
-		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8");
+		static SetAbsOriginFn SetAbsOrigin = (SetAbsOriginFn)Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8");
 		SetAbsOrigin(this, origin);
 	}
 	Vector& GetAbsAngles()
@@ -372,12 +372,12 @@ public:
 
 	float_t &m_surfaceFriction()
 	{
-		static unsigned int _m_surfaceFriction = Utils::FindInDataMap(GetPredDescMap(), "m_surfaceFriction");
+		static unsigned int _m_surfaceFriction = Utilities::FindInDataMap(GetPredDescMap(), "m_surfaceFriction");
 		return *(float_t*)((uintptr_t)this + _m_surfaceFriction);
 	}
 	Vector &m_vecBaseVelocity()
 	{
-		static unsigned int _m_vecBaseVelocity = Utils::FindInDataMap(GetPredDescMap(), "m_vecBaseVelocity");
+		static unsigned int _m_vecBaseVelocity = Utilities::FindInDataMap(GetPredDescMap(), "m_vecBaseVelocity");
 		return *(Vector*)((uintptr_t)this + _m_vecBaseVelocity);
 	}
 	bool IsEnemy()
@@ -386,7 +386,7 @@ public:
 	}
 	float_t &m_flMaxspeed()
 	{
-		static unsigned int _m_flMaxspeed = Utils::FindInDataMap(GetPredDescMap(), "m_flMaxspeed");
+		static unsigned int _m_flMaxspeed = Utilities::FindInDataMap(GetPredDescMap(), "m_flMaxspeed");
 		return *(float_t*)((uintptr_t)this + _m_flMaxspeed);
 	}
 

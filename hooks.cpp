@@ -94,7 +94,7 @@ namespace Hooks
 
 		if (g_LocalPlayer->IsAlive() && g_EngineClient->IsInGame())
 		{
-			Utils::autoBhop(cmd);
+			Utilities::autoBhop(cmd);
 		}
 
 		C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
@@ -164,7 +164,7 @@ namespace Hooks
 
 			C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
-			if (InputSys::Get().IsKeyDown(VK_TAB)) Utils::RankRevealAll();
+			if (InputSys::Get().IsKeyDown(VK_TAB)) Utilities::RankRevealAll();
 
 			if (Weapon && Feature.RemoveScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
 			{

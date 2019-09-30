@@ -187,7 +187,7 @@ void RageAimbot::StoreRecords()
 		}
 
 		BacktrackRecords[i].insert(BacktrackRecords[i].begin(), TickInfo(Player));
-		for (auto Tick : BacktrackRecords[i]) if (!Utils::IsTickValid(Tick.SimulationTime, 0.2f)) BacktrackRecords[i].pop_back();
+		for (auto Tick : BacktrackRecords[i]) if (!Utilities::IsTickValid(Tick.SimulationTime, 0.2f)) BacktrackRecords[i].pop_back();
 	}
 }
 float Hitchance2(C_BaseCombatWeapon* Weapon)
@@ -262,7 +262,7 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 			if (!(cmd->buttons & IN_ATTACK) && Weapon->CanFire())
 			{
 				bSendPacket = true;
-				cmd->tick_count = TIME_TO_TICKS(BestTargetSimtime + Utils::GetLerpTime());
+				cmd->tick_count = TIME_TO_TICKS(BestTargetSimtime + Utilities::GetLerpTime());
 				cmd->buttons |= IN_ATTACK;
 			}
 		}

@@ -139,7 +139,7 @@ bool C_BaseCombatWeapon::IsSniper()
 
 bool C_BaseCombatWeapon::IsReloading()
 {
-	static uint32_t inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90") + 2);
+	static uint32_t inReload = *(uint32_t*)(Utilities::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90") + 2);
 	return *(bool*)((uintptr_t)this + inReload);
 }
 
@@ -159,19 +159,19 @@ void C_BaseCombatWeapon::UpdateAccuracyPenalty()
 }
 
 CUtlVector<IRefCounted*>& C_BaseCombatWeapon::m_CustomMaterials()
-{	static unsigned int inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "83 BE ? ? ? ? ? 7F 67") + 2) - 12;
+{	static unsigned int inReload = *(uint32_t*)(Utilities::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "83 BE ? ? ? ? ? 7F 67") + 2) - 12;
 	return *(CUtlVector<IRefCounted*>*)((uintptr_t)this + inReload);
 }
 
 bool* C_BaseCombatWeapon::m_bCustomMaterialInitialized()
 {
-	static uint32_t currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 86 ? ? ? ? ? FF 50 04") + 2);
+	static uint32_t currentCommand = *(uint32_t*)(Utilities::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 86 ? ? ? ? ? FF 50 04") + 2);
 	return (bool*)((uintptr_t)this + currentCommand);
 }
 
 CUserCmd*& C_BasePlayer::m_pCurrentCommand()
 {
-	static uint32_t currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "89 BE ? ? ? ? E8 ? ? ? ? 85 FF") + 2);
+	static uint32_t currentCommand = *(uint32_t*)(Utilities::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "89 BE ? ? ? ? E8 ? ? ? ? 85 FF") + 2);
 	return *(CUserCmd**)((uintptr_t)this + currentCommand);
 }
 
@@ -203,7 +203,7 @@ AnimationLayer *C_BasePlayer::GetAnimOverlay(int i)
 void C_BasePlayer::SetAbsAngles(QAngle angle)
 {
 	using SetAbsAnglesFn = void(__thiscall*)(void*, const QAngle & Angles);
-	static SetAbsAnglesFn SetAbsAngles = (SetAbsAnglesFn)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1 E8");
+	static SetAbsAnglesFn SetAbsAngles = (SetAbsAnglesFn)Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1 E8");
 	SetAbsAngles(this, angle);
 }
 int C_BasePlayer::GetSequenceActivity(int sequence)
@@ -212,7 +212,8 @@ int C_BasePlayer::GetSequenceActivity(int sequence)
 
 	if (!hdr) return -1;
 
-	static int (__fastcall* get_sequence_activity)(void*, studiohdr_t*, int) = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(Utils::PatternScan(GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 7D 08 FF 56 8B F1 74 3D"));
+	static int (__fastcall* get_sequence_activity)(void*, studiohdr_t*, int) = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>
+		(Utilities::PatternScan(GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 7D 08 FF 56 8B F1 74 3D"));
 	return get_sequence_activity(this, hdr, sequence);
 }
 float C_BasePlayer::MaxDesyncDelta() 
@@ -243,7 +244,7 @@ CBasePlayerAnimState*C_BasePlayer::GetPlayerAnimState()
 
 void C_BasePlayer::UpdateAnimationState(CBasePlayerAnimState*state, QAngle angle)
 {
-	static uint8_t* UpdateAnimState = Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24");
+	static uint8_t* UpdateAnimState = Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24");
 	if (!UpdateAnimState) return;
 
 	__asm { push 0 }
@@ -262,7 +263,7 @@ void C_BasePlayer::UpdateAnimationState(CBasePlayerAnimState*state, QAngle angle
 void C_BasePlayer::ResetAnimationState(CBasePlayerAnimState*state)
 {
 	using ResetAnimState_t = void(__thiscall*)(CBasePlayerAnimState*);
-	static ResetAnimState_t ResetAnimState = (ResetAnimState_t)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "56 6A 01 68 ? ? ? ? 8B F1");
+	static ResetAnimState_t ResetAnimState = (ResetAnimState_t)Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "56 6A 01 68 ? ? ? ? 8B F1");
 	if (!ResetAnimState) return;
 
 	ResetAnimState(state);
@@ -271,7 +272,7 @@ void C_BasePlayer::ResetAnimationState(CBasePlayerAnimState*state)
 void C_BasePlayer::CreateAnimationState(CBasePlayerAnimState*state)
 {
 	using CreateAnimState_t = void(__thiscall*)(CBasePlayerAnimState*, C_BasePlayer*);
-	static CreateAnimState_t CreateAnimState = (CreateAnimState_t)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46");
+	static CreateAnimState_t CreateAnimState = (CreateAnimState_t)Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46");
 	if (!CreateAnimState) return;
 
 	CreateAnimState(state, this);
@@ -302,7 +303,7 @@ bool C_BasePlayer::IsFlashed()
 
 bool C_BasePlayer::HasC4()
 {
-	static bool (__thiscall* fnHasC4)(void*) = reinterpret_cast<bool(__thiscall*)(void*)>(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "56 8B F1 85 F6 74 31"));
+	static bool (__thiscall* fnHasC4)(void*) = reinterpret_cast<bool(__thiscall*)(void*)>(Utilities::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "56 8B F1 85 F6 74 31"));
 	return fnHasC4(this);
 }
 
@@ -442,14 +443,14 @@ void C_BasePlayer::UpdateClientSideAnimation()
 
 void C_BasePlayer::InvalidateBoneCache()
 {
-	static DWORD addr = (DWORD)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81");
+	static DWORD addr = (DWORD)Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81");
 
-	*(int*)((uintptr_t)this + 0xA30) = g_GlobalVars->framecount; //we'll skip occlusion checks now
-	*(int*)((uintptr_t)this + 0xA28) = 0;//clear occlusion flags
+	*(int*)((uintptr_t)this + 0xA30) = g_GlobalVars->framecount;
+	*(int*)((uintptr_t)this + 0xA28) = 0;
 
 	unsigned long g_iModelBoneCounter = **(unsigned long**)(addr + 10);
-	*(unsigned int*)((DWORD)this + 0x2924) = 0xFF7FFFFF; // m_flLastBoneSetupTime = -FLT_MAX;
-	*(unsigned int*)((DWORD)this + 0x2690) = (g_iModelBoneCounter - 1); // m_iMostRecentModelBoneCounter = g_iModelBoneCounter - 1;
+	*(unsigned int*)((DWORD)this + 0x2924) = 0xFF7FFFFF;
+	*(unsigned int*)((DWORD)this + 0x2690) = (g_iModelBoneCounter - 1);
 }
 
 int C_BasePlayer::m_nMoveType()

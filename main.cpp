@@ -2,7 +2,7 @@
 #include <Windows.h>
 
 #include "valve_sdk/sdk.hpp"
-#include "helpers/utils.hpp"
+#include "helpers/Utilities.hpp"
 
 #include "hooks.hpp"
 #include "options.hpp"
@@ -11,7 +11,7 @@
 
 DWORD WINAPI OnDllAttach(LPVOID base)
 {
-	if (Utils::WaitForModules(10000, { L"client_panorama.dll", L"engine.dll", L"shaderapidx9.dll" }) == WAIT_TIMEOUT) return FALSE;
+	if (Utilities::WaitForModules(10000, { L"client_panorama.dll", L"engine.dll", L"shaderapidx9.dll" }) == WAIT_TIMEOUT) return FALSE;
 
 		Interfaces::Initialize();
 

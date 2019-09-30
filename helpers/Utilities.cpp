@@ -16,7 +16,7 @@ HANDLE _out = NULL, _old_out = NULL;
 HANDLE _err = NULL, _old_err = NULL;
 HANDLE _in = NULL, _old_in = NULL;
 
-namespace Utils 
+namespace Utilities
 {
 	std::vector<char> HexToBytes(const std::string& hex) 
 	{

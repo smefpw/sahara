@@ -6,7 +6,7 @@
 #include <initializer_list>
 #include "../valve_sdk/sdk.hpp"
 
-namespace Utils 
+namespace Utilities
 {
 	std::vector<char> HexToBytes(const std::string& hex);
 	std::string BytesToString(unsigned char* data, int len);

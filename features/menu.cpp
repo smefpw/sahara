@@ -38,22 +38,24 @@ void Menu::RenderMenu()
 
 	if (ImGui::Begin("Sahara", &Visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
 	{
-		if (ImGui::CollapsingHeader("Rage"))
+		if (ImGui::CollapsingHeader("Aimbot"))
 		{
-			ImGui::Checkbox("Enabled", &Feature.AimbotEnabled);
-			ImGui::SliderInt("Hitchance", &Feature.AimbotHitchance, 0, 100);
-			ImGui::SliderInt("Min Dmg", &Feature.AimbotMinDmg, 0, 100);
+			ImGui::Checkbox("Enable", &Feature.Enabled);
+
+			ImGui::SliderInt("Hitchance", &Feature.Hitchance, 0, 100);
+			ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
 		}
 		if (ImGui::CollapsingHeader("Visuals"))
 		{
 			ImGui::Checkbox("Box", &Feature.Box);
 			ImGui::Checkbox("Name", &Feature.Name);
 			ImGui::Checkbox("Health", &Feature.Health);
+			ImGui::Checkbox("Radar", &Feature.Radar);
 		}
 		if (ImGui::CollapsingHeader("Misc"))
 		{
-			ImGui::Checkbox("No scope border", &Feature.NoScope);
-			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBhop);
+			ImGui::Checkbox("Remove scope border", &Feature.RemoveScope);
+			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBunnyhop);
 		}
 		ImGui::End();
 	}

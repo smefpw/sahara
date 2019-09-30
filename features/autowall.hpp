@@ -2,7 +2,7 @@
 #include "../options.hpp"
 #include "../valve_sdk/csgostructs.hpp"
 #include "../helpers/math.hpp"
-#include "../helpers/utils.hpp"
+#include "../helpers/Utilities.hpp"
 #include "../singleton.hpp"
 
 struct FireBulletData

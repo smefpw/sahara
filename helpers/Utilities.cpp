@@ -1,4 +1,4 @@
-#include "Utils.hpp"
+#include "Utilities.hpp"
 
 #define NOMINMAX
 
@@ -302,7 +302,7 @@ namespace Utils
 	}
 	void autoBhop(CUserCmd* cmd)
 	{
-		if (Feature.AutoBhop)
+		if (Feature.AutoBunnyhop)
 		{
 			auto moveType = g_LocalPlayer->GetMoveType();
 			static auto bLastJumped = false, bShouldFake = false;

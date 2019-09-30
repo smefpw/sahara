@@ -1,4 +1,4 @@
-#include "ragebot.hpp"
+#include "Aimbot.hpp"
 #include "../hooks.hpp"
 #include "autowall.hpp"
 #include "../features/visuals.hpp"
@@ -142,7 +142,7 @@ bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack
 	{
 		float highestDamage;
 
-		highestDamage = Feature.AimbotMinDmg;
+		highestDamage = Feature.Damage;
 
 		for (int HitBoxID : HitBoxesToScan)
 		{
@@ -194,7 +194,7 @@ float Hitchance2(C_BaseCombatWeapon* Weapon)
 {
 	float Hitchance = 101;
 	if (!Weapon) return 0;
-	if (Feature.AimbotHitchance > 1)
+	if (Feature.Hitchance > 1)
 	{
 		float Inaccuracy = Weapon->GetInaccuracy();
 
@@ -208,7 +208,7 @@ float Hitchance2(C_BaseCombatWeapon* Weapon)
 
 void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket)
 {
-	if (!g_LocalPlayer || !g_LocalPlayer->IsAlive() || !Weapon || Weapon->IsKnife() || Weapon->IsGrenade() || !Feature.AimbotEnabled) return;
+	if (!g_LocalPlayer || !g_LocalPlayer->IsAlive() || !Weapon || Weapon->IsKnife() || Weapon->IsGrenade() || !Feature.Enabled) return;
 
 	int BestTargetIndex = -1;
 	float BestTargetDistance = FLT_MAX;
@@ -255,9 +255,9 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 
 		cmd->viewangles = AimAngle;
 
-		if (Hitchance(Weapon, cmd->viewangles, Target, float(Feature.AimbotHitchance)) ||
-			Backtrack && Feature.AimbotHitchance * 1.5 <= Hitchance2(Weapon) ||
-			Feature.AimbotHitchance == 0)
+		if (Hitchance(Weapon, cmd->viewangles, Target, float(Feature.Hitchance)) ||
+			Backtrack && Feature.Hitchance * 1.5 <= Hitchance2(Weapon) ||
+			Feature.Hitchance == 0)
 		{
 			if (!(cmd->buttons & IN_ATTACK) && Weapon->CanFire())
 			{

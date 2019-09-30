@@ -1,6 +1,6 @@
 #include "csgostructs.hpp"
 #include "../Helpers/Math.hpp"
-#include "../Helpers/Utils.hpp"
+#include "../Helpers/Utilities.hpp"
 
 bool C_BaseEntity::IsPlayer()
 {
@@ -49,7 +49,7 @@ bool C_BaseCombatWeapon::HasBullets()
 bool C_BaseCombatWeapon::CanFire()
 {
 	static decltype(this) stored_weapon = nullptr;
-	static auto stored_tick = 0;
+	static int stored_tick = 0;
 
 	if (stored_weapon != this || stored_tick >= g_LocalPlayer->m_nTickBase()) 
 	{
@@ -58,10 +58,9 @@ bool C_BaseCombatWeapon::CanFire()
 		return false;
 	}
 
-	if (IsReloading() || m_iClip1() <= 0 || !g_LocalPlayer)
-		return false;
+	if (IsReloading() || m_iClip1() <= 0 || !g_LocalPlayer) return false;
 
-	auto flServerTime = g_LocalPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
+	float flServerTime = g_LocalPlayer->m_nTickBase() * g_GlobalVars->interval_per_tick;
 
 	return m_flNextPrimaryAttack() <= flServerTime;
 }
@@ -140,7 +139,7 @@ bool C_BaseCombatWeapon::IsSniper()
 
 bool C_BaseCombatWeapon::IsReloading()
 {
-	static auto inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90") + 2);
+	static uint32_t inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90") + 2);
 	return *(bool*)((uintptr_t)this + inReload);
 }
 
@@ -160,19 +159,19 @@ void C_BaseCombatWeapon::UpdateAccuracyPenalty()
 }
 
 CUtlVector<IRefCounted*>& C_BaseCombatWeapon::m_CustomMaterials()
-{	static auto inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "83 BE ? ? ? ? ? 7F 67") + 2) - 12;
+{	static unsigned int inReload = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "83 BE ? ? ? ? ? 7F 67") + 2) - 12;
 	return *(CUtlVector<IRefCounted*>*)((uintptr_t)this + inReload);
 }
 
 bool* C_BaseCombatWeapon::m_bCustomMaterialInitialized()
 {
-	static auto currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 86 ? ? ? ? ? FF 50 04") + 2);
+	static uint32_t currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "C6 86 ? ? ? ? ? FF 50 04") + 2);
 	return (bool*)((uintptr_t)this + currentCommand);
 }
 
 CUserCmd*& C_BasePlayer::m_pCurrentCommand()
 {
-	static auto currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "89 BE ? ? ? ? E8 ? ? ? ? 85 FF") + 2);
+	static uint32_t currentCommand = *(uint32_t*)(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "89 BE ? ? ? ? E8 ? ? ? ? 85 FF") + 2);
 	return *(CUserCmd**)((uintptr_t)this + currentCommand);
 }
 
@@ -198,8 +197,7 @@ AnimationLayer *C_BasePlayer::GetAnimOverlays()
 
 AnimationLayer *C_BasePlayer::GetAnimOverlay(int i)
 {
-	if (i < 15)
-		return &GetAnimOverlays()[i];
+	if (i < 15) return &GetAnimOverlays()[i];
 	return nullptr;
 }
 void C_BasePlayer::SetAbsAngles(QAngle angle)
@@ -210,17 +208,16 @@ void C_BasePlayer::SetAbsAngles(QAngle angle)
 }
 int C_BasePlayer::GetSequenceActivity(int sequence)
 {
-	auto hdr = g_MdlInfo->GetStudiomodel(this->GetModel());
+	studiohdr_t* hdr = g_MdlInfo->GetStudiomodel(this->GetModel());
 
-	if (!hdr)
-		return -1;
+	if (!hdr) return -1;
 
-	static auto get_sequence_activity = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(Utils::PatternScan(GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 7D 08 FF 56 8B F1 74 3D"));
+	static int (__fastcall* get_sequence_activity)(void*, studiohdr_t*, int) = reinterpret_cast<int(__fastcall*)(void*, studiohdr_t*, int)>(Utils::PatternScan(GetModuleHandle(L"client_panorama.dll"), "55 8B EC 83 7D 08 FF 56 8B F1 74 3D"));
 	return get_sequence_activity(this, hdr, sequence);
 }
-float C_BasePlayer::MaxDesyncDelta() {
-
-	auto animstate = uintptr_t(this->GetPlayerAnimState());
+float C_BasePlayer::MaxDesyncDelta() 
+{
+	uintptr_t animstate = uintptr_t(this->GetPlayerAnimState());
 
 	float duckammount = *(float*)(animstate + 0xA4);
 	float speedfraction = std::fmax(0, std::fmin(*reinterpret_cast<float*>(animstate + 0xF8), 1));
@@ -233,7 +230,6 @@ float C_BasePlayer::MaxDesyncDelta() {
 	if (duckammount > 0) 
 	{
 		unk2 += ((duckammount * speedfactor) * (0.5f - unk2));
-
 	}
 
 	unk3 = *(float*)(animstate + 0x334) * unk2;
@@ -247,15 +243,10 @@ CBasePlayerAnimState*C_BasePlayer::GetPlayerAnimState()
 
 void C_BasePlayer::UpdateAnimationState(CBasePlayerAnimState*state, QAngle angle)
 {
-	static auto UpdateAnimState = Utils::PatternScan(
-		GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24");
+	static uint8_t* UpdateAnimState = Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 83 E4 F8 83 EC 18 56 57 8B F9 F3 0F 11 54 24");
+	if (!UpdateAnimState) return;
 
-	if (!UpdateAnimState)
-		return;
-
-	__asm {
-		push 0
-	}
+	__asm { push 0 }
 
 	__asm
 	{
@@ -271,9 +262,8 @@ void C_BasePlayer::UpdateAnimationState(CBasePlayerAnimState*state, QAngle angle
 void C_BasePlayer::ResetAnimationState(CBasePlayerAnimState*state)
 {
 	using ResetAnimState_t = void(__thiscall*)(CBasePlayerAnimState*);
-	static auto ResetAnimState = (ResetAnimState_t)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "56 6A 01 68 ? ? ? ? 8B F1");
-	if (!ResetAnimState)
-		return;
+	static ResetAnimState_t ResetAnimState = (ResetAnimState_t)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "56 6A 01 68 ? ? ? ? 8B F1");
+	if (!ResetAnimState) return;
 
 	ResetAnimState(state);
 }
@@ -281,9 +271,8 @@ void C_BasePlayer::ResetAnimationState(CBasePlayerAnimState*state)
 void C_BasePlayer::CreateAnimationState(CBasePlayerAnimState*state)
 {
 	using CreateAnimState_t = void(__thiscall*)(CBasePlayerAnimState*, C_BasePlayer*);
-	static auto CreateAnimState = (CreateAnimState_t)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46");
-	if (!CreateAnimState)
-		return;
+	static CreateAnimState_t CreateAnimState = (CreateAnimState_t)Utils::PatternScan(GetModuleHandleA("client_panorama.dll"), "55 8B EC 56 8B F1 B9 ? ? ? ? C7 46");
+	if (!CreateAnimState) return;
 
 	CreateAnimState(state, this);
 }
@@ -307,13 +296,13 @@ bool C_BasePlayer::IsAlive()
 
 bool C_BasePlayer::IsFlashed()
 {
-	static auto m_flFlashMaxAlpha = NetvarSys::Get().GetOffset("DT_CSPlayer", "m_flFlashMaxAlpha");
+	static uint32_t m_flFlashMaxAlpha = NetvarSys::Get().GetOffset("DT_CSPlayer", "m_flFlashMaxAlpha");
 	return *(float*)((uintptr_t)this + m_flFlashMaxAlpha - 0x8) > 200.0;
 }
 
 bool C_BasePlayer::HasC4()
 {
-	static auto fnHasC4 = reinterpret_cast<bool(__thiscall*)(void*)>(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "56 8B F1 85 F6 74 31"));
+	static bool (__thiscall* fnHasC4)(void*) = reinterpret_cast<bool(__thiscall*)(void*)>(Utils::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "56 8B F1 85 F6 74 31"));
 	return fnHasC4(this);
 }
 
@@ -323,13 +312,13 @@ Vector C_BasePlayer::GetHitboxPos(int hitbox_id)
 
 	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.0f)) 
 	{
-		auto studio_model = g_MdlInfo->GetStudiomodel(GetModel());
+		studiohdr_t* studio_model = g_MdlInfo->GetStudiomodel(GetModel());
 		if (studio_model) 
 		{
-			auto hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);
+			mstudiobbox_t* hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);
 			if (hitbox) 
 			{
-				auto
+				class Vector
 					min = Vector{},
 					max = Vector{};
 
@@ -344,13 +333,13 @@ Vector C_BasePlayer::GetHitboxPos(int hitbox_id)
 }
 Vector C_BasePlayer::GetHitboxPos(int hitbox_id, matrix3x4_t* boneMatrix)
 {
-	auto studio_model = g_MdlInfo->GetStudiomodel(GetModel());
-	if (studio_model) {
-		auto hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);
-		if (hitbox) {
-			auto
-				min = Vector{},
-				max = Vector{};
+	studiohdr_t* studio_model = g_MdlInfo->GetStudiomodel(GetModel());
+	if (studio_model) 
+	{
+		mstudiobbox_t* hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);
+		if (hitbox) 
+		{
+			Vector min = Vector{}, max = Vector{};
 
 			Math::VectorTransform(hitbox->bbmin, boneMatrix[hitbox->bone], min);
 			Math::VectorTransform(hitbox->bbmax, boneMatrix[hitbox->bone], max);
@@ -367,10 +356,12 @@ mstudiobbox_t* C_BasePlayer::GetHitbox(int hitbox_id)
 
 	if (SetupBones(boneMatrix, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.0f)) 
 	{
-		auto studio_model = g_MdlInfo->GetStudiomodel(GetModel());
-		if (studio_model) {
-			auto hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);
-			if (hitbox) {
+		studiohdr_t* studio_model = g_MdlInfo->GetStudiomodel(GetModel());
+		if (studio_model) 
+		{
+			mstudiobbox_t* hitbox = studio_model->GetHitboxSet(0)->GetHitbox(hitbox_id);
+			if (hitbox) 
+			{
 				return hitbox;
 			}
 		}
@@ -380,24 +371,19 @@ mstudiobbox_t* C_BasePlayer::GetHitbox(int hitbox_id)
 
 bool C_BasePlayer::GetHitboxPos(int hitbox, Vector &output)
 {
-	if (hitbox >= HITBOX_MAX)
-		return false;
+	if (hitbox >= HITBOX_MAX) return false;
 
 	const model_t *model = this->GetModel();
-	if (!model)
-		return false;
+	if (!model) return false;
 
 	studiohdr_t *studioHdr = g_MdlInfo->GetStudiomodel(model);
-	if (!studioHdr)
-		return false;
+	if (!studioHdr) return false;
 
 	matrix3x4_t matrix[MAXSTUDIOBONES];
-	if (!this->SetupBones(matrix, MAXSTUDIOBONES, 0x100, 0))
-		return false;
+	if (!this->SetupBones(matrix, MAXSTUDIOBONES, 0x100, 0)) return false;
 
 	mstudiobbox_t *studioBox = studioHdr->GetHitboxSet(0)->GetHitbox(hitbox);
-	if (!studioBox)
-		return false;
+	if (!studioBox) return false;
 
 	Vector min, max;
 
@@ -427,7 +413,7 @@ bool C_BasePlayer::CanSeePlayer(C_BasePlayer* player, int hitbox)
 	CTraceFilter filter;
 	filter.pSkip = this;
 
-	auto endpos = player->GetHitboxPos(hitbox);
+	Vector endpos = player->GetHitboxPos(hitbox);
 
 	ray.Init(GetEyePos(), endpos);
 	g_EngineTrace->TraceRay(ray, MASK_SHOT | CONTENTS_GRATE, &filter, &tr);
@@ -473,7 +459,7 @@ int C_BasePlayer::m_nMoveType()
 
 QAngle* C_BasePlayer::GetVAngles()
 {
-	static auto deadflag = NetvarSys::Get().GetOffset("DT_BasePlayer", "deadflag");
+	static uint32_t deadflag = NetvarSys::Get().GetOffset("DT_BasePlayer", "deadflag");
 	return (QAngle*)((uintptr_t)this + deadflag + 0x4);
 }
 

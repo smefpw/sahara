@@ -2,10 +2,10 @@
 #include <intrin.h>  
 #include "helpers/input.hpp"
 #include "options.hpp"
-#include "helpers/utils.hpp"
-#include "features/visuals.hpp"
-#include "features/ragebot.hpp"
-#include "features/menu.hpp"
+#include "helpers/Utilities.hpp"
+#include "features/Visuals.hpp"
+#include "features/Aimbot.hpp"
+#include "features/Menu.hpp"
 
 #pragma intrinsic(_ReturnAddress) 
 
@@ -102,7 +102,7 @@ namespace Hooks
 		MovementFix::Get().Start(cmd);
 		RageAimbot::Get().StartEnginePred(cmd);
 
-		if (Feature.AimbotEnabled)
+		if (Feature.Enabled)
 		{
 			RageAimbot::Get().StoreRecords();
 			RageAimbot::Get().Do(cmd, Weapon, bSendPacket);
@@ -142,7 +142,7 @@ namespace Hooks
 		static auto panelId = vgui::VPANEL{ 0 };
 		static auto oPaintTraverse = vguipanel_hook.get_original<decltype(&hkPaintTraverse)>(index::PaintTraverse);
 
-		if (Feature.NoScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0)
+		if (Feature.RemoveScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0)
 			return;
 
 		oPaintTraverse(g_VGuiPanel, edx, panel, forceRepaint, allowForce);
@@ -166,7 +166,7 @@ namespace Hooks
 
 			if (InputSys::Get().IsKeyDown(VK_TAB)) Utils::RankRevealAll();
 
-			if (Weapon && Feature.NoScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
+			if (Weapon && Feature.RemoveScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
 			{
 				Render::Get().Line(ScreenWidth / 2, 0, ScreenWidth / 2, ScreenHeight, Color(0, 0, 0, 150));
 				Render::Get().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
@@ -174,7 +174,7 @@ namespace Hooks
 
 			for (int i = 1; i <= 64; i++) 
 			{
-				auto Player = C_BasePlayer::GetPlayerByIndex(i);
+				C_BasePlayer* Player = C_BasePlayer::GetPlayerByIndex(i);
 
 				if (!Player) continue;
 
@@ -185,6 +185,7 @@ namespace Hooks
 						if (Feature.Health) Visuals::Get().Health();
 						if (Feature.Name) Visuals::Get().Name();
 						if (Feature.Box) Visuals::Get().Box();
+						if (Feature.Radar) Visuals::Get().Radar();
 					}
 				}
 			}

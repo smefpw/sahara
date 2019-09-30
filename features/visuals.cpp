@@ -1,6 +1,6 @@
-#include "visuals.hpp"
+#include "Visuals.hpp"
 #include "../hooks.hpp"
-#include "ragebot.hpp"
+#include "Aimbot.hpp"
 
 void Render::CreateFonts()
 {
@@ -153,5 +153,19 @@ void Visuals::Health()
 	float Height = (Context.Box.bottom - Context.Box.top) * float(HealthValue / 100.f);
 
 	Render::Get().FilledRectange(Context.Box.left - 7, Context.Box.top - 1, Context.Box.left - 2, Context.Box.bottom + 1, Color(0, 0, 0, 150));
-	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(200, 200, 200, 255));
+	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(135, 235, 50, 255));
+}
+
+void Visuals::Radar()
+{
+	for (int i = 1; i <= g_GlobalVars->maxClients; i++)
+	{
+		if (i == g_EngineClient->GetLocalPlayer()) continue;
+
+		C_BasePlayer* pPlayer = reinterpret_cast<C_BasePlayer*>(g_EntityList->GetClientEntity(i));
+
+		if (!pPlayer) continue;
+
+		pPlayer->m_bSpotted() = true;
+	}
 }

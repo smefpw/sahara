@@ -10,21 +10,23 @@
 class Options
 {
 public:
-#pragma region Rage
-	CONFIG(bool, AimbotEnabled, false);
-	CONFIG(int, AimbotHitchance, 0);
-	CONFIG(int, AimbotMinDmg, 0);
+#pragma region Aimbot
+	CONFIG(bool, Enabled, false);
+
+	CONFIG(int, Hitchance, 0);
+	CONFIG(int, Damage, 0);
 #pragma endregion
 
 #pragma region Visuals
-	CONFIG(bool, Box, false);
-	CONFIG(bool, Name, false);
 	CONFIG(bool, Health, false);
+	CONFIG(bool, Name, false);
+	CONFIG(bool, Box, false);
+	CONFIG(bool, Radar, false);
 #pragma endregion
 
 #pragma region Misc
-	CONFIG(bool, AutoBhop, false);
-	CONFIG(bool, NoScope, false);
+	CONFIG(bool, AutoBunnyhop, false);
+	CONFIG(bool, RemoveScope, false);
 #pragma endregion
 };
 

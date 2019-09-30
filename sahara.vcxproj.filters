@@ -23,9 +23,6 @@
     <ClCompile Include="Helpers\math.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Helpers\utils.cpp">
-      <Filter>SDK Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
@@ -74,9 +71,6 @@
     <ClCompile Include="valve_sdk\netvars.cpp">
       <Filter>SDK Source Files\SDK</Filter>
     </ClCompile>
-    <ClCompile Include="features\visuals.cpp">
-      <Filter>Features</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
@@ -89,20 +83,26 @@
     <ClCompile Include="ui.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="features\menu.cpp">
-      <Filter>Features</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\directx9\imgui_impl_dx9.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="features\ragebot.cpp">
-      <Filter>Features</Filter>
-    </ClCompile>
-    <ClCompile Include="features\autowall.cpp">
-      <Filter>Features</Filter>
-    </ClCompile>
     <ClCompile Include="valve_sdk\interfaces\IEngineTrace.cpp">
       <Filter>SDK Source Files\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Visuals.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Aimbot.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Menu.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
+    <ClCompile Include="features\Autowall.cpp">
+      <Filter>Features</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\Utilities.cpp">
+      <Filter>SDK Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,9 +298,6 @@
     <ClInclude Include="singleton.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\utils.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="helpers\vfunc_hook.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
@@ -318,9 +315,6 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>SDK Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="features\visuals.hpp">
-      <Filter>Features</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>SDK Header Files</Filter>
@@ -346,9 +340,6 @@
     <ClInclude Include="helpers\input.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="features\menu.hpp">
-      <Filter>Features</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\directx9\imgui_impl_dx9.h">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
@@ -358,11 +349,20 @@
     <ClInclude Include="simpleini.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="features\ragebot.hpp">
+    <ClInclude Include="features\Menu.hpp">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="features\autowall.hpp">
+    <ClInclude Include="features\Aimbot.hpp">
       <Filter>Features</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Visuals.hpp">
+      <Filter>Features</Filter>
+    </ClInclude>
+    <ClInclude Include="features\Autowall.hpp">
+      <Filter>Features</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\Utilities.hpp">
+      <Filter>SDK Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

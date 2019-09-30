@@ -99,13 +99,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="features\autowall.cpp" />
-    <ClCompile Include="features\menu.cpp" />
-    <ClCompile Include="features\ragebot.cpp" />
-    <ClCompile Include="features\visuals.cpp" />
+    <ClCompile Include="features\Autowall.cpp" />
+    <ClCompile Include="features\Menu.cpp" />
+    <ClCompile Include="features\Aimbot.cpp" />
+    <ClCompile Include="features\Visuals.cpp" />
     <ClCompile Include="helpers\input.cpp" />
     <ClCompile Include="helpers\math.cpp" />
-    <ClCompile Include="helpers\utils.cpp" />
+    <ClCompile Include="helpers\Utilities.cpp" />
     <ClCompile Include="helpers\vfunc_hook.cpp" />
     <ClCompile Include="hooks.cpp" />
     <ClCompile Include="imgui\directx9\imgui_impl_dx9.cpp" />
@@ -129,10 +129,10 @@
     <ClCompile Include="valve_sdk\netvars.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="features\autowall.hpp" />
-    <ClInclude Include="features\menu.hpp" />
-    <ClInclude Include="features\ragebot.hpp" />
-    <ClInclude Include="features\visuals.hpp" />
+    <ClInclude Include="features\Autowall.hpp" />
+    <ClInclude Include="features\Menu.hpp" />
+    <ClInclude Include="features\Aimbot.hpp" />
+    <ClInclude Include="features\Visuals.hpp" />
     <ClInclude Include="helpers\input.hpp" />
     <ClInclude Include="imgui\directx9\imgui_impl_dx9.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -147,7 +147,7 @@
     <ClInclude Include="ui.hpp" />
     <ClInclude Include="valve_sdk\Misc\datamap.hpp" />
     <ClInclude Include="helpers\math.hpp" />
-    <ClInclude Include="helpers\utils.hpp" />
+    <ClInclude Include="helpers\Utilities.hpp" />
     <ClInclude Include="helpers\vfunc_hook.hpp" />
     <ClInclude Include="hooks.hpp" />
     <ClInclude Include="imgui\stb_rect_pack.h" />

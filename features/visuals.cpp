@@ -147,10 +147,13 @@ void Visuals::Name()
 
 void Visuals::Recoil()
 {
+	// Kinda useless as paint traverse already has a check for this.
+	if (!g_LocalPlayer->IsAlive()) return;
+
 	int w, h;
 
 	g_EngineClient->GetScreenSize(w, h);
-	g_VGuiSurface->DrawSetColor(Color(255, 255, 255));
+	g_VGuiSurface->DrawSetColor(Color::White);
 
 	int x = w / 2;
 	int y = h / 2;
@@ -162,9 +165,9 @@ void Visuals::Recoil()
 	x -= (dx * (punchAngle.yaw));
 	y += (dy * (punchAngle.pitch));
 
-	// Not the best method but it works, will improve it later on.
-	g_VGuiSurface->DrawLine(x - Feature.Size, y, x + Feature.Size, y);
-	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size);
+	// If you got a better way of doing this, create a pull request and i'll take a look.
+	g_VGuiSurface->DrawLine(x - Feature.x, y, x + Feature.x, y); // 0, 1
+	g_VGuiSurface->DrawLine(x, y - Feature.y, x, y + Feature.y); // 0, 1
 }
 
 void Visuals::Health()

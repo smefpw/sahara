@@ -145,7 +145,6 @@ void Visuals::Name()
 
 void Visuals::Recoil()
 {
-	// Kinda useless as paint traverse already has a check for this.
 	if (!g_LocalPlayer->IsAlive()) return;
 
 	int w, h;
@@ -163,9 +162,8 @@ void Visuals::Recoil()
 	x -= dx * punchAngle.yaw;
 	y += dy * punchAngle.pitch;
 
-	// If you got a better way of doing this, create a pull request and i'll take a look.
-	g_VGuiSurface->DrawLine(x - Feature.Size, y, x + Feature.Size + 1, y); // 0, 1
-	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size + 1); // 0, 1
+	g_VGuiSurface->DrawLine(x - Feature.Size, y, x + Feature.Size + 1, y);
+	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size + 1);
 }
 
 void Visuals::Health()

@@ -25,8 +25,7 @@ public:
 	CONFIG(bool, Radar, false);
 	CONFIG(bool, Recoil, false);
 
-	CONFIG(int, x, 0);
-	CONFIG(int, y, 0);
+	CONFIG(int, Size, 0);
 #pragma endregion
 
 #pragma region Misc

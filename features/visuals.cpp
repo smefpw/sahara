@@ -160,12 +160,12 @@ void Visuals::Recoil()
 
 	QAngle punchAngle = g_LocalPlayer->m_aimPunchAngle();
 
-	x -= (dx * (punchAngle.yaw));
-	y += (dy * (punchAngle.pitch));
+	x -= dx * punchAngle.yaw;
+	y += dy * punchAngle.pitch;
 
 	// If you got a better way of doing this, create a pull request and i'll take a look.
-	g_VGuiSurface->DrawLine(x - Feature.x, y, x + Feature.x, y); // 0, 1
-	g_VGuiSurface->DrawLine(x, y - Feature.y, x, y + Feature.y); // 0, 1
+	g_VGuiSurface->DrawLine(x - Feature.Size, y, x + Feature.Size + 1, y); // 0, 1
+	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size + 1); // 0, 1
 }
 
 void Visuals::Health()

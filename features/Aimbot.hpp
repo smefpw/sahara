@@ -17,8 +17,7 @@ private:
 	QAngle m_oldangle;
 };
 
-class RageAimbot :
-	public Singleton<RageAimbot>
+class RageAimbot : public Singleton<RageAimbot>
 {
 	friend class Singleton<RageAimbot>;
 private:
@@ -35,8 +34,7 @@ private:
 			SimulationTime = Player->m_flSimulationTime();
 			Origin = Player->m_vecOrigin();
 			MatrixBuilt = false;
-			if (Player->SetupBones(BoneMatrix, 128, BONE_USED_BY_HITBOX, g_GlobalVars->curtime))
-				MatrixBuilt = true;
+			if (Player->SetupBones(BoneMatrix, 128, BONE_USED_BY_HITBOX, g_GlobalVars->curtime)) MatrixBuilt = true;
 		}
 		float SimulationTime;
 		Vector Origin;

@@ -66,20 +66,15 @@ namespace Utilities
 		{
 			for (int i = 0; i<pMap->dataNumFields; i++) 
 			{
-				if (pMap->dataDesc[i].fieldName == NULL)
-					continue;
-
-				if (strcmp(name, pMap->dataDesc[i].fieldName) == 0)
-					return pMap->dataDesc[i].fieldOffset[TD_OFFSET_NORMAL];
-
+				if (pMap->dataDesc[i].fieldName == NULL) continue;
+				if (strcmp(name, pMap->dataDesc[i].fieldName) == 0) return pMap->dataDesc[i].fieldOffset[TD_OFFSET_NORMAL];
 				if (pMap->dataDesc[i].fieldType == FIELD_EMBEDDED)
 				{
 					if (pMap->dataDesc[i].td)
 					{
 						unsigned int offset;
 
-						if ((offset = FindInDataMap(pMap->dataDesc[i].td, name)) != 0)
-							return offset;
+						if ((offset = FindInDataMap(pMap->dataDesc[i].td, name)) != 0) return offset;
 					}
 				}
 			}
@@ -100,30 +95,23 @@ namespace Utilities
         _err     = GetStdHandle(STD_ERROR_HANDLE);
         _in      = GetStdHandle(STD_INPUT_HANDLE);
 
-        SetConsoleMode(_out,
-            ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
-
-        SetConsoleMode(_in,
-            ENABLE_INSERT_MODE | ENABLE_EXTENDED_FLAGS |
-            ENABLE_PROCESSED_INPUT | ENABLE_QUICK_EDIT_MODE);
+        SetConsoleMode(_out, ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT);
+        SetConsoleMode(_in, ENABLE_INSERT_MODE | ENABLE_EXTENDED_FLAGS | ENABLE_PROCESSED_INPUT | ENABLE_QUICK_EDIT_MODE);
     }
     void DetachConsole()
     {
-        if(_out && _err && _in) {
+        if(_out && _err && _in)
+		{
             FreeConsole();
 
-            if(_old_out)
-                SetStdHandle(STD_OUTPUT_HANDLE, _old_out);
-            if(_old_err)
-                SetStdHandle(STD_ERROR_HANDLE, _old_err);
-            if(_old_in)
-                SetStdHandle(STD_INPUT_HANDLE, _old_in);
+            if(_old_out) SetStdHandle(STD_OUTPUT_HANDLE, _old_out);
+            if(_old_err) SetStdHandle(STD_ERROR_HANDLE, _old_err);
+            if(_old_in) SetStdHandle(STD_INPUT_HANDLE, _old_in);
         }
     }
     bool ConsolePrint(const char* fmt, ...)
     {
-        if(!_out) 
-            return false;
+        if(!_out) return false;
 
         char buf[1024];
         va_list va;
@@ -136,8 +124,7 @@ namespace Utilities
     }
     char ConsoleReadKey()
     {
-        if(!_in)
-            return false;
+        if(!_in) return false;
 
         auto key = char{ 0 };
         auto keysread = DWORD{ 0 };
@@ -153,39 +140,43 @@ namespace Utilities
 
         std::uint32_t totalSlept = 0;
 
-        if(timeout == 0) {
-            for(auto& mod : modules) {
-                if(GetModuleHandleW(std::data(mod)) == NULL)
-                    return WAIT_TIMEOUT;
+        if(timeout == 0)
+		{
+            for(auto& mod : modules)
+			{
+                if(GetModuleHandleW(std::data(mod)) == NULL) return WAIT_TIMEOUT;
             }
             return WAIT_OBJECT_0;
         }
 
-        if(timeout < 0)
-            timeout = INT32_MAX;
+        if(timeout < 0) timeout = INT32_MAX;
 
-        while(true) {
-            for(auto i = 0u; i < modules.size(); ++i) {
+        while(true)
+		{
+            for(auto i = 0u; i < modules.size(); ++i)
+			{
                 auto& module = *(modules.begin() + i);
-                if(!signaled[i] && GetModuleHandleW(std::data(module)) != NULL) {
+                if (!signaled[i] && GetModuleHandleW(std::data(module)) != NULL)
+				{
                     signaled[i] = true;
 
                     bool done = true;
-                    for(auto j = 0u; j < modules.size(); ++j) {
-                        if(!signaled[j]) {
+                    for(auto j = 0u; j < modules.size(); ++j)
+					{
+                        if(!signaled[j])
+						{
                             done = false;
                             break;
                         }
                     }
-                    if(done) {
+                    if(done)
+					{
                         success = true;
                         goto exit;
                     }
                 }
             }
-            if(totalSlept > std::uint32_t(timeout)) {
-                break;
-            }
+            if(totalSlept > std::uint32_t(timeout)) break;
             Sleep(10);
             totalSlept += 10;
         }
@@ -195,18 +186,22 @@ namespace Utilities
     }
     std::uint8_t* PatternScan(void* module, const char* signature)
     {
-        static auto pattern_to_byte = [](const char* pattern) {
+        static auto pattern_to_byte = [](const char* pattern)
+		{
             auto bytes = std::vector<int>{};
             auto start = const_cast<char*>(pattern);
             auto end = const_cast<char*>(pattern) + strlen(pattern);
 
-            for(auto current = start; current < end; ++current) {
-                if(*current == '?') {
+            for(auto current = start; current < end; ++current)
+			{
+                if(*current == '?')
+				{
                     ++current;
-                    if(*current == '?')
-                        ++current;
+                    if (*current == '?') ++current;
                     bytes.push_back(-1);
-                } else {
+                } 
+				else
+				{
                     bytes.push_back(strtoul(current, &current, 16));
                 }
             }
@@ -223,17 +218,18 @@ namespace Utilities
         auto s = patternBytes.size();
         auto d = patternBytes.data();
 
-        for(auto i = 0ul; i < sizeOfImage - s; ++i) {
+        for (auto i = 0ul; i < sizeOfImage - s; ++i)
+		{
             bool found = true;
-            for(auto j = 0ul; j < s; ++j) {
-                if(scanBytes[i + j] != d[j] && d[j] != -1) {
+            for (auto j = 0ul; j < s; ++j)
+			{
+                if (scanBytes[i + j] != d[j] && d[j] != -1)
+				{
                     found = false;
                     break;
                 }
             }
-            if(found) {
-                return &scanBytes[i];
-            }
+            if (found) return &scanBytes[i];
         }
         return nullptr;
     }
@@ -262,20 +258,17 @@ namespace Utilities
 		ConVar* min_ud_rate = g_CVar->FindVar("sv_minupdaterate");
 		ConVar* max_ud_rate = g_CVar->FindVar("sv_maxupdaterate");
 
-		if (min_ud_rate && max_ud_rate)
-			ud_rate = max_ud_rate->GetInt();
+		if (min_ud_rate && max_ud_rate) ud_rate = max_ud_rate->GetInt();
 
 		float ratio = g_CVar->FindVar("cl_interp_ratio")->GetFloat();
 
-		if (ratio == 0)
-			ratio = 1.0f;
+		if (ratio == 0) ratio = 1.0f;
 
 		float lerp = g_CVar->FindVar("cl_interp")->GetFloat();
 		ConVar* c_min_ratio = g_CVar->FindVar("sv_client_min_interp_ratio");
 		ConVar* c_max_ratio = g_CVar->FindVar("sv_client_max_interp_ratio");
 
-		if (c_min_ratio && c_max_ratio && c_min_ratio->GetFloat() != 1)
-			ratio = std::clamp(ratio, c_min_ratio->GetFloat(), c_max_ratio->GetFloat());
+		if (c_min_ratio && c_max_ratio && c_min_ratio->GetFloat() != 1) ratio = std::clamp(ratio, c_min_ratio->GetFloat(), c_max_ratio->GetFloat());
 
 		return std::max(lerp, (ratio / ud_rate));
 	}
@@ -295,8 +288,7 @@ namespace Utilities
 		float TimeLimit = MaxTime;
 		std::clamp(TimeLimit, 0.001f, 0.2f);
 
-		if (fabsf(DeltaTime) > TimeLimit)
-			return false;
+		if (fabsf(DeltaTime) > TimeLimit) return false;
 
 		return true;
 	}

@@ -6,11 +6,11 @@
 #include "../singleton.hpp"
 
 
-class Render : public Singleton<Render>{
+class Render : public Singleton<Render>
+{
 	friend class Singleton<Render>;
 private:
 public:
-	vgui::HFont Watermark;
 	vgui::HFont Visuals;
 
 	void CreateFonts();
@@ -21,7 +21,8 @@ public:
 	void Line(int X1, int Y1, int X2, int Y2, Color DrawColor);
 };
 
-class Visuals : public Singleton<Visuals>{
+class Visuals : public Singleton<Visuals>
+{
 	friend class Singleton<Visuals>;
 private:
 	RECT GetBBox(C_BasePlayer* Player, Vector TransformedPoints[]);

@@ -69,6 +69,7 @@ void ScaleDamage_1(int hitgroup, C_BasePlayer* enemy, float weapon_armor_ratio, 
 				current_damage = ratio;
 			}
 			break;
+
 		case HITGROUP_GENERIC:
 		case HITGROUP_CHEST:
 		case HITGROUP_STOMACH:
@@ -97,7 +98,6 @@ void Autowall::TraceLine(Vector& absStart, Vector& absEnd, unsigned int mask, IC
 
 void Autowall::ClipTraceToPlayers(const Vector& absStart, const Vector absEnd, unsigned int mask, ITraceFilter* filter, CGameTrace* tr)
 {
-
 	C_BasePlayer* pLocal = g_LocalPlayer;
 	C_BaseCombatWeapon* weapon = pLocal->m_hActiveWeapon();
 
@@ -186,18 +186,10 @@ void Autowall::GetBulletTypeParameters(float& maxRange, float& maxDistance, char
 
 bool Autowall::BreakableEntity(IClientEntity* entity)
 {
-
 	ClientClass* pClass = (ClientClass*)entity->GetClientClass();
 
-	if (!pClass)
-	{
-		return false;
-	}
-
-	if (pClass == nullptr)
-	{
-		return false;
-	}
+	if (!pClass) return false;
+	if (pClass == nullptr) return false;
 
 	return pClass->m_ClassID == ClassId::ClassId_CBreakableProp || pClass->m_ClassID == ClassId::ClassId_CBreakableSurface;
 
@@ -212,15 +204,8 @@ void Autowall::ScaleDamage(CGameTrace& enterTrace, CCSWeaponInfo* weaponData, fl
 	int armorValue = ((C_BasePlayer*)enterTrace.hit_entity)->m_ArmorValue();
 	int hitGroup = enterTrace.hitgroup;
 
-	if (!pLocal)
-	{
-		return;
-	}
-
-	if (weapon->IsZeus() || weapon->IsGrenade() || weapon->IsKnife())
-	{
-		return;
-	}
+	if (!pLocal) return;
+	if (weapon->IsZeus() || weapon->IsGrenade() || weapon->IsKnife()) return;
 
 	auto IsArmored = [&enterTrace]()->bool
 	{
@@ -525,19 +510,13 @@ bool Autowall::FireBullet(C_BaseCombatWeapon* pWeapon, Vector& direction, float&
 
 	filter.pSkip = local;
 
-	if (!weaponData)
-	{
-		return false;
-	}
+	if (!weaponData) return false;
 
 	maxRange = weaponData->flRange;
 
 	GetBulletTypeParameters(penetrationPower, penetrationDistance, *(char**)((uintptr_t)weaponData + 0x0080), sv_penetration_type);
 
-	if (sv_penetration_type)
-	{
-		penetrationPower = weaponData->flPenetration;
-	}
+	if (sv_penetration_type) penetrationPower = weaponData->flPenetration;
 
 	int possibleHitsRemaining = 4;
 
@@ -558,19 +537,13 @@ bool Autowall::FireBullet(C_BaseCombatWeapon* pWeapon, Vector& direction, float&
 
 		int enterMaterial = enterSurfaceData->game.material;
 
-		if (enterTrace.fraction == 1.f)
-		{
-			break;
-		}
+		if (enterTrace.fraction == 1.f) break;
 
 		currentDistance += enterTrace.fraction * maxRange;
 
 		currentDamage *= pow(weaponData->flRangeModifier, (currentDistance / 500.f));
 
-		if (currentDistance > penetrationDistance && weaponData->flPenetration > 0.f || enterSurfPenetrationModifier < 0.1f)
-		{
-			break;
-		}
+		if (currentDistance > penetrationDistance && weaponData->flPenetration > 0.f || enterSurfPenetrationModifier < 0.1f) break;
 
 		bool canDoDamage = (enterTrace.hitgroup != HITGROUP_GEAR && enterTrace.hitgroup != HITGROUP_GENERIC);
 
@@ -580,10 +553,7 @@ bool Autowall::FireBullet(C_BaseCombatWeapon* pWeapon, Vector& direction, float&
 			return true;
 		}
 
-		if (!HandleBulletPenetration(weaponData, enterTrace, eyePosition, direction, possibleHitsRemaining, currentDamage, penetrationPower, sv_penetration_type, ff_damage_reduction_bullets, ff_damage_bullet_penetration))
-		{
-			break;
-		}
+		if (!HandleBulletPenetration(weaponData, enterTrace, eyePosition, direction, possibleHitsRemaining, currentDamage, penetrationPower, sv_penetration_type, ff_damage_reduction_bullets, ff_damage_bullet_penetration)) break;
 	}
 	return false;
 }
@@ -592,10 +562,7 @@ float Autowall::CanHit(Vector& point)
 {
 	C_BasePlayer* local = g_LocalPlayer;
 
-	if (!local || !local->IsAlive())
-	{
-		return -1.f;
-	}
+	if (!local || !local->IsAlive()) return -1.f;
 
 	FireBulletData data(local->GetEyePos());
 	data.filter = CTraceFilter();
@@ -607,10 +574,8 @@ float Autowall::CanHit(Vector& point)
 	direction = tmp;
 	direction.NormalizeInPlace();
 
-	if (FireBullet(local->m_hActiveWeapon(), direction, currentDamage))
-	{
-		return currentDamage;
-	}
+	if (FireBullet(local->m_hActiveWeapon(), direction, currentDamage)) return currentDamage;
+
 	return -1.f;
 }
 
@@ -618,10 +583,7 @@ float Autowall::CanHit(Vector& start, Vector& point)
 {
 	C_BasePlayer* local = g_LocalPlayer;
 
-	if (!local || !local->IsAlive())
-	{
-		return -1.f;
-	}
+	if (!local || !local->IsAlive()) return -1.f;
 
 	FireBulletData data(start);
 	data.filter = CTraceFilter();
@@ -633,19 +595,14 @@ float Autowall::CanHit(Vector& start, Vector& point)
 	direction = tmp;
 	direction.NormalizeInPlace();
 
-	if (FireBullet(local->m_hActiveWeapon(), direction, currentDamage))
-	{
-		return currentDamage;
-	}
+	if (FireBullet(local->m_hActiveWeapon(), direction, currentDamage)) return currentDamage;
+
 	return -1.f;
 }
 
 float Autowall::CanHit(C_BasePlayer* ent, Vector& point)
 {
-	if (!ent || !ent->IsAlive())
-	{
-		return -1.f;
-	}
+	if (!ent || !ent->IsAlive()) return -1.f;
 
 	FireBulletData data(ent->GetEyePos());
 	data.filter = CTraceFilter();
@@ -657,10 +614,8 @@ float Autowall::CanHit(C_BasePlayer* ent, Vector& point)
 	direction = tmp;
 	direction.NormalizeInPlace();
 
-	if (FireBullet(ent->m_hActiveWeapon(), direction, currentDamage))
-	{
-		return currentDamage;
-	}
+	if (FireBullet(ent->m_hActiveWeapon(), direction, currentDamage)) return currentDamage;
+
 	return -1.f;
 }
 
@@ -668,10 +623,7 @@ bool Autowall::trace_awall(float& damage)
 {
 	C_BasePlayer* local = g_LocalPlayer;
 
-	if (!local)
-	{
-		return false;
-	}
+	if (!local) return false;
 
 	FireBulletData data(local->GetEyePos());
 	Vector eyepos = local->GetEyePos();
@@ -694,20 +646,14 @@ bool Autowall::trace_awall(float& damage)
 
 	C_BaseCombatWeapon* weapon = (C_BaseCombatWeapon*)local->m_hActiveWeapon().Get();
 
-	if (!weapon)
-	{
-		return false;
-	}
+	if (!weapon) return false;
 
 	data.penetrate_count = 1;
 	data.trace_length = 0.0f;
 
 	CCSWeaponInfo* weaponData = weapon->GetCSWeaponData();
 
-	if (!weaponData)
-	{
-		return false;
-	}
+	if (!weaponData) return false;
 
 	data.current_damage = (float)weaponData->iDamage;
 
@@ -717,15 +663,8 @@ bool Autowall::trace_awall(float& damage)
 
 	TraceLine(data.src, end, MASK_SHOT | CONTENTS_GRATE, local, &data.enter_trace);
 
-	if (data.enter_trace.fraction == 1.0f)
-	{
-		return false;
-	}
-
-	if (FireBullet(weapon, data.direction, damage))
-	{
-		return true;
-	}
+	if (data.enter_trace.fraction == 1.0f) return false;
+	if (FireBullet(weapon, data.direction, damage)) return true;
 
 	return false;
 }

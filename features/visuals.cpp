@@ -5,10 +5,8 @@
 void Render::CreateFonts()
 {
 	Visuals = g_VGuiSurface->CreateFont_();
-	Watermark = g_VGuiSurface->CreateFont_();
 
 	g_VGuiSurface->SetFontGlyphSet(Visuals, "Tahoma", 12, 400, 0, 0, FONTFLAG_OUTLINE);
-	g_VGuiSurface->SetFontGlyphSet(Watermark, "Verdana", 16, 600, 0, 0, FONTFLAG_OUTLINE);
 }
 
 void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawColor, bool Center)
@@ -189,8 +187,6 @@ void Visuals::Radar()
 
 		C_BasePlayer* pPlayer = reinterpret_cast<C_BasePlayer*>(g_EntityList->GetClientEntity(i));
 
-		if (!pPlayer) continue;
-
-		pPlayer->m_bSpotted() = true;
+		if (!pPlayer) continue; pPlayer->m_bSpotted() = true;
 	}
 }

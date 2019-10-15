@@ -23,10 +23,8 @@ namespace Math
 		AngleVectors(viewAngle, aim);
 		AngleVectors(aimAngle, ang);
 
-		//return RAD2DEG(acos(aim.Dot(ang) / aim.LengthSqr()));
 		auto res = RAD2DEG(acos(aim.Dot(ang) / aim.LengthSqr()));
-		if (std::isnan(res))
-			res = 0.f;
+		if (std::isnan(res)) res = 0.f; 
 		return res;
 	}
     //--------------------------------------------------------------------------------
@@ -109,21 +107,20 @@ namespace Math
     {
         float	tmp, yaw, pitch;
 
-        if(forward[1] == 0 && forward[0] == 0) {
+        if (forward[1] == 0 && forward[0] == 0)
+		{
             yaw = 0;
-            if(forward[2] > 0)
-                pitch = 270;
-            else
-                pitch = 90;
-        } else {
+            if (forward[2] > 0) pitch = 270;
+            else pitch = 90;
+        } 
+		else
+		{
             yaw = (atan2(forward[1], forward[0]) * 180 / DirectX::XM_PI);
-            if(yaw < 0)
-                yaw += 360;
+            if (yaw < 0) yaw += 360;
 
             tmp = sqrt(forward[0] * forward[0] + forward[1] * forward[1]);
             pitch = (atan2(-forward[2], tmp) * 180 / DirectX::XM_PI);
-            if(pitch < 0)
-                pitch += 360;
+            if (pitch < 0) pitch += 360;
         }
 
         angles[0] = pitch;
@@ -141,7 +138,8 @@ namespace Math
 
         float w = w2sMatrix.m[3][0] * in.x + w2sMatrix.m[3][1] * in.y + w2sMatrix.m[3][2] * in.z + w2sMatrix.m[3][3];
 
-        if(w < 0.001f) {
+        if (w < 0.001f)
+		{
             out.x *= 100000;
             out.y *= 100000;
             return false;
@@ -155,7 +153,8 @@ namespace Math
     //--------------------------------------------------------------------------------
     bool WorldToScreen(const Vector& in, Vector& out)
     {
-        if(screen_transform(in, out)) {
+        if (screen_transform(in, out))
+		{
             int w, h;
             g_EngineClient->GetScreenSize(w, h);
 
@@ -170,13 +169,7 @@ namespace Math
 	float RandomFloat(float min, float max)
 	{
 		static auto ranFloat = reinterpret_cast<float(*)(float, float)>(GetProcAddress(GetModuleHandleW(L"vstdlib.dll"), "RandomFloat"));
-		if (ranFloat)
-		{
-			return ranFloat(min, max);
-		}
-		else
-		{
-			return 0.f;
-		}
+		if (ranFloat) return ranFloat(min, max);
+		else return 0.f;
 	}
 }

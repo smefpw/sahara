@@ -126,7 +126,6 @@ bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlay
 		g_EngineTrace->ClipRayToEntity(ray, MASK_SHOT | CONTENTS_GRATE, ent, &tr);
 
 		if (tr.hit_entity == ent) ++cHits;
-
 		if (static_cast<int> ((static_cast<float> (cHits) / 150.f) * 100.f) >= chance) return true;
 		if ((150 - i + cHits) < cNeededHits) return false;
 	}
@@ -138,6 +137,7 @@ bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack
 	std::vector<int> HitBoxesToScan{ 0,1,2,3,4,5,6, HITBOX_LEFT_FOOT, HITBOX_RIGHT_FOOT };
 
 	int bestHitbox = -1;
+
 	if (!Backtrack)
 	{
 		float highestDamage;

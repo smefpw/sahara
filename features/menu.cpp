@@ -51,7 +51,8 @@ void Menu::RenderMenu()
 			ImGui::Checkbox("Name", &Feature.Name);
 			ImGui::Checkbox("Health", &Feature.Health);
 			ImGui::Checkbox("Radar", &Feature.Radar);
-			if (ImGui::Checkbox("Recoil", &Feature.Recoil)) ImGui::SliderInt("x", &Feature.Size, 0, 15);
+			
+			if (ImGui::Checkbox("Recoil", &Feature.Recoil)) ImGui::SliderInt("Size", &Feature.Size, 0, 15);
 		}
 		if (ImGui::CollapsingHeader("Misc"))
 		{

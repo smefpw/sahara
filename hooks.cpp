@@ -142,8 +142,7 @@ namespace Hooks
 		static auto panelId = vgui::VPANEL{ 0 };
 		static auto oPaintTraverse = vguipanel_hook.get_original<decltype(&hkPaintTraverse)>(index::PaintTraverse);
 
-		if (Feature.RemoveScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0)
-			return;
+		if (Feature.RemoveScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0) return;
 
 		oPaintTraverse(g_VGuiPanel, edx, panel, forceRepaint, allowForce);
 
@@ -186,6 +185,7 @@ namespace Hooks
 						if (Feature.Name) Visuals::Get().Name();
 						if (Feature.Box) Visuals::Get().Box();
 						if (Feature.Radar) Visuals::Get().Radar();
+						if (Feature.Recoil) Visuals::Get().Recoil();
 					}
 				}
 			}

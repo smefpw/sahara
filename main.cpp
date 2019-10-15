@@ -1,4 +1,5 @@
 #define NOMINMAX
+
 #include <Windows.h>
 
 #include "valve_sdk/sdk.hpp"
@@ -13,14 +14,14 @@ DWORD WINAPI OnDllAttach(LPVOID base)
 {
 	if (Utilities::WaitForModules(10000, { L"client_panorama.dll", L"engine.dll", L"shaderapidx9.dll" }) == WAIT_TIMEOUT) return FALSE;
 
-		Interfaces::Initialize();
+	Interfaces::Initialize();
 
-		NetvarSys::Get().Initialize();
-		InputSys::Get().Initialize();
-		Menu::Get().Initialize();
-		Hooks::Initialize();
+	NetvarSys::Get().Initialize();
+	InputSys::Get().Initialize();
+	Menu::Get().Initialize();
+	Hooks::Initialize();
 
-		InputSys::Get().RegisterHotkey(VK_INSERT, [base]() { Menu::Get().Toggle(); });
+	InputSys::Get().RegisterHotkey(VK_INSERT, [base]() { Menu::Get().Toggle(); });
 }
 
 BOOL WINAPI DllMain(
@@ -30,11 +31,11 @@ BOOL WINAPI DllMain(
 {
     switch(fdwReason)
 	{
-        case DLL_PROCESS_ATTACH:
-            DisableThreadLibraryCalls(hinstDll);
-            CreateThread(nullptr, 0, OnDllAttach, hinstDll, 0, nullptr);
-            return TRUE;
-        default:
-            return TRUE;
+	case DLL_PROCESS_ATTACH:
+		DisableThreadLibraryCalls(hinstDll);
+		CreateThread(nullptr, 0, OnDllAttach, hinstDll, 0, nullptr);
+		return TRUE;
+	default:
+		return TRUE;
     }
 }

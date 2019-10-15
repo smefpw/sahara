@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <memory>
 #include <unordered_map>
@@ -22,6 +23,9 @@ public:
 	CONFIG(bool, Name, false);
 	CONFIG(bool, Box, false);
 	CONFIG(bool, Radar, false);
+	CONFIG(bool, Recoil, false);
+
+	CONFIG(int, Size, 0);
 #pragma endregion
 
 #pragma region Misc

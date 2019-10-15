@@ -34,8 +34,10 @@ private:
 	} Context;
 public:
 	bool Begin(C_BasePlayer* Player);
+
 	void Health();
 	void Name();
 	void Box();
 	void Radar();
+	void Recoil();
 };

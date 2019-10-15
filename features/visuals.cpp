@@ -145,6 +145,28 @@ void Visuals::Name()
 	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.top - TextHeight, PlayerInfo.szName, Render::Get().Visuals, Color(255, 255, 255, 255), true);
 }
 
+void Visuals::Recoil()
+{
+	int w, h;
+
+	g_EngineClient->GetScreenSize(w, h);
+	g_VGuiSurface->DrawSetColor(Color(255, 255, 255));
+
+	int x = w / 2;
+	int y = h / 2;
+	int dy = h / 97;
+	int dx = w / 97;
+
+	QAngle punchAngle = g_LocalPlayer->m_aimPunchAngle();
+
+	x -= (dx * (punchAngle.yaw));
+	y += (dy * (punchAngle.pitch));
+
+	// Not the best method but it works, will improve it later on.
+	g_VGuiSurface->DrawLine(x - Feature.Size, y, x + Feature.Size, y);
+	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size);
+}
+
 void Visuals::Health()
 {
 	int HealthValue = Context.Player->m_iHealth();

@@ -132,7 +132,7 @@ bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlay
 
 	return false;
 }
-bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack, matrix3x4_t* BoneMatrix)
+bool RageAimbot::Hitscan(C_BasePlayer* pEntity, Vector& HitboxPos, bool Backtrack, matrix3x4_t* BoneMatrix)
 {
 	std::vector<int> HitBoxesToScan{ 0,1,2,3,4,5,6, HITBOX_LEFT_FOOT, HITBOX_RIGHT_FOOT };
 
@@ -146,10 +146,10 @@ bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack
 
 		for (int HitBoxID : HitBoxesToScan)
 		{
-			Player->SetAbsOrigin(Player->m_vecOrigin());
-			Vector Point = Player->GetHitboxPos(HitBoxID, BoneMatrix);
+			pEntity->SetAbsOrigin(pEntity->m_vecOrigin());
+			Vector Point = pEntity->GetHitboxPos(HitBoxID, BoneMatrix);
 			float damage = Autowall::Get().CanHit(Point);
-			if (damage >= highestDamage || damage >= Player->m_iHealth())
+			if (damage >= highestDamage || damage >= pEntity->m_iHealth())
 			{
 				bestHitbox = HitBoxID;
 				highestDamage = damage;
@@ -162,9 +162,9 @@ bool RageAimbot::Hitscan(C_BasePlayer* Player, Vector& HitboxPos, bool Backtrack
 	{
 		for (int HitBoxID : HitBoxesToScan)
 		{
-			Vector Point = Player->GetHitboxPos(HitBoxID, BoneMatrix);
+			Vector Point = pEntity->GetHitboxPos(HitBoxID, BoneMatrix);
 
-			if (g_LocalPlayer->CanSeePlayer(Player, Point))
+			if (g_LocalPlayer->CanSeePlayer(pEntity, Point))
 			{
 				bestHitbox = HitBoxID;
 				HitboxPos = Point;
@@ -178,15 +178,16 @@ void RageAimbot::StoreRecords()
 {
 	for (int i = 1; i <= 64; i++)
 	{
-		C_BasePlayer* Player = C_BasePlayer::GetPlayerByIndex(i);
-		if (!Player || Player->IsDormant() || !Player->IsPlayer() || !Player->IsAlive() || !Player->IsEnemy())
+		auto pEntity = C_BasePlayer::GetPlayerByIndex(i);
+
+		if (!pEntity || pEntity->IsDormant() || !pEntity->IsPlayer() || !pEntity->IsAlive() || !pEntity->IsEnemy())
 		{
 			if (BacktrackRecords[i].size() > 0)
 				for (int Tick = 0; Tick < BacktrackRecords[i].size(); Tick++) BacktrackRecords[i].erase(BacktrackRecords[i].begin() + Tick);
 			continue;
 		}
 
-		BacktrackRecords[i].insert(BacktrackRecords[i].begin(), TickInfo(Player));
+		BacktrackRecords[i].insert(BacktrackRecords[i].begin(), TickInfo(pEntity));
 		for (auto Tick : BacktrackRecords[i]) if (!Utilities::IsTickValid(Tick.SimulationTime, 0.2f)) BacktrackRecords[i].pop_back();
 	}
 }
@@ -219,23 +220,23 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 
 	for (int i = 1; i <= 64; i++)
 	{
-		C_BasePlayer* Player = C_BasePlayer::GetPlayerByIndex(i);
-		if (!Player || !Player->IsPlayer() || Player->IsDormant() || !Player->IsAlive() || !Player->IsEnemy() || BacktrackRecords[i].size() < 1) continue;
+		auto pEntity = C_BasePlayer::GetPlayerByIndex(i);
+		if (!pEntity || !pEntity->IsPlayer() || pEntity->IsDormant() || !pEntity->IsAlive() || !pEntity->IsEnemy() || BacktrackRecords[i].size() < 1) continue;
 
-		float PlayerDistance = Math::VectorDistance(g_LocalPlayer->m_vecOrigin(), Player->m_vecOrigin());
+		float PlayerDistance = Math::VectorDistance(g_LocalPlayer->m_vecOrigin(), pEntity->m_vecOrigin());
 
 		if (BestTargetDistance > PlayerDistance)
 		{
 			if (BacktrackRecords[i].front().MatrixBuilt && BacktrackRecords[i].front().BoneMatrix != nullptr &&
-				Hitscan(Player, Hitbox, false, BacktrackRecords[i].front().BoneMatrix))
+				Hitscan(pEntity, Hitbox, false, BacktrackRecords[i].front().BoneMatrix))
 			{
 				BestTargetDistance = PlayerDistance;
 				BestTargetIndex = i;
-				BestTargetSimtime = Player->m_flSimulationTime();
+				BestTargetSimtime = pEntity->m_flSimulationTime();
 				Backtrack = false;
 			}
 			else if (BacktrackRecords[i].back().MatrixBuilt && BacktrackRecords[i].back().BoneMatrix != nullptr &&
-				Hitscan(Player, Hitbox, true, BacktrackRecords[i].back().BoneMatrix))
+				Hitscan(pEntity, Hitbox, true, BacktrackRecords[i].back().BoneMatrix))
 			{
 				BestTargetDistance = PlayerDistance;
 				BestTargetIndex = i;
@@ -246,7 +247,7 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 	}
 	if (BestTargetIndex != -1 && Hitbox.IsValid() && BestTargetSimtime)
 	{
-		C_BasePlayer* Target = C_BasePlayer::GetPlayerByIndex(BestTargetIndex);
+		auto Target = C_BasePlayer::GetPlayerByIndex(BestTargetIndex);
 		if (!Target) return;
 		QAngle AimAngle = Math::CalcAngle(g_LocalPlayer->GetEyePos(), Hitbox);
 		AimAngle -= g_LocalPlayer->m_aimPunchAngle() * g_CVar->FindVar("weapon_recoil_scale")->GetFloat();

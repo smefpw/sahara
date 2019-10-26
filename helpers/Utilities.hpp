@@ -15,6 +15,7 @@ namespace Utilities
 	unsigned int FindInDataMap(datamap_t * pMap, const char * name);
 	void AttachConsole();
     void DetachConsole();
+	bool IsBattleRoyale();
     bool ConsolePrint(const char* fmt, ...);
     char ConsoleReadKey();
     int WaitForModules(std::int32_t timeout, const std::initializer_list<std::wstring>& modules);

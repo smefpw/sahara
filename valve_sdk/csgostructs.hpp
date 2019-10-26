@@ -312,6 +312,7 @@ public:
 	NETVAR(bool, m_bHasHelmet, "DT_CSPlayer", "m_bHasHelmet");
 	NETVAR(bool, m_bIsScoped, "DT_CSPlayer", "m_bIsScoped");;
 	NETVAR(float, m_flLowerBodyYawTarget, "DT_CSPlayer", "m_flLowerBodyYawTarget");
+	NETVAR(int32_t, m_nSurvivalTeam, "DT_CSPlayer", "m_nSurvivalTeam");
 	NETVAR(int32_t, m_iHealth, "DT_BasePlayer", "m_iHealth");
 	NETVAR(int32_t, m_lifeState, "DT_BasePlayer", "m_lifeState");
 	NETVAR(int32_t, m_fFlags, "DT_BasePlayer", "m_fFlags");
@@ -382,7 +383,18 @@ public:
 	}
 	bool IsEnemy()
 	{
-		return (this->m_iTeamNum() != g_LocalPlayer->m_iTeamNum());
+		static auto mp_teammates_are_enemies = g_CVar->FindVar("mp_teammates_are_enemies");
+
+		if (!g_LocalPlayer) return false;
+
+		if (this == g_LocalPlayer) return false;
+		if (this->m_bGunGameImmunity()) return false;
+		if (this->m_iTeamNum() != g_LocalPlayer->m_iTeamNum()) return true;
+
+		if (!Utilities::IsBattleRoyale()) if (mp_teammates_are_enemies->GetBool()) return true;
+		if (Utilities::IsBattleRoyale()) if (this->m_nSurvivalTeam() == -1 || this->m_nSurvivalTeam() != g_LocalPlayer->m_nSurvivalTeam()) return true;
+
+		return false;
 	}
 	float_t &m_flMaxspeed()
 	{

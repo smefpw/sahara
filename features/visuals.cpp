@@ -22,8 +22,7 @@ void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawCo
 		Render::Get().TextSize(TextWidth, TextHeight, Text, Font);
 		g_VGuiSurface->DrawSetTextPos(X - TextWidth / 2, Y);
 	}
-	else
-		g_VGuiSurface->DrawSetTextPos(X, Y);
+	else g_VGuiSurface->DrawSetTextPos(X, Y);
 	g_VGuiSurface->DrawPrintText(WText.c_str(), wcslen(WText.c_str()));
 }
 
@@ -179,12 +178,13 @@ void Visuals::Health()
 
 void Visuals::Radar()
 {
-	for (int i = 1; i <= g_GlobalVars->maxClients; i++)
+	for (auto i = 1; i <= g_GlobalVars->maxClients; i++)
 	{
-		if (i == g_EngineClient->GetLocalPlayer()) continue;
+		const auto pEntity = static_cast<C_BasePlayer*>(g_EntityList->GetClientEntity(i));
 
-		C_BasePlayer* pPlayer = reinterpret_cast<C_BasePlayer*>(g_EntityList->GetClientEntity(i));
+		if (!pEntity) continue;
+		if (!pEntity->IsEnemy()) continue;
 
-		if (!pPlayer) continue; pPlayer->m_bSpotted() = true;
+		pEntity->m_bSpotted() = true;
 	}
 }

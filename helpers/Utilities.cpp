@@ -292,6 +292,12 @@ namespace Utilities
 
 		return true;
 	}
+	bool IsBattleRoyale()
+	{
+		static ConVar* game_type = nullptr;
+		if (!game_type) game_type = g_CVar->FindVar("game_type");
+		return (game_type->GetInt() == 6);
+	}
 	void autoBhop(CUserCmd* cmd)
 	{
 		if (Feature.AutoBunnyhop)

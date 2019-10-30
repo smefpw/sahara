@@ -20,9 +20,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Helpers\math.cpp">
-      <Filter>SDK Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
@@ -289,9 +286,6 @@
     <ClInclude Include="hooks.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\math.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="options.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
@@ -362,6 +356,9 @@
       <Filter>Features</Filter>
     </ClInclude>
     <ClInclude Include="helpers\Utilities.hpp">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\math.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -88,8 +88,10 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>false</SDLCheck>
+      <SDLCheck>
+      </SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,7 +106,6 @@
     <ClCompile Include="features\Aimbot.cpp" />
     <ClCompile Include="features\Visuals.cpp" />
     <ClCompile Include="helpers\input.cpp" />
-    <ClCompile Include="helpers\math.cpp" />
     <ClCompile Include="helpers\Utilities.cpp" />
     <ClCompile Include="helpers\vfunc_hook.cpp" />
     <ClCompile Include="hooks.cpp" />

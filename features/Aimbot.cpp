@@ -89,9 +89,9 @@ bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlay
 	for (int i = 0; i < 150; i++)
 	{
 		float a = Math::RandomFloat(0.f, 1.f);
-		float b = Math::RandomFloat(0.f, 2.f * M_PI);
+		float b = Math::RandomFloat(0.f, 2.f * PI);
 		float c = Math::RandomFloat(0.f, 1.f);
-		float d = Math::RandomFloat(0.f, 2.f * M_PI);
+		float d = Math::RandomFloat(0.f, 2.f * PI);
 
 		float inaccuracy = a * weap_inaccuracy;
 		float spread = c * weap_spread;
@@ -194,6 +194,7 @@ void RageAimbot::StoreRecords()
 float Hitchance2(C_BaseCombatWeapon* Weapon)
 {
 	float Hitchance = 101;
+
 	if (!Weapon) return 0;
 	if (Feature.Hitchance > 1)
 	{
@@ -214,6 +215,7 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 	int BestTargetIndex = -1;
 	float BestTargetDistance = FLT_MAX;
 	float BestTargetSimtime = 0.f;
+
 	Vector Hitbox = Vector{};
 
 	bool Backtrack = false;

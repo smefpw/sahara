@@ -7,10 +7,7 @@
 
 struct FireBulletData
 {
-	FireBulletData(const Vector& eye_pos)
-		: src(eye_pos)
-	{
-	}
+	FireBulletData(const Vector& eye_pos) : src(eye_pos) {}
 
 	Vector           src;
 	trace_t          enter_trace;
@@ -23,11 +20,9 @@ struct FireBulletData
 };
 
 #pragma once
-
 class Autowall : public Singleton<Autowall>
 {
 public:
-
 	void TraceLine(Vector& absStart, Vector& absEnd, unsigned int mask, IClientEntity* ignore, CGameTrace* ptr);
 	void ClipTraceToPlayers(const Vector& absStart, const Vector absEnd, unsigned int mask, ITraceFilter* filter, CGameTrace* tr);
 	void GetBulletTypeParameters(float& maxRange, float& maxDistance, char* bulletType, bool sv_penetration_type);
@@ -42,6 +37,5 @@ public:
 	bool trace_awall(float& damage);
 	bool trace_awall(C_BasePlayer* m_local, Vector hit, float& damage);
 	bool handle_penetration = false;
-
 private:
 };

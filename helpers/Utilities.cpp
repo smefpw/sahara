@@ -9,7 +9,7 @@
 
 #include "../options.hpp"
 #include "../valve_sdk/csgostructs.hpp"
-#include "Math.hpp"
+#include "math.hpp"
 
 
 HANDLE _out = NULL, _old_out = NULL;

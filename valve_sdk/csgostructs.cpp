@@ -1,5 +1,5 @@
 #include "csgostructs.hpp"
-#include "../Helpers/Math.hpp"
+#include "../Helpers/math.hpp"
 #include "../Helpers/Utilities.hpp"
 
 bool C_BaseEntity::IsPlayer()

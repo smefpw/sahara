@@ -1,5 +1,4 @@
 #pragma once
-
 #include "valve_sdk/csgostructs.hpp"
 #include "helpers/vfunc_hook.hpp"
 #include <d3d9.h>
@@ -15,6 +14,7 @@ namespace index
     constexpr auto DoPostScreenSpaceEffects = 44;
 	constexpr auto SvCheatsGetBool          = 13;
 	constexpr auto OverrideView             = 18;
+	constexpr auto EngineHook				= 27;
 	constexpr auto LockCursor               = 67;
 	constexpr auto GetViewmodelFOV			= 35;
 }
@@ -23,15 +23,17 @@ namespace Hooks
 {
 	void Initialize();
 
-	inline vfunc_hook direct3d_hook;
-    inline vfunc_hook hlclient_hook;
-	inline vfunc_hook vguipanel_hook;
-	inline vfunc_hook vguisurf_hook;
-	inline vfunc_hook mdlrender_hook;
-	inline vfunc_hook viewrender_hook;
-	inline vfunc_hook clientmode_hook;
+	extern vfunc_hook direct3d_hook;
+	extern vfunc_hook hlclient_hook;
+	extern vfunc_hook vguipanel_hook;
+	extern vfunc_hook vguisurf_hook;
+	extern vfunc_hook mdlrender_hook;
+	extern vfunc_hook viewrender_hook;
+	extern vfunc_hook enginehook_hook;
+	extern vfunc_hook clientmode_hook;
 
 	using GetViewmodelFOV = float(__thiscall*)();
+	using IsConnected_t = bool(__thiscall*)(IVEngineClient*);
 
 	long __stdcall hkEndScene(IDirect3DDevice9* device);
 	long __stdcall hkReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pPresentationParameters);
@@ -44,4 +46,5 @@ namespace Hooks
 	int  __fastcall hkDoPostScreenEffects(void* _this, int, int a1);
 	void __fastcall hkLockCursor(void* _this);
 	float __stdcall hkGetViewmodelFOV();
+	bool __stdcall IsConnected();
 }

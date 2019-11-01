@@ -60,6 +60,7 @@ void Menu::RenderMenu()
 		if (ImGui::CollapsingHeader("Misc"))
 		{
 			ImGui::Checkbox("Remove scope border", &Feature.RemoveScope);
+			ImGui::Checkbox("Force inventory open", &Feature.ForceInventory);
 			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBunnyhop);
 		}
 		ImGui::End();

@@ -11,19 +11,32 @@
 
 namespace Hooks 
 {
+	vfunc_hook direct3d_hook;
+	vfunc_hook hlclient_hook;
+	vfunc_hook vguipanel_hook;
+	vfunc_hook vguisurf_hook;
+	vfunc_hook mdlrender_hook;
+	vfunc_hook viewrender_hook;
+	vfunc_hook enginehook_hook;
+	vfunc_hook clientmode_hook;
+
 	void Initialize()
 	{
+		// Set up virtual function hooks
 		direct3d_hook.setup(g_D3DDevice9);
 		hlclient_hook.setup(g_CHLClient);
 		vguipanel_hook.setup(g_VGuiPanel);
 		vguisurf_hook.setup(g_VGuiSurface);
 		mdlrender_hook.setup(g_MdlRender);
+		enginehook_hook.setup(g_EngineClient);
 		clientmode_hook.setup(g_ClientMode);
 
+		// Hook functions
 		direct3d_hook.hook_index(index::EndScene, hkEndScene);
 		direct3d_hook.hook_index(index::Reset, hkReset);
 		hlclient_hook.hook_index(index::FrameStageNotify, hkFrameStageNotify);
 		hlclient_hook.hook_index(index::CreateMove, hkCreateMove_Proxy);
+		enginehook_hook.hook_index(index::EngineHook, IsConnected);
 		vguipanel_hook.hook_index(index::PaintTraverse, hkPaintTraverse);
 		vguisurf_hook.hook_index(index::LockCursor, hkLockCursor);
 		mdlrender_hook.hook_index(index::DrawModelExecute, hkDrawModelExecute);
@@ -250,6 +263,18 @@ namespace Hooks
 		}
 
 		ofunc(g_CHLClient, edx, stage);
+	}
+	//--------------------------------------------------------------------------------
+	bool __stdcall IsConnected() {
+
+		auto ofunc = enginehook_hook.get_original<IsConnected_t>(27);
+
+		static void* unk = Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "75 04 B0 01 5F") - 2;
+		if (_ReturnAddress() == unk && Feature.ForceInventory) {
+			return false;
+		}
+
+		return ofunc(g_EngineClient);
 	}
 	//--------------------------------------------------------------------------------
 	void __fastcall hkLockCursor(void* _this)

@@ -50,8 +50,8 @@ void Menu::RenderMenu()
 			ImGui::Checkbox("Box", &Feature.Box);
 			ImGui::Checkbox("Name", &Feature.Name);
 			ImGui::Checkbox("Health", &Feature.Health);
-			ImGui::Checkbox("Radar", &Feature.Radar);
 			ImGui::Checkbox("Recoil", &Feature.Recoil);
+			ImGui::Checkbox("Radar", &Feature.Radar);
 
 			if (Feature.Recoil) ImGui::SliderInt("Size", &Feature.Size, 1, 15);
 
@@ -119,7 +119,7 @@ void Menu::CreateStyle()
 	Style.WindowBorderSize = 1.2f;
 
 	Style.Colors[ImGuiCol_Text] = ImVec4(col_text.x, col_text.y, col_text.z, 1.f);
-	Style.Colors[ImGuiCol_Text2] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_Text2] = ImColor(255, 55, 55, 255);
 	Style.Colors[ImGuiCol_TextDisabled] = ImVec4(col_text.x, col_text.y, col_text.z, 1.f);
 	Style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(col_text.x, col_text.y, col_text.z, 1.f);
 	Style.Colors[ImGuiCol_WindowBg] = ImColor(9, 9, 9, 255);
@@ -133,14 +133,14 @@ void Menu::CreateStyle()
 	Style.Colors[ImGuiCol_TitleBg] = ImColor(37, 40, 47, 255);
 	Style.Colors[ImGuiCol_TitleBgCollapsed] = ImColor(37, 40, 47, 255);
 	Style.Colors[ImGuiCol_TitleBgActive] = ImColor(37, 40, 47, 255);
-	Style.Colors[ImGuiCol_MenuBarBg] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_MenuBarBg] = ImColor(255, 55, 55, 255);
 	Style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.1f, 0.1f, 0.1f, 0.95f);
-	Style.Colors[ImGuiCol_ScrollbarGrab] = ImColor(200, 200, 200, 255);
-	Style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImColor(200, 200, 200, 255);
-	Style.Colors[ImGuiCol_ScrollbarGrabActive] = ImColor(200, 200, 200, 255);
-	Style.Colors[ImGuiCol_CheckMark] = ImColor(200, 200, 200, 255);
-	Style.Colors[ImGuiCol_SliderGrab] = ImColor(200, 200, 200, 255);
-	Style.Colors[ImGuiCol_SliderGrabActive] = ImColor(200, 200, 200, 255);
+	Style.Colors[ImGuiCol_ScrollbarGrab] = ImColor(255, 55, 55, 255);
+	Style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImColor(255, 55, 55, 255);
+	Style.Colors[ImGuiCol_ScrollbarGrabActive] = ImColor(250, 35, 35, 255);
+	Style.Colors[ImGuiCol_CheckMark] = ImColor(255, 55, 55, 255);
+	Style.Colors[ImGuiCol_SliderGrab] = ImColor(255, 55, 55, 255);
+	Style.Colors[ImGuiCol_SliderGrabActive] = ImColor(250, 35, 35, 255);
 	Style.Colors[ImGuiCol_Button] = ImColor(37, 40, 47, 255);
 	Style.Colors[ImGuiCol_ButtonHovered] = ImColor(57, 60, 67, 255);
 	Style.Colors[ImGuiCol_ButtonActive] = ImColor(57, 60, 67, 255);

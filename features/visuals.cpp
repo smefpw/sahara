@@ -173,7 +173,7 @@ void Visuals::Health()
 	float Height = (Context.Box.bottom - Context.Box.top) * float(HealthValue / 100.f);
 
 	Render::Get().FilledRectange(Context.Box.left - 7, Context.Box.top - 1, Context.Box.left - 2, Context.Box.bottom + 1, Color(0, 0, 0, 150));
-	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(135, 235, 50, 255));
+	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(255, 55, 55, 255));
 }
 
 void Visuals::Radar()

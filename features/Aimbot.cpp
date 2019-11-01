@@ -253,7 +253,7 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 		if (!Target) return;
 		QAngle AimAngle = Math::CalcAngle(g_LocalPlayer->GetEyePos(), Hitbox);
 		AimAngle -= g_LocalPlayer->m_aimPunchAngle() * g_CVar->FindVar("weapon_recoil_scale")->GetFloat();
-		Math::Normalize3(AimAngle);
+		Math::Normalize(AimAngle);
 		Math::ClampAngles(AimAngle);
 
 		cmd->viewangles = AimAngle;

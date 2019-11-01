@@ -53,6 +53,8 @@ void Menu::RenderMenu()
 			ImGui::Checkbox("Radar", &Feature.Radar);
 			ImGui::Checkbox("Recoil", &Feature.Recoil);
 
+			ImGui::SliderInt("FOV", &Feature.FOV, 0, 45);
+
 			if (Feature.Recoil) ImGui::SliderInt("Size", &Feature.Size, 1, 15);
 		}
 		if (ImGui::CollapsingHeader("Misc"))

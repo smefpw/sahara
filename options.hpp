@@ -25,6 +25,7 @@ public:
 	CONFIG(bool, Radar, false);
 	CONFIG(bool, Recoil, false);
 
+	CONFIG(int, FOV, 15);
 	CONFIG(int, Size, 5);
 #pragma endregion
 

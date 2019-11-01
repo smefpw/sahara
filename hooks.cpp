@@ -27,6 +27,7 @@ namespace Hooks
 		vguipanel_hook.hook_index(index::PaintTraverse, hkPaintTraverse);
 		vguisurf_hook.hook_index(index::LockCursor, hkLockCursor);
 		mdlrender_hook.hook_index(index::DrawModelExecute, hkDrawModelExecute);
+		clientmode_hook.hook_index(index::GetViewmodelFOV, hkGetViewmodelFOV);
 		clientmode_hook.hook_index(index::DoPostScreenSpaceEffects, hkDoPostScreenEffects);
 		clientmode_hook.hook_index(index::OverrideView, hkOverrideView);
 
@@ -111,7 +112,7 @@ namespace Hooks
 		RageAimbot::Get().EndEnginePred();
 		MovementFix::Get().End(cmd);
 
-		Math::Normalize3(cmd->viewangles);
+		Math::Normalize(cmd->viewangles);
 		Math::ClampAngles(cmd->viewangles);
 
 		verified->m_cmd = *cmd;
@@ -261,6 +262,12 @@ namespace Hooks
 			return;
 		}
 		ofunc(g_VGuiSurface);
+	}
+	float __stdcall hkGetViewmodelFOV()
+	{
+		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(index::GetViewmodelFOV);
+		if (g_EngineClient->IsTakingScreenshot()) return ofunc();
+		else return ofunc() + Feature.FOV;
 	}
 	//--------------------------------------------------------------------------------
 	void __fastcall hkDrawModelExecute(void* _this, int edx, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)

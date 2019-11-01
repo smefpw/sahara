@@ -119,7 +119,7 @@ namespace Math
 		return res;
 	}
 	template <class T>
-	inline void Normalize3(T& vec)
+	inline void Normalize(T& vec)
 	{
 		for (auto i = 0; i < 2; i++) 
 		{

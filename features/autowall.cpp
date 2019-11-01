@@ -642,7 +642,7 @@ bool Autowall::trace_awall(float& damage)
 	QAngle angles = QAngle(0, 0, 0);
 	angles = Math::CalcAngle(data.src, dst);
 	Math::AngleVectors(angles, data.direction);
-	Math::Normalize3(data.direction);
+	Math::Normalize(data.direction);
 
 	C_BaseCombatWeapon* weapon = (C_BaseCombatWeapon*)local->m_hActiveWeapon().Get();
 
@@ -678,7 +678,7 @@ bool Autowall::trace_awall(C_BasePlayer* m_local, Vector hit, float& damage)
 
 		QAngle angles;
 		angles = Math::CalcAngle(data.src, hit);
-		Math::Normalize3(angles);
+		Math::Normalize(angles);
 		Math::AngleVectors(angles, data.direction);
 
 		CHandle<C_BaseCombatWeapon> m_weapon = m_local->m_hActiveWeapon();

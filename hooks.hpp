@@ -16,6 +16,7 @@ namespace index
 	constexpr auto SvCheatsGetBool          = 13;
 	constexpr auto OverrideView             = 18;
 	constexpr auto LockCursor               = 67;
+	constexpr auto GetViewmodelFOV			= 35;
 }
 
 namespace Hooks
@@ -30,6 +31,8 @@ namespace Hooks
 	inline vfunc_hook viewrender_hook;
 	inline vfunc_hook clientmode_hook;
 
+	using GetViewmodelFOV = float(__thiscall*)();
+
 	long __stdcall hkEndScene(IDirect3DDevice9* device);
 	long __stdcall hkReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pPresentationParameters);
     void __stdcall hkCreateMove(int sequence_number, float input_sample_frametime, bool active, bool& bSendPacket);
@@ -40,4 +43,5 @@ namespace Hooks
 	void __fastcall hkOverrideView(void* _this, int, CViewSetup * vsView);
 	int  __fastcall hkDoPostScreenEffects(void* _this, int, int a1);
 	void __fastcall hkLockCursor(void* _this);
+	float __stdcall hkGetViewmodelFOV();
 }

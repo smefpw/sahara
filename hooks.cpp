@@ -27,8 +27,8 @@ namespace Hooks
 		vguipanel_hook.hook_index(index::PaintTraverse, hkPaintTraverse);
 		vguisurf_hook.hook_index(index::LockCursor, hkLockCursor);
 		mdlrender_hook.hook_index(index::DrawModelExecute, hkDrawModelExecute);
-		clientmode_hook.hook_index(index::GetViewmodelFOV, hkGetViewmodelFOV);
 		clientmode_hook.hook_index(index::DoPostScreenSpaceEffects, hkDoPostScreenEffects);
+		clientmode_hook.hook_index(index::GetViewmodelFOV, hkGetViewmodelFOV);
 		clientmode_hook.hook_index(index::OverrideView, hkOverrideView);
 
 		Render::Get().CreateFonts();
@@ -238,19 +238,6 @@ namespace Hooks
 		ofunc(g_CHLClient, edx, stage);
 	}
 	//--------------------------------------------------------------------------------
-	void __fastcall hkOverrideView(void* _this, int edx, CViewSetup* vsView)
-	{
-		static auto ofunc = clientmode_hook.get_original<decltype(&hkOverrideView)>(index::OverrideView);
-		if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected())
-		{
-			ofunc(g_ClientMode, edx, vsView);
-			return;
-		}
-		vsView->fov = 90.f;
-
-		ofunc(g_ClientMode, edx, vsView);
-	}
-	//--------------------------------------------------------------------------------
 	void __fastcall hkLockCursor(void* _this)
 	{
 		static auto ofunc = vguisurf_hook.get_original<decltype(&hkLockCursor)>(index::LockCursor);
@@ -263,11 +250,28 @@ namespace Hooks
 		}
 		ofunc(g_VGuiSurface);
 	}
+	//--------------------------------------------------------------------------------
+	void __fastcall hkOverrideView(void* _this, int edx, CViewSetup* vsView)
+	{
+		static auto ofunc = clientmode_hook.get_original<decltype(&hkOverrideView)>(index::OverrideView);
+		if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected())
+		{
+			ofunc(g_ClientMode, edx, vsView);
+			return;
+		}
+		vsView->fov = 90.f;
+
+		ofunc(g_ClientMode, edx, vsView);
+	}
 	float __stdcall hkGetViewmodelFOV()
 	{
 		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(index::GetViewmodelFOV);
-		if (g_EngineClient->IsTakingScreenshot()) return ofunc();
-		else return ofunc() + Feature.FOV;
+		while (!g_EngineClient->IsTakingScreenshot())
+		{
+			if (Feature.FOV) return ofunc() + 35.f;
+			else return ofunc();
+
+		} return ofunc();
 	}
 	//--------------------------------------------------------------------------------
 	void __fastcall hkDrawModelExecute(void* _this, int edx, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)

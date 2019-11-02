@@ -289,6 +289,9 @@
     <ClInclude Include="options.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="singleton.hpp">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="helpers\vfunc_hook.hpp">
       <Filter>SDK Header Files</Filter>
     </ClInclude>

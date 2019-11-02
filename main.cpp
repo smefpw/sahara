@@ -16,12 +16,12 @@ DWORD WINAPI OnDllAttach(LPVOID base)
 
 	Interfaces::Initialize();
 
-	NetvarSys().Initialize();
-	InputSys().Initialize();
-	Menu().Initialize();
+	NetvarSys::Get().Initialize();
+	InputSys::Get().Initialize();
+	Menu::Get().Initialize();
 	Hooks::Initialize();
 
-	InputSys().RegisterHotkey(VK_INSERT, [base]() { Menu().Toggle(); });
+	InputSys::Get().RegisterHotkey(VK_INSERT, [base]() { Menu::Get().Toggle(); });
 }
 
 BOOL WINAPI DllMain(

@@ -148,7 +148,7 @@ bool RageAimbot::Hitscan(C_BasePlayer* pEntity, Vector& HitboxPos, bool Backtrac
 		{
 			pEntity->SetAbsOrigin(pEntity->m_vecOrigin());
 			Vector Point = pEntity->GetHitboxPos(HitBoxID, BoneMatrix);
-			float damage = Autowall().CanHit(Point);
+			float damage = Autowall::Get().CanHit(Point);
 			if (damage >= highestDamage || damage >= pEntity->m_iHealth())
 			{
 				bestHitbox = HitBoxID;

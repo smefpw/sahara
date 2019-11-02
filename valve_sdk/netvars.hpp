@@ -5,8 +5,10 @@
 #include <unordered_map>
 
 #include "Misc/Recv.hpp"
+#include "../Singleton.hpp"
 
 class NetvarSys
+    : public Singleton<NetvarSys>
 {
     struct netvar_table
     {
@@ -18,6 +20,8 @@ class NetvarSys
     };
 public:
     void Initialize();
+
+    void Dump();
     void Dump(std::ostream& stream);
 
     uint32_t      GetOffset(const std::string& tableName, const std::string& propName);

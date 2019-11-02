@@ -10,19 +10,19 @@
 
 #define NETVAR(type, name, table, netvar)                           \
     type& name##() const {                                          \
-        static int _##name = NetvarSys().GetOffset(table, netvar);     \
+        static int _##name = NetvarSys::Get().GetOffset(table, netvar);     \
         return *(type*)((uintptr_t)this + _##name);                 \
     }
 
 #define PNETVAR(type, name, table, netvar)                           \
     type* name##() const {                                          \
-        static int _##name = NetvarSys().GetOffset(table, netvar);     \
+        static int _##name = NetvarSys::Get().GetOffset(table, netvar);     \
         return (type*)((uintptr_t)this + _##name);                 \
     }
 
 #define NETPROP(name, table, netvar) static RecvProp* name() \
 { \
-	static auto prop_ptr = NetvarSys().GetNetvarProp(table,netvar); \
+	static auto prop_ptr = NetvarSys::Get().GetNetvarProp(table,netvar); \
 	return prop_ptr; \
 }
 
@@ -182,7 +182,7 @@ public:
 
 	const matrix3x4_t& m_rgflCoordinateFrame()
 	{
-		static auto _m_rgflCoordinateFrame = NetvarSys().GetOffset("DT_BaseEntity", "m_CollisionGroup") - 0x30;
+		static auto _m_rgflCoordinateFrame = NetvarSys::Get().GetOffset("DT_BaseEntity", "m_CollisionGroup") - 0x30;
 		return *(matrix3x4_t*)((uintptr_t)this + _m_rgflCoordinateFrame);
 	}
 
@@ -341,7 +341,7 @@ public:
 
 	std::array<float, 24> m_flPoseParameter() const 
 	{
-		static int _m_flPoseParameter = NetvarSys().GetOffset("DT_BaseAnimating", "m_flPoseParameter");
+		static int _m_flPoseParameter = NetvarSys::Get().GetOffset("DT_BaseAnimating", "m_flPoseParameter");
 		return *(std::array<float, 24>*)((uintptr_t)this + _m_flPoseParameter);
 	}
 

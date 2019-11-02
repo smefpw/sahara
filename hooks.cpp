@@ -44,7 +44,7 @@ namespace Hooks
 		clientmode_hook.hook_index(index::GetViewmodelFOV, hkGetViewmodelFOV);
 		clientmode_hook.hook_index(index::OverrideView, hkOverrideView);
 
-		Render().CreateFonts();
+		Render::Get().CreateFonts();
 
 		g_InputSystem->EnableInput(true);
 	}
@@ -83,7 +83,7 @@ namespace Hooks
 		pDevice->SetSamplerState(NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP);
 		pDevice->SetSamplerState(NULL, D3DSAMP_SRGBTEXTURE, NULL);
 		
-		Menu().RenderMenu();
+		Menu::Get().RenderMenu();
 
 		pDevice->SetRenderState(D3DRS_COLORWRITEENABLE, colorwrite);
 		pDevice->SetRenderState(D3DRS_SRGBWRITEENABLE, srgbwrite);
@@ -95,14 +95,14 @@ namespace Hooks
 	{
 		static auto oReset = direct3d_hook.get_original<decltype(&hkReset)>(index::Reset);
 
-		Menu().OnDeviceLost();
+		Menu::Get().OnDeviceLost();
 
 		auto hr = oReset(device, pPresentationParameters);
 
 		if (hr >= 0)
 		{
-			Menu().OnDeviceReset();
-			Render().CreateFonts();
+			Menu::Get().OnDeviceReset();
+			Render::Get().CreateFonts();
 		}
 
 		return hr;
@@ -127,17 +127,17 @@ namespace Hooks
 
 		C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
-		MovementFix().Start(cmd);
-		RageAimbot().StartEnginePred(cmd);
+		MovementFix::Get().Start(cmd);
+		RageAimbot::Get().StartEnginePred(cmd);
 
 		if (Feature.Enabled)
 		{
-			RageAimbot().StoreRecords();
-			RageAimbot().Do(cmd, Weapon, bSendPacket);
+			RageAimbot::Get().StoreRecords();
+			RageAimbot::Get().Do(cmd, Weapon, bSendPacket);
 		}
 
-		RageAimbot().EndEnginePred();
-		MovementFix().End(cmd);
+		RageAimbot::Get().EndEnginePred();
+		MovementFix::Get().End(cmd);
 
 		Math::Normalize(cmd->viewangles);
 		Math::ClampAngles(cmd->viewangles);
@@ -191,16 +191,16 @@ namespace Hooks
 
 			C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
-			if (InputSys().IsKeyDown(VK_TAB)) Utilities::RankRevealAll();
+			if (InputSys::Get().IsKeyDown(VK_TAB)) Utilities::RankRevealAll();
 
 			if (Weapon && Feature.RemoveScope && Weapon->IsSniper() && g_LocalPlayer->m_bIsScoped())
 			{
-				Render().Line(ScreenWidth / 2, 0, ScreenWidth / 2, ScreenHeight, Color(0, 0, 0, 150));
-				Render().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
+				Render::Get().Line(ScreenWidth / 2, 0, ScreenWidth / 2, ScreenHeight, Color(0, 0, 0, 150));
+				Render::Get().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
 			}
 
 			// Recoil already has checks for if the localplayer is alive.
-			if (Feature.Recoil) Visuals().Recoil();
+			if (Feature.Recoil) Visuals::Get().Recoil();
 
 			for (int i = 1; i <= 64; i++) 
 			{
@@ -210,12 +210,12 @@ namespace Hooks
 
 				if (i < 65 && Player->IsAlive())
 				{
-					if (Visuals().Begin(Player)) 
+					if (Visuals::Get().Begin(Player)) 
 					{
-						if (Feature.Health) Visuals().Health();
-						if (Feature.Name) Visuals().Name();
-						if (Feature.Box) Visuals().Box();
-						if (Feature.Radar) Visuals().Radar();
+						if (Feature.Health) Visuals::Get().Health();
+						if (Feature.Name) Visuals::Get().Name();
+						if (Feature.Box) Visuals::Get().Box();
+						if (Feature.Radar) Visuals::Get().Radar();
 					}
 				}
 			}
@@ -281,7 +281,7 @@ namespace Hooks
 	{
 		static auto ofunc = vguisurf_hook.get_original<decltype(&hkLockCursor)>(index::LockCursor);
 
-		if (Menu().IsVisible()) 
+		if (Menu::Get().IsVisible()) 
 		{
 			g_VGuiSurface->UnlockCursor();
 			g_InputSystem->ResetInputState();

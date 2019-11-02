@@ -9,6 +9,8 @@
 #include <stdexcept>
 #include <d3d9.h>
 
+#include "../singleton.hpp"
+
 enum class KeyState
 {
     None = 1,
@@ -20,8 +22,10 @@ enum class KeyState
 DEFINE_ENUM_FLAG_OPERATORS(KeyState);
 
 class InputSys 
+    : public Singleton<InputSys>
 {
-public:
+    friend class Singleton<InputSys>;
+
     InputSys();
     ~InputSys();
 

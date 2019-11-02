@@ -20,21 +20,24 @@ void InputSys::Initialize()
 {
 	D3DDEVICE_CREATION_PARAMETERS params;
 
-	if (FAILED(g_D3DDevice9->GetCreationParameters(&params))) throw std::runtime_error("[InputSys] GetCreationParameters failed.");
+	if (FAILED(g_D3DDevice9->GetCreationParameters(&params)))
+		throw std::runtime_error("[InputSys] GetCreationParameters failed.");
 
 	m_hTargetWindow = params.hFocusWindow;
 	m_ulOldWndProc = SetWindowLongPtr(m_hTargetWindow, GWLP_WNDPROC, (LONG_PTR)WndProc);
 
-	if (!m_ulOldWndProc) throw std::runtime_error("[InputSys] SetWindowLongPtr failed.");
+	if (!m_ulOldWndProc)
+		throw std::runtime_error("[InputSys] SetWindowLongPtr failed.");
 }
 
 LRESULT __stdcall InputSys::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	InputSys().ProcessMessage(msg, wParam, lParam);
+	Get().ProcessMessage(msg, wParam, lParam);
 
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) && Menu().IsVisible())return true;
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam) && Menu::Get().IsVisible())
+		return true;
 
-	return CallWindowProc((WNDPROC)InputSys().m_ulOldWndProc, hWnd, msg, wParam, lParam);
+	return CallWindowProc((WNDPROC)Get().m_ulOldWndProc, hWnd, msg, wParam, lParam);
 }
 
 bool InputSys::ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)

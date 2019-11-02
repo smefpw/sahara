@@ -156,7 +156,6 @@
     <ClInclude Include="imgui\stb_truetype.h" />
     <ClInclude Include="valve_sdk\interfaces\IRefCounted.hpp" />
     <ClInclude Include="options.hpp" />
-    <ClInclude Include="singleton.hpp" />
     <ClInclude Include="valve_sdk\csgostructs.hpp" />
     <ClInclude Include="valve_sdk\sdk.hpp" />
     <ClInclude Include="valve_sdk\interfaces\CClientState.hpp" />

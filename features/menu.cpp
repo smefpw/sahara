@@ -12,7 +12,7 @@ void Menu::Initialize()
 	Visible = false;
 
 	ImGui::CreateContext();
-	ImGui_ImplDX9_Init(InputSys::Get().GetMainWindow(), g_D3DDevice9);
+	ImGui_ImplDX9_Init(InputSys().GetMainWindow(), g_D3DDevice9);
 
 	CreateStyle();
 }

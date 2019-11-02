@@ -3,12 +3,10 @@
 #include "../valve_sdk/csgostructs.hpp"
 #include "../helpers/math.hpp"
 #include "../helpers/Utilities.hpp"
-#include "../singleton.hpp"
 
 
-class Render : public Singleton<Render>
+class Render
 {
-	friend class Singleton<Render>;
 private:
 public:
 	vgui::HFont Visuals;
@@ -21,9 +19,8 @@ public:
 	void Line(int X1, int Y1, int X2, int Y2, Color DrawColor);
 };
 
-class Visuals : public Singleton<Visuals>
+class Visuals
 {
-	friend class Singleton<Visuals>;
 private:
 	RECT GetBBox(C_BasePlayer* Player, Vector TransformedPoints[]);
 	struct

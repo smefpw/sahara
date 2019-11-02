@@ -181,7 +181,7 @@ int C_BasePlayer::GetNumAnimOverlays()
 }
 bool& C_BasePlayer::ClientAnimations()
 {
-	return *reinterpret_cast<bool*>(uintptr_t(this) + NetvarSys::Get().GetOffset("DT_BaseAnimating", "m_bClientSideAnimation"));
+	return *reinterpret_cast<bool*>(uintptr_t(this) + NetvarSys().GetOffset("DT_BaseAnimating", "m_bClientSideAnimation"));
 }
 void C_BasePlayer::Animations(bool active)
 {
@@ -297,7 +297,7 @@ bool C_BasePlayer::IsAlive()
 
 bool C_BasePlayer::IsFlashed()
 {
-	static uint32_t m_flFlashMaxAlpha = NetvarSys::Get().GetOffset("DT_CSPlayer", "m_flFlashMaxAlpha");
+	static uint32_t m_flFlashMaxAlpha = NetvarSys().GetOffset("DT_CSPlayer", "m_flFlashMaxAlpha");
 	return *(float*)((uintptr_t)this + m_flFlashMaxAlpha - 0x8) > 200.0;
 }
 
@@ -460,7 +460,7 @@ int C_BasePlayer::m_nMoveType()
 
 QAngle* C_BasePlayer::GetVAngles()
 {
-	static uint32_t deadflag = NetvarSys::Get().GetOffset("DT_BasePlayer", "deadflag");
+	static uint32_t deadflag = NetvarSys().GetOffset("DT_BasePlayer", "deadflag");
 	return (QAngle*)((uintptr_t)this + deadflag + 0x4);
 }
 

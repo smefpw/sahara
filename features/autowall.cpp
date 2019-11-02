@@ -644,7 +644,7 @@ bool Autowall::trace_awall(float& damage)
 	Math::AngleVectors(angles, data.direction);
 	Math::Normalize(data.direction);
 
-	C_BaseCombatWeapon* weapon = (C_BaseCombatWeapon*)local->m_hActiveWeapon().Get();
+	C_BaseCombatWeapon* weapon = (C_BaseCombatWeapon*)local->m_hActiveWeapon();
 
 	if (!weapon) return false;
 

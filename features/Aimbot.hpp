@@ -3,12 +3,10 @@
 #include "../valve_sdk/csgostructs.hpp"
 #include "../helpers/math.hpp"
 #include "../helpers/Utilities.hpp"
-#include "../singleton.hpp"
 #include "../helpers/input.hpp"
 
-class MovementFix : public Singleton<MovementFix>
+class MovementFix
 {
-	friend class Singleton<MovementFix>;
 public:
 	void Start(CUserCmd* cmd);
 	void End(CUserCmd* cmd);
@@ -17,9 +15,8 @@ private:
 	QAngle m_oldangle;
 };
 
-class RageAimbot : public Singleton<RageAimbot>
+class RageAimbot
 {
-	friend class Singleton<RageAimbot>;
 private:
 	struct TickInfo
 	{

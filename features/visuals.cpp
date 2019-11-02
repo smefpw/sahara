@@ -19,7 +19,7 @@ void Render::Text(int X, int Y, const char* Text, vgui::HFont Font, Color DrawCo
 	if (Center)
 	{
 		int TextWidth, TextHeight;
-		Render::Get().TextSize(TextWidth, TextHeight, Text, Font);
+		Render().TextSize(TextWidth, TextHeight, Text, Font);
 		g_VGuiSurface->DrawSetTextPos(X - TextWidth / 2, Y);
 	}
 	else g_VGuiSurface->DrawSetTextPos(X, Y);
@@ -127,9 +127,9 @@ bool Visuals::Begin(C_BasePlayer* Player)
 
 void Visuals::Box()
 {
-	Render::Get().OutlinedRectange(Context.Box.left - 1, Context.Box.top - 1, Context.Box.right + 1, Context.Box.bottom + 1, Color::Black);
-	Render::Get().OutlinedRectange(Context.Box.left + 1, Context.Box.top + 1, Context.Box.right - 1, Context.Box.bottom - 1, Color::Black);
-	Render::Get().OutlinedRectange(Context.Box.left, Context.Box.top, Context.Box.right, Context.Box.bottom, Color::White);
+	Render().OutlinedRectange(Context.Box.left - 1, Context.Box.top - 1, Context.Box.right + 1, Context.Box.bottom + 1, Color::Black);
+	Render().OutlinedRectange(Context.Box.left + 1, Context.Box.top + 1, Context.Box.right - 1, Context.Box.bottom - 1, Color::Black);
+	Render().OutlinedRectange(Context.Box.left, Context.Box.top, Context.Box.right, Context.Box.bottom, Color::White);
 }
 
 void Visuals::Name()
@@ -138,8 +138,8 @@ void Visuals::Name()
 	g_EngineClient->GetPlayerInfo(Context.Player->EntIndex(), &PlayerInfo);
 
 	int TextWidth, TextHeight;
-	Render::Get().TextSize(TextWidth, TextHeight, PlayerInfo.szName, Render::Get().Visuals);
-	Render::Get().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.top - TextHeight, PlayerInfo.szName, Render::Get().Visuals, Color(255, 255, 255, 255), true);
+	Render().TextSize(TextWidth, TextHeight, PlayerInfo.szName, Render().Visuals);
+	Render().Text(Context.Box.left + (Context.Box.right - Context.Box.left) / 2, Context.Box.top - TextHeight, PlayerInfo.szName, Render().Visuals, Color(255, 255, 255, 255), true);
 }
 
 void Visuals::Recoil()
@@ -172,8 +172,8 @@ void Visuals::Health()
 
 	float Height = (Context.Box.bottom - Context.Box.top) * float(HealthValue / 100.f);
 
-	Render::Get().FilledRectange(Context.Box.left - 7, Context.Box.top - 1, Context.Box.left - 2, Context.Box.bottom + 1, Color(0, 0, 0, 150));
-	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(255, 55, 55, 255));
+	Render().FilledRectange(Context.Box.left - 7, Context.Box.top - 1, Context.Box.left - 2, Context.Box.bottom + 1, Color(0, 0, 0, 150));
+	Render().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(255, 55, 55, 255));
 }
 
 void Visuals::Radar()

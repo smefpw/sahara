@@ -3,7 +3,6 @@
 #include "../valve_sdk/csgostructs.hpp"
 #include "../helpers/math.hpp"
 #include "../helpers/Utilities.hpp"
-#include "../singleton.hpp"
 
 struct FireBulletData
 {
@@ -20,7 +19,7 @@ struct FireBulletData
 };
 
 #pragma once
-class Autowall : public Singleton<Autowall>
+class Autowall
 {
 public:
 	void TraceLine(Vector& absStart, Vector& absEnd, unsigned int mask, IClientEntity* ignore, CGameTrace* ptr);

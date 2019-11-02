@@ -2,7 +2,6 @@
 #pragma once
 
 #include <string>
-#include "../singleton.hpp"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_internal.h"
 #include "../imgui/directx9/imgui_impl_dx9.h"
@@ -17,7 +16,6 @@
 struct IDirect3DDevice9;
 
 class Menu
-	: public Singleton<Menu>
 {
 public:
 	void Initialize();

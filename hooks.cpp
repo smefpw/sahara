@@ -66,7 +66,7 @@ namespace Hooks
 
 		static ConVar* sv_skyname = g_CVar->FindVar("sv_skyname");
 		sv_skyname->m_fnChangeCallbacks.m_Size = 0;
-		sv_skyname->SetValue("sky_csgo_night02");
+		sv_skyname->SetValue("sky_csgo_night02b"); 
 		//--------------------------------------------------------------------------------
 
 		static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(index::EndScene);
@@ -307,7 +307,7 @@ namespace Hooks
 		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(index::GetViewmodelFOV);
 		while (!g_EngineClient->IsTakingScreenshot())
 		{
-			if (Feature.FOV) return ofunc() + 35.f;
+			if (Feature.Viewmodel) return ofunc() + 35.f;
 			else return ofunc();
 
 		} return ofunc();

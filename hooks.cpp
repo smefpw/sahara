@@ -52,21 +52,21 @@ namespace Hooks
 	long __stdcall hkEndScene(IDirect3DDevice9* pDevice)
 	{
 		//--------------------------------------------------------------------------------
-		static ConVar* fog_override = g_CVar->FindVar("fog_override");
-		fog_override->m_fnChangeCallbacks.m_Size = 0;
-		fog_override->SetValue(1);
-
 		static ConVar* fog_enable = g_CVar->FindVar("fog_enable");
 		fog_enable->m_fnChangeCallbacks.m_Size = 0;
 		fog_enable->SetValue(0);
 
-		static ConVar* sv_skyname = g_CVar->FindVar("sv_skyname");
-		sv_skyname->m_fnChangeCallbacks.m_Size = 0;
-		sv_skyname->SetValue("sky_csgo_night02");
-
 		static ConVar* fog_enableskybox = g_CVar->FindVar("fog_enableskybox");
 		fog_enableskybox->m_fnChangeCallbacks.m_Size = 0;
 		fog_enableskybox->SetValue(0);
+
+		//static ConVar* sv_cheats = g_CVar->FindVar("sv_cheats");
+		//sv_cheats->m_fnChangeCallbacks.m_Size = 0;
+		//sv_cheats->SetValue("1");
+
+		static ConVar* sv_skyname = g_CVar->FindVar("sv_skyname");
+		sv_skyname->m_fnChangeCallbacks.m_Size = 0;
+		sv_skyname->SetValue("sky_csgo_night02");
 		//--------------------------------------------------------------------------------
 
 		static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(index::EndScene);

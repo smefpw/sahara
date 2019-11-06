@@ -24,6 +24,7 @@ public:
 	CONFIG(bool, Box, false);
 	CONFIG(bool, Radar, false);
 	CONFIG(bool, Recoil, false);
+	CONFIG(bool, Grenade, false);
 	CONFIG(bool, Viewmodel, false);
 
 	CONFIG(int, Size, 5);

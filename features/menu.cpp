@@ -55,6 +55,7 @@ void Menu::RenderMenu()
 			if (Feature.Recoil) ImGui::SliderInt("Size", &Feature.Size, 1, 15);
 
 			ImGui::Checkbox("Engine radar", &Feature.Radar);
+			ImGui::Checkbox("Grenade preview", &Feature.Grenade);
 			ImGui::Checkbox("Extended viewmodel", &Feature.Viewmodel);
 		}
 		if (ImGui::CollapsingHeader("Misc"))

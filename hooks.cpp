@@ -70,7 +70,7 @@ namespace Hooks
 		static ConVar* cl_grenadepreview = g_CVar->FindVar("cl_grenadepreview");
 		cl_grenadepreview->m_fnChangeCallbacks.m_Size = 0;
 		cl_grenadepreview->m_nFlags &= ~FCVAR_CHEAT;
-		cl_grenadepreview->SetValue("1"); 
+		cl_grenadepreview->SetValue(Feature.Grenade); 
 		//--------------------------------------------------------------------------------
 
 		static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(index::EndScene);

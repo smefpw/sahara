@@ -54,19 +54,23 @@ namespace Hooks
 		//--------------------------------------------------------------------------------
 		static ConVar* fog_enable = g_CVar->FindVar("fog_enable");
 		fog_enable->m_fnChangeCallbacks.m_Size = 0;
+		fog_enable->m_nFlags &= ~FCVAR_CHEAT;
 		fog_enable->SetValue(0);
 
 		static ConVar* fog_enableskybox = g_CVar->FindVar("fog_enableskybox");
 		fog_enableskybox->m_fnChangeCallbacks.m_Size = 0;
+		fog_enableskybox->m_nFlags &= ~FCVAR_CHEAT;
 		fog_enableskybox->SetValue(0);
-
-		//static ConVar* sv_cheats = g_CVar->FindVar("sv_cheats");
-		//sv_cheats->m_fnChangeCallbacks.m_Size = 0;
-		//sv_cheats->SetValue("1");
 
 		static ConVar* sv_skyname = g_CVar->FindVar("sv_skyname");
 		sv_skyname->m_fnChangeCallbacks.m_Size = 0;
-		sv_skyname->SetValue("sky_csgo_night02b"); 
+		sv_skyname->m_nFlags &= ~FCVAR_CHEAT;
+		sv_skyname->SetValue("sky_csgo_night02b");
+
+		static ConVar* cl_grenadepreview = g_CVar->FindVar("cl_grenadepreview");
+		cl_grenadepreview->m_fnChangeCallbacks.m_Size = 0;
+		cl_grenadepreview->m_nFlags &= ~FCVAR_CHEAT;
+		cl_grenadepreview->SetValue("1"); 
 		//--------------------------------------------------------------------------------
 
 		static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(index::EndScene);
@@ -305,7 +309,7 @@ namespace Hooks
 	float __stdcall hkGetViewmodelFOV()
 	{
 		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(index::GetViewmodelFOV);
-		while (!g_EngineClient->IsTakingScreenshot())
+		while (!g_EngineClient->IsTakingScreenshot() && g_EngineClient->IsInGame() && !g_LocalPlayer->m_bIsScoped())
 		{
 			if (Feature.Viewmodel) return ofunc() + 35.f;
 			else return ofunc();

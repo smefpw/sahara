@@ -11,15 +11,6 @@
 
 namespace Hooks 
 {
-	vfunc_hook direct3d_hook;
-	vfunc_hook hlclient_hook;
-	vfunc_hook vguipanel_hook;
-	vfunc_hook vguisurf_hook;
-	vfunc_hook mdlrender_hook;
-	vfunc_hook viewrender_hook;
-	vfunc_hook enginehook_hook;
-	vfunc_hook clientmode_hook;
-
 	void Initialize()
 	{
 		// Set up virtual function hooks
@@ -32,17 +23,17 @@ namespace Hooks
 		clientmode_hook.setup(g_ClientMode);
 
 		// Hook functions
-		direct3d_hook.hook_index(index::EndScene, hkEndScene);
-		direct3d_hook.hook_index(index::Reset, hkReset);
-		hlclient_hook.hook_index(index::FrameStageNotify, hkFrameStageNotify);
-		hlclient_hook.hook_index(index::CreateMove, hkCreateMove_Proxy);
-		enginehook_hook.hook_index(index::EngineHook, IsConnected);
-		vguipanel_hook.hook_index(index::PaintTraverse, hkPaintTraverse);
-		vguisurf_hook.hook_index(index::LockCursor, hkLockCursor);
-		mdlrender_hook.hook_index(index::DrawModelExecute, hkDrawModelExecute);
-		clientmode_hook.hook_index(index::DoPostScreenSpaceEffects, hkDoPostScreenEffects);
-		clientmode_hook.hook_index(index::GetViewmodelFOV, hkGetViewmodelFOV);
-		clientmode_hook.hook_index(index::OverrideView, hkOverrideView);
+		direct3d_hook.hook_index(42, hkEndScene);
+		direct3d_hook.hook_index(16, hkReset);
+		hlclient_hook.hook_index(37, hkFrameStageNotify);
+		hlclient_hook.hook_index(22, hkCreateMove_Proxy);
+		enginehook_hook.hook_index(27, IsConnected);
+		vguipanel_hook.hook_index(41, hkPaintTraverse);
+		vguisurf_hook.hook_index(67, hkLockCursor);
+		mdlrender_hook.hook_index(21, hkDrawModelExecute);
+		clientmode_hook.hook_index(44, hkDoPostScreenEffects);
+		clientmode_hook.hook_index(35, hkGetViewmodelFOV);
+		clientmode_hook.hook_index(18, hkOverrideView);
 
 		Render::Get().CreateFonts();
 
@@ -73,7 +64,7 @@ namespace Hooks
 		cl_grenadepreview->SetValue(Feature.Grenade); 
 		//--------------------------------------------------------------------------------
 
-		static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(index::EndScene);
+		static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(42);
 
 		DWORD colorwrite, srgbwrite;
 		pDevice->GetRenderState(D3DRS_COLORWRITEENABLE, &colorwrite);
@@ -97,7 +88,7 @@ namespace Hooks
 	//--------------------------------------------------------------------------------
 	long __stdcall hkReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pPresentationParameters)
 	{
-		static auto oReset = direct3d_hook.get_original<decltype(&hkReset)>(index::Reset);
+		static auto oReset = direct3d_hook.get_original<decltype(&hkReset)>(16);
 
 		Menu::Get().OnDeviceLost();
 
@@ -115,7 +106,7 @@ namespace Hooks
 
 	void __stdcall hkCreateMove(int sequence_number, float input_sample_frametime, bool active, bool& bSendPacket)
 	{
-		static auto oCreateMove = hlclient_hook.get_original<decltype(&hkCreateMove_Proxy)>(index::CreateMove);
+		static auto oCreateMove = hlclient_hook.get_original<decltype(&hkCreateMove_Proxy)>(22);
 
 		oCreateMove(g_CHLClient, 0, sequence_number, input_sample_frametime, active);
 
@@ -172,7 +163,7 @@ namespace Hooks
 	void __fastcall hkPaintTraverse(void* _this, int edx, vgui::VPANEL panel, bool forceRepaint, bool allowForce)
 	{
 		static auto panelId = vgui::VPANEL{ 0 };
-		static auto oPaintTraverse = vguipanel_hook.get_original<decltype(&hkPaintTraverse)>(index::PaintTraverse);
+		static auto oPaintTraverse = vguipanel_hook.get_original<decltype(&hkPaintTraverse)>(41);
 
 		if (Feature.RemoveScope && strcmp("HudZoom", g_VGuiPanel->GetName(panel)) == 0) return;
 
@@ -208,18 +199,19 @@ namespace Hooks
 
 			for (int i = 1; i <= 64; i++) 
 			{
-				C_BasePlayer* Player = C_BasePlayer::GetPlayerByIndex(i);
+				auto pEntity = C_BasePlayer::GetPlayerByIndex(i);
 
-				if (!Player) continue;
+				if (!pEntity) continue;
 
-				if (i < 65 && Player->IsAlive())
+				if (i < 65 && pEntity->IsAlive())
 				{
-					if (Visuals::Get().Begin(Player)) 
+					if (Visuals::Get().Begin(pEntity))
 					{
 						if (Feature.Health) Visuals::Get().Health();
 						if (Feature.Name) Visuals::Get().Name();
 						if (Feature.Box) Visuals::Get().Box();
 						if (Feature.Radar) Visuals::Get().Radar();
+						if (Feature.EnemyWarning) Render::Get().Text(1, 1, "There is an enemy nearby.", Render::Get().Visuals, Color(255, 55, 55, 255), false);
 					}
 				}
 			}
@@ -228,13 +220,13 @@ namespace Hooks
 	//--------------------------------------------------------------------------------
 	int __fastcall hkDoPostScreenEffects(void* _this, int edx, int a1)
 	{
-		static auto oDoPostScreenEffects = clientmode_hook.get_original<decltype(&hkDoPostScreenEffects)>(index::DoPostScreenSpaceEffects);
+		static auto oDoPostScreenEffects = clientmode_hook.get_original<decltype(&hkDoPostScreenEffects)>(44);
 		return oDoPostScreenEffects(g_ClientMode, edx, a1);
 	}
 	//--------------------------------------------------------------------------------
 	void __fastcall hkFrameStageNotify(void* _this, int edx, ClientFrameStage_t stage)
 	{
-		static auto ofunc = hlclient_hook.get_original<decltype(&hkFrameStageNotify)>(index::FrameStageNotify);
+		static auto ofunc = hlclient_hook.get_original<decltype(&hkFrameStageNotify)>(37);
 		if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer)
 		{
 			ofunc(g_CHLClient, edx, stage); return;
@@ -283,7 +275,7 @@ namespace Hooks
 	//--------------------------------------------------------------------------------
 	void __fastcall hkLockCursor(void* _this)
 	{
-		static auto ofunc = vguisurf_hook.get_original<decltype(&hkLockCursor)>(index::LockCursor);
+		static auto ofunc = vguisurf_hook.get_original<decltype(&hkLockCursor)>(67);
 
 		if (Menu::Get().IsVisible()) 
 		{
@@ -296,7 +288,7 @@ namespace Hooks
 	//--------------------------------------------------------------------------------
 	void __fastcall hkOverrideView(void* _this, int edx, CViewSetup* vsView)
 	{
-		static auto ofunc = clientmode_hook.get_original<decltype(&hkOverrideView)>(index::OverrideView);
+		static auto ofunc = clientmode_hook.get_original<decltype(&hkOverrideView)>(18);
 		if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected())
 		{
 			ofunc(g_ClientMode, edx, vsView);
@@ -308,7 +300,7 @@ namespace Hooks
 	}
 	float __stdcall hkGetViewmodelFOV()
 	{
-		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(index::GetViewmodelFOV);
+		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(35);
 		while (!g_EngineClient->IsTakingScreenshot() && g_EngineClient->IsInGame() && !g_LocalPlayer->m_bIsScoped())
 		{
 			if (Feature.Viewmodel) return ofunc() + 35.f;
@@ -319,7 +311,7 @@ namespace Hooks
 	//--------------------------------------------------------------------------------
 	void __fastcall hkDrawModelExecute(void* _this, int edx, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 	{
-		mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(index::DrawModelExecute)(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
+		mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(21)(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
 		g_MdlRender->ForcedMaterialOverride(nullptr);
 	}
 }

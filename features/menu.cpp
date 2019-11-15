@@ -62,6 +62,7 @@ void Menu::RenderMenu()
 		{
 			ImGui::Checkbox("Remove scope border", &Feature.RemoveScope);
 			ImGui::Checkbox("Force inventory open", &Feature.ForceInventory);
+			ImGui::Checkbox("Enemy nearby warning", &Feature.EnemyWarning);
 			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBunnyhop);
 		}
 		ImGui::End();

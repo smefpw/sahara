@@ -211,7 +211,7 @@ namespace Hooks
 						if (Feature.Name) Visuals::Get().Name();
 						if (Feature.Box) Visuals::Get().Box();
 						if (Feature.Radar) Visuals::Get().Radar();
-						if (Feature.EnemyWarning) Render::Get().Text(1, 1, "There is an enemy nearby.", Render::Get().Visuals, Color(255, 55, 55, 255), false);
+						if (Feature.EnemyWarning) Render::Get().Text(5, 5, "There is an enemy nearby.", Render::Get().Visuals, Color(255, 55, 55, 255), false);
 					}
 				}
 			}

@@ -12,22 +12,18 @@ void FakeLag::FakeDuck(CUserCmd* cmd, bool& bSendPacket)
 	if (!g_LocalPlayer || !g_EngineClient->IsConnected() || !g_EngineClient->IsInGame()) return;
 	if (!g_LocalPlayer->IsAlive()) return;
 	
-
 	static int cnt = 0;
 	static bool do_ = false;
 
-	if (Feature.FakeDuck && Feature.InfiniteDuck && GetAsyncKeyState(0x43))
+	if (Feature.FakeDuck && Feature.InfiniteDuck && GetAsyncKeyState(0x5A))
 	{
 		g_LocalPlayer->GetPlayerAnimState()->m_fDuckAmount = 1.f;
 
 		bSendPacket = false;
 
-		if (cnt % 14 == 0)
-			do_ = true;
-		else if (cnt % 14 == 6)
-			bSendPacket = true;
-		else if (cnt % 14 == 7)
-			do_ = false;
+		if (cnt % 14 == 0) do_ = true;
+		else if (cnt % 14 == 6) bSendPacket = true;
+		else if (cnt % 14 == 7) do_ = false;
 
 		if (do_)
 		{

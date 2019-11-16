@@ -185,9 +185,10 @@ namespace Hooks
 			int ScreenWidth, ScreenHeight;
 			g_EngineClient->GetScreenSize(ScreenWidth, ScreenHeight);
 
-			Render::Get().Text(15, 10, "Sahara for Counter-Strike: Global Offensive", Render::Get().Visuals, Color(255, 55, 55, 255), false);
-
 			if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) return;
+
+			// Only draw watermark when we're in game.
+			Render::Get().Text(15, 10, "Sahara for Counter-Strike: Global Offensive", Render::Get().Visuals, Color(255, 55, 55, 255), false);
 
 			C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
@@ -202,18 +203,17 @@ namespace Hooks
 			// Recoil already has checks for if the localplayer is alive.
 			if (Feature.Recoil) Visuals::Get().Recoil();
 
-			if (Feature.Alive && g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is alive.", Render::Get().Visuals, Color::Yellow, false);
-			if (Feature.Alive && !g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is dead.", Render::Get().Visuals, Color::Red, false);
+			if (Feature.Alive && g_EngineClient->IsInGame() &&  g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is alive.", Render::Get().Visuals, Color::Yellow, false);
+			if (Feature.Alive && g_EngineClient->IsInGame() && !g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is dead.", Render::Get().Visuals, Color::Red, false);
 
-			if (Feature.Scoped && g_LocalPlayer->IsAlive() && g_LocalPlayer->m_bIsScoped())
+			if (Feature.Scoped && g_EngineClient->IsInGame() && g_LocalPlayer->IsAlive() && g_LocalPlayer->m_bIsScoped())
 			{
 				Render::Get().Text(15, 45, "[Debug] You're currently scoped in.", Render::Get().Visuals, Color::Blue, false);
 			}
 
-			if (Feature.FakeDuck && Feature.InfiniteDuck && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x43))
+			if (Feature.FakeDuck && Feature.InfiniteDuck && Feature.Holding && g_EngineClient->IsInGame() && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x5A))
 			{
-				auto FakeDuck = g_LocalPlayer->FakeDucking() ? "[Debug] Fake duck successful." : "[Debug] Fake duck unsuccessful.";
-				Render::Get().Text(15, 55, FakeDuck, Render::Get().Visuals, Color::Yellow, false);
+				Render::Get().Text(15, 55, "[Debug] Holding fakeduck key.", Render::Get().Visuals, Color::Purple, false);
 			}
 			
 			for (int i = 1; i <= 64; i++) 

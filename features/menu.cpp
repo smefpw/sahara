@@ -46,7 +46,11 @@ void Menu::RenderMenu()
 			ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
 
 			ImGui::Checkbox("Infinite duck", &Feature.InfiniteDuck);
-			if (Feature.InfiniteDuck) ImGui::Checkbox("Fake duck", &Feature.FakeDuck);
+			if (Feature.InfiniteDuck)
+			{
+				ImGui::Checkbox("Fake duck", &Feature.FakeDuck);
+				if (Feature.FakeDuck) ImGui::Text("Hold the key z to fakeduck.");
+			}
 		}
 		if (ImGui::CollapsingHeader("Visuals"))
 		{
@@ -72,6 +76,7 @@ void Menu::RenderMenu()
 			ImGui::Checkbox("Are enemies nearby", &Feature.Nearby);
 			ImGui::Checkbox("Localplayer alive check", &Feature.Alive);
 			ImGui::Checkbox("Is localplayer scoped", &Feature.Scoped);
+			ImGui::Checkbox("Fakeduck active and holding", &Feature.Holding);
 		}
 
 		ImGui::End();

@@ -3,9 +3,10 @@
 Color Color::Black(0, 0, 0, 255);
 Color Color::White(255, 255, 255, 255);
 Color Color::Yellow(245, 195, 35, 255);
-Color Color::Red(245, 35, 35, 255);
-Color Color::Green(0, 128, 0, 255);
+Color Color::Purple(165, 105, 250, 255);
+Color Color::Green(75, 225, 55, 255);
 Color Color::Blue(35, 155, 245, 255);
+Color Color::Red(245, 35, 35, 255);
 
 Color::Color()
 {

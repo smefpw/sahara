@@ -42,6 +42,7 @@ public:
 	CONFIG(bool, Nearby, false);
 	CONFIG(bool, Alive, false);
 	CONFIG(bool, Scoped, false);
+	CONFIG(bool, Holding, false);
 #pragma endregion
 };
 

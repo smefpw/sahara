@@ -117,9 +117,10 @@ public:
 	static Color Black;
 	static Color White;
 	static Color Yellow;
-	static Color Red;
+	static Color Purple;
 	static Color Green;
 	static Color Blue;
+	static Color Red;
 
 private:
 	unsigned char _CColor[4];

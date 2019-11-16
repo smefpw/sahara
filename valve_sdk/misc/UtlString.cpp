@@ -1,4 +1,4 @@
-#include "UtlString.hpp"
+#include "UtlString.h"
 
 #define NOMINMAX
 #include <Windows.h>

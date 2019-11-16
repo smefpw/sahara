@@ -8,13 +8,13 @@
 
 #pragma warning (disable : 4514)
 
-#include "UtlBuffer.hpp"
+#include "UtlBuffer.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <limits.h>
-#include "characterset.hpp"
+#include "Characterset.h"
 
 const char* V_strnchr(const char* pStr, char c, int n)
 {

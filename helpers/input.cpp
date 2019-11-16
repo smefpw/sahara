@@ -1,9 +1,9 @@
-#include "input.hpp"
+#include "Input.h"
 
-#include "../valve_sdk/sdk.hpp"
+#include "../valve_sdk/SDK.h"
 #include "../imgui/imgui.h"
 #include "../imgui/directx9/imgui_impl_dx9.h"
-#include "../features/menu.hpp"
+#include "../Features/Menu.h"
 
 InputSys::InputSys()
 	: m_hTargetWindow(nullptr), m_ulOldWndProc(0)

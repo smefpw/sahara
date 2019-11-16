@@ -1,4 +1,4 @@
-#include "Utilities.hpp"
+#include "Utilities.h"
 
 #define NOMINMAX
 
@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 
-#include "../options.hpp"
-#include "../valve_sdk/csgostructs.hpp"
-#include "math.hpp"
+#include "../Options.h"
+#include "../valve_sdk/CSGOStructs.h"
+#include "Math.h"
 
 
 HANDLE _out = NULL, _old_out = NULL;

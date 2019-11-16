@@ -1,9 +1,9 @@
 #define NOMINMAX
 
-#include "menu.hpp"
+#include "Menu.h"
 #include <Windows.h>
 #include <chrono>
-#include "..//menuarrays.hpp"
+#include "..//MenuArrays.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 

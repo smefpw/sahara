@@ -1,11 +1,11 @@
-#include "hooks.hpp"
+#include "Hooks.h"
 #include <intrin.h>  
-#include "helpers/input.hpp"
-#include "options.hpp"
-#include "helpers/Utilities.hpp"
-#include "features/Visuals.hpp"
-#include "features/Aimbot.hpp"
-#include "features/Menu.hpp"
+#include "Helpers/Input.h"
+#include "Options.h"
+#include "Helpers/Utilities.h"
+#include "Features/Visuals.h"
+#include "Features/Aimbot.h"
+#include "Features/Menu.h"
 
 #pragma intrinsic(_ReturnAddress) 
 

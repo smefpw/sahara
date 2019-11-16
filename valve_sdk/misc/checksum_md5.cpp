@@ -1,4 +1,4 @@
-#include "checksum_md5.hpp"
+#include "Checksum_MD5.h"
 
 #include <windows.h>
 #include <stdio.h>

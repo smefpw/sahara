@@ -1,5 +1,5 @@
 #pragma once
-#include "IAppSystem.hpp"
+#include "IAppSystem.h"
 
 #define MAX_SPLITSCREEN_CLIENT_BITS 2
 // this should == MAX_JOYSTICKS in InputEnums.h

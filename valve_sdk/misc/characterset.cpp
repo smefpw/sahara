@@ -12,7 +12,7 @@
 //=============================================================================
 
 #include <string.h>
-#include "characterset.hpp"
+#include "Characterset.h"
 
 //-----------------------------------------------------------------------------
 // Purpose: builds a simple lookup table of a group of important characters

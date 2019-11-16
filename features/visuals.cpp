@@ -1,6 +1,6 @@
-#include "Visuals.hpp"
-#include "../hooks.hpp"
-#include "Aimbot.hpp"
+#include "Visuals.h"
+#include "../Hooks.h"
+#include "Aimbot.h"
 
 void Render::CreateFonts()
 {

@@ -20,12 +20,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>SDK Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hooks.cpp">
-      <Filter>SDK Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="valve_sdk\misc\characterset.cpp">
       <Filter>SDK Source Files\SDK</Filter>
     </ClCompile>
@@ -74,12 +68,6 @@
     <ClCompile Include="imgui\imgui_draw.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="helpers\input.cpp">
-      <Filter>SDK Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ui.cpp">
-      <Filter>SDK Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\directx9\imgui_impl_dx9.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
@@ -101,149 +89,20 @@
     <ClCompile Include="helpers\Utilities.cpp">
       <Filter>SDK Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Hooks.cpp">
+      <Filter>SDK Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>SDK Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>SDK Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="helpers\Input.cpp">
+      <Filter>SDK Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="valve_sdk\misc\BaseHandle.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\CClientState.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\characterset.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\checksum_crc.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\checksum_md5.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\CInput.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\ClientClass.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\Color.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\Convar.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\CUserCmd.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\EHandle.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\Enums.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\GlobalVars.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\glow_outline_effect.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IAppSystem.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IBaseClientDll.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IClientEntity.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IClientEntityList.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IClientMode.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IClientNetworkable.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IClientRenderable.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IClientThinkable.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IClientUnknown.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\ICollideable.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IConVar.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\ICvar.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IEngineSound.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IEngineTrace.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IGameEventmanager.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\IHandleEntity.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IMaterialSystem.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IMDLCache.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IMoveHelper.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IPanel.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IPhysics.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IPrediction.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IRenderView.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\ISurface.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IVDebugOverlay.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IVEngineClient.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IViewRender.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IVModelInfoClient.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IVModelRender.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\platform.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\math\QAngle.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\Recv.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\sdk.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\stb_rect_pack.h">
       <Filter>SDK Header Files\SDK</Filter>
     </ClInclude>
@@ -251,60 +110,6 @@
       <Filter>SDK Header Files\SDK</Filter>
     </ClInclude>
     <ClInclude Include="imgui\stb_truetype.h">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\Studio.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\UtlBuffer.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\UtlMemory.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\UtlString.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\UtlVector.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\math\Vector.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\math\Vector2D.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\math\Vector4D.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\misc\vfunc.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\math\VMatrix.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="hooks.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="options.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="singleton.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="helpers\vfunc_hook.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\csgostructs.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\netvars.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\interfaces\IRefCounted.hpp">
-      <Filter>SDK Header Files\SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="valve_sdk\Misc\datamap.hpp">
       <Filter>SDK Header Files\SDK</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -328,38 +133,233 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ui.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="helpers\input.hpp">
-      <Filter>SDK Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\directx9\imgui_impl_dx9.h">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="menuarrays.hpp">
+    <ClInclude Include="Hooks.h">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="simpleini.hpp">
+    <ClInclude Include="Options.h">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="features\Menu.hpp">
+    <ClInclude Include="features\Visuals.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="features\Aimbot.hpp">
+    <ClInclude Include="features\Aimbot.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="features\Visuals.hpp">
+    <ClInclude Include="features\Autowall.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="features\Autowall.hpp">
+    <ClInclude Include="features\Menu.h">
       <Filter>Features</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\Utilities.hpp">
+    <ClInclude Include="helpers\Utilities.h">
       <Filter>SDK Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="helpers\math.hpp">
+    <ClInclude Include="helpers\Math.h">
       <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Color.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\BaseHandle.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\CClientState.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\CInput.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\ClientClass.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Convar.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\CUserCmd.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\Misc\datamap.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\EHandle.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Enums.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\GlobalVars.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\glow_outline_effect.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IAppSystem.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IBaseClientDll.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IClientEntity.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IClientEntityList.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IClientMode.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IClientNetworkable.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IClientRenderable.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IClientThinkable.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IClientUnknown.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\ICollideable.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IConVar.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\ICvar.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\math\VMatrix.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\math\Vector4D.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\math\Vector2D.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\math\Vector.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\UtlVector.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\UtlString.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\UtlMemory.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\UtlBuffer.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Studio.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IEngineSound.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IEngineTrace.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IGameEventmanager.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\IHandleEntity.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IMaterialSystem.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IMDLCache.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IMoveHelper.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IPanel.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IPhysics.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IPrediction.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IRefCounted.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IRenderView.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\ISurface.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IVDebugOverlay.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IVEngineClient.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IViewRender.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IVModelInfoClient.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\Netvars.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Platform.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\math\QAngle.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Recv.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\SDK.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\Input.h">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuArrays.h">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Simpleini.h">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Characterset.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Checksum_Crc.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\Checksum_MD5.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\CSGOStructs.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\misc\VFunc.h">
+      <Filter>SDK Header Files\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\VFunc_Hook.h">
+      <Filter>SDK Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="valve_sdk\interfaces\IVModelRender.h">
+      <Filter>SDK Header Files\SDK</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

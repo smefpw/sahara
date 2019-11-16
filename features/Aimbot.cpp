@@ -1,7 +1,8 @@
-#include "Aimbot.hpp"
-#include "../hooks.hpp"
-#include "autowall.hpp"
-#include "../features/visuals.hpp"
+#include "Aimbot.h"
+#include "Autowall.h"
+
+#include "../Hooks.h"
+#include "../features/Visuals.h"
 
 float flOldCurtime;
 float flOldFrametime;

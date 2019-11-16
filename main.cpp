@@ -2,13 +2,13 @@
 
 #include <Windows.h>
 
-#include "valve_sdk/sdk.hpp"
-#include "helpers/Utilities.hpp"
+#include "valve_sdk/SDK.h"
+#include "Helpers/Utilities.h"
 
-#include "hooks.hpp"
-#include "options.hpp"
-#include "helpers/input.hpp"
-#include "features/menu.hpp"
+#include "Hooks.h"
+#include "Options.h"
+#include "Helpers/Input.h"
+#include "Features/Menu.h"
 
 DWORD WINAPI OnDllAttach(LPVOID base)
 {

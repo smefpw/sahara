@@ -1,4 +1,4 @@
-#include "vfunc_hook.hpp"
+#include "VFunc_Hook.h"
 
 vfunc_hook::vfunc_hook()
     : class_base(nullptr), vftbl_len(0), new_vftbl(nullptr), old_vftbl(nullptr)

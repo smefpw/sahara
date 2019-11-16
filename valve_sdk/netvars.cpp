@@ -1,9 +1,9 @@
-#include "netvars.hpp"
+#include "Netvars.h"
 
 #include <fstream>
 #include <utility>
 
-#include "sdk.hpp"
+#include "SDK.h"
 
 void NetvarSys::Initialize()
 {

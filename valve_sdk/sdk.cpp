@@ -1,6 +1,6 @@
-#include "sdk.hpp"
+#include "SDK.h"
 
-#include "../Helpers/Utilities.hpp"
+#include "../Helpers/Utilities.h"
 
 namespace Interfaces
 {

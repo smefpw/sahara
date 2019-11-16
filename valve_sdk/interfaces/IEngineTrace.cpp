@@ -1,5 +1,5 @@
-#include "../SDK.hpp"
-#include "IEngineTrace.hpp"
+#include "../SDK.h"
+#include "IEngineTrace.h"
 
 // VS is gay, so I was required to put it in a .cpp file ;(
 

@@ -1,4 +1,4 @@
-#include "VMatrix.hpp"
+#include "VMatrix.h"
 
 //-----------------------------------------------------------------------------
 // VMatrix inlines.

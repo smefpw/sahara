@@ -1,4 +1,4 @@
-#include "checksum_crc.hpp"
+#include "Checksum_Crc.h"
 
 #define BigShort( val )    WordSwap( val )
 #define BigWord( val )    WordSwap( val )

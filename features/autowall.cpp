@@ -1,4 +1,4 @@
-#include "Autowall.hpp"
+#include "Autowall.h"
 
 #define HITGROUP_GENERIC    0
 #define HITGROUP_HEAD        1

@@ -1,5 +1,5 @@
-#include "ui.hpp"
-#include "features/menu.hpp"
+#include "UI.h"
+#include "Features/Menu.h"
 #include <deque>
 #include <algorithm>
 #include <vector>

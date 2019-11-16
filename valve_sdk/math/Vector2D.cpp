@@ -1,6 +1,6 @@
 #include <cmath>
 
-#include "Vector2D.hpp"
+#include "Vector2D.h"
 
 Vector2D::Vector2D(void)
 {

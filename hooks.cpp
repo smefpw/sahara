@@ -9,7 +9,7 @@
 
 #pragma intrinsic(_ReturnAddress) 
 
-namespace Hooks 
+namespace Hooks
 {
 	void Initialize()
 	{
@@ -61,7 +61,7 @@ namespace Hooks
 		static ConVar* cl_grenadepreview = g_CVar->FindVar("cl_grenadepreview");
 		cl_grenadepreview->m_fnChangeCallbacks.m_Size = 0;
 		cl_grenadepreview->m_nFlags &= ~FCVAR_CHEAT;
-		cl_grenadepreview->SetValue(Feature.Grenade); 
+		cl_grenadepreview->SetValue(Feature.Grenade);
 		//--------------------------------------------------------------------------------
 
 		static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(42);
@@ -214,9 +214,29 @@ namespace Hooks
 						if (Feature.Box) Visuals::Get().Box();
 						if (Feature.Radar) Visuals::Get().Radar();
 
+						// Alive check so the shit doesn't draw when we're spectating someone.
 						if (g_LocalPlayer->IsAlive() && Feature.Nearby) 
 						{
+							// Keep the y = 25 unless you plan to move or remove the watermark.
 							Render::Get().Text(15, 25, "[Debug] There is an enemy nearby.", Render::Get().Visuals, Color(255, 255, 255, 255), false);
+						}
+
+						if (g_LocalPlayer->IsAlive() && Feature.Alive)
+						{
+							// The text won't overlap the "dead" check as we're either dead or alive anyway.
+							Render::Get().Text(15, 35, "[Debug] Alive", Render::Get().Visuals, Color(245, 195, 35, 255), false); // Yellow
+						}
+
+						if (!g_LocalPlayer->IsAlive() && Feature.Dead)
+						{
+							// The localplayer is either going to be dead or alive, so we keep the y = 35
+							Render::Get().Text(15, 35, "[Debug] Dead", Render::Get().Visuals, Color(245, 35, 35, 255), false); // Red
+						}
+
+						// Checking if the localplayer is scoped AND alive, we need the alive check so text doesn't overlap the dead/alive check.
+						if (g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->IsAlive() && Feature.Scoped)
+						{
+							Render::Get().Text(15, 45, "[Debug] You're currently scoped in.", Render::Get().Visuals, Color(35, 155, 245, 255), false); // Blue
 						}
 					}
 				}

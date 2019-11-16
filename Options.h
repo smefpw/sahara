@@ -34,10 +34,14 @@ public:
 	CONFIG(bool, AutoBunnyhop, false);
 	CONFIG(bool, RemoveScope, false);
 	CONFIG(bool, ForceInventory, false);
+	CONFIG(bool, Thirdperson, false);
 #pragma endregion
 
 #pragma region Debug
 	CONFIG(bool, Nearby, false);
+	CONFIG(bool, Alive, false);
+	CONFIG(bool, Dead, false);
+	CONFIG(bool, Scoped, false);
 #pragma endregion
 };
 

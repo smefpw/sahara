@@ -199,6 +199,14 @@ namespace Hooks
 			// Recoil already has checks for if the localplayer is alive.
 			if (Feature.Recoil) Visuals::Get().Recoil();
 
+			if (Feature.Alive && g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is alive.", Render::Get().Visuals, Color::Yellow, false);
+			if (Feature.Alive && !g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is dead.", Render::Get().Visuals, Color::Red, false);
+
+			if (Feature.Scoped && g_LocalPlayer->IsAlive() && g_LocalPlayer->m_bIsScoped())
+			{
+				Render::Get().Text(15, 45, "[Debug] You're currently scoped in.", Render::Get().Visuals, Color::Blue, false);
+			}
+
 			for (int i = 1; i <= 64; i++) 
 			{
 				auto pEntity = C_BasePlayer::GetPlayerByIndex(i);
@@ -217,26 +225,7 @@ namespace Hooks
 						// Alive check so the shit doesn't draw when we're spectating someone.
 						if (g_LocalPlayer->IsAlive() && Feature.Nearby) 
 						{
-							// Keep the y = 25 unless you plan to move or remove the watermark.
-							Render::Get().Text(15, 25, "[Debug] There is an enemy nearby.", Render::Get().Visuals, Color(255, 255, 255, 255), false);
-						}
-
-						if (g_LocalPlayer->IsAlive() && Feature.Alive)
-						{
-							// The text won't overlap the "dead" check as we're either dead or alive anyway.
-							Render::Get().Text(15, 35, "[Debug] Alive", Render::Get().Visuals, Color(245, 195, 35, 255), false); // Yellow
-						}
-
-						if (!g_LocalPlayer->IsAlive() && Feature.Dead)
-						{
-							// The localplayer is either going to be dead or alive, so we keep the y = 35
-							Render::Get().Text(15, 35, "[Debug] Dead", Render::Get().Visuals, Color(245, 35, 35, 255), false); // Red
-						}
-
-						// Checking if the localplayer is scoped AND alive, we need the alive check so text doesn't overlap the dead/alive check.
-						if (g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->IsAlive() && Feature.Scoped)
-						{
-							Render::Get().Text(15, 45, "[Debug] You're currently scoped in.", Render::Get().Visuals, Color(35, 155, 245, 255), false); // Blue
+							Render::Get().Text(15, 25, "[Debug] There are enemies nearby.", Render::Get().Visuals, Color(255, 255, 255, 255), false);
 						}
 					}
 				}

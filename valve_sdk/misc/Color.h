@@ -116,6 +116,7 @@ public:
 
 	static Color Black;
 	static Color White;
+	static Color Yellow;
 	static Color Red;
 	static Color Green;
 	static Color Blue;

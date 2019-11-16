@@ -56,8 +56,7 @@ void Menu::RenderMenu()
 
 			ImGui::Checkbox("Engine radar", &Feature.Radar);
 			ImGui::Checkbox("Grenade preview", &Feature.Grenade);
-			ImGui::Checkbox("Extended viewmodel", &Feature.Viewmodel);
-			ImGui::Checkbox("Thirdperson", &Feature.Thirdperson);
+			ImGui::Checkbox("Increased viewmodel", &Feature.Viewmodel);
 		}
 		if (ImGui::CollapsingHeader("Misc"))
 		{
@@ -67,10 +66,9 @@ void Menu::RenderMenu()
 		}
 		if (ImGui::CollapsingHeader("Debug"))
 		{
-			ImGui::Checkbox("Enemies nearby", &Feature.Nearby);
-			ImGui::Checkbox("Localplayer alive", &Feature.Alive);
-			ImGui::Checkbox("Localplayer dead", &Feature.Dead);
-			ImGui::Checkbox("Localplayer scoped", &Feature.Scoped);
+			ImGui::Checkbox("Are enemies nearby", &Feature.Nearby);
+			ImGui::Checkbox("Localplayer alive check", &Feature.Alive);
+			ImGui::Checkbox("Is localplayer scoped", &Feature.Scoped);
 		}
 
 		ImGui::End();

@@ -200,18 +200,27 @@ namespace Hooks
 				Render::Get().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
 			}
 
-			// Recoil already has checks for if the localplayer is alive.
-			if (Feature.Recoil) Visuals::Get().Recoil();
+			if (Feature.Recoil && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive())
+			{
+				Visuals::Get().Recoil();
+			}
 
-			if (Feature.Alive && g_EngineClient->IsInGame() &&  g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is alive.", Render::Get().Visuals, Color::Yellow, false);
-			if (Feature.Alive && g_EngineClient->IsInGame() && !g_LocalPlayer->IsAlive()) Render::Get().Text(15, 35, "[Debug] Localplayer is dead.", Render::Get().Visuals, Color::Red, false);
+			if (Feature.Alive && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive())
+			{
+				Render::Get().Text(15, 35, "[Debug] Localplayer is alive.", Render::Get().Visuals, Color::Yellow, false);
+			}
 
-			if (Feature.Scoped && g_EngineClient->IsInGame() && g_LocalPlayer->IsAlive() && g_LocalPlayer->m_bIsScoped())
+			if (Feature.Alive && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && !g_LocalPlayer->IsAlive())
+			{
+				Render::Get().Text(15, 35, "[Debug] Localplayer is dead.", Render::Get().Visuals, Color::Red, false);
+			}
+
+			if (Feature.Scoped && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive() && g_LocalPlayer->m_bIsScoped())
 			{
 				Render::Get().Text(15, 45, "[Debug] You're currently scoped in.", Render::Get().Visuals, Color::Blue, false);
 			}
 
-			if (Feature.FakeDuck && Feature.InfiniteDuck && Feature.Holding && g_EngineClient->IsInGame() && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x5A))
+			if (Feature.FakeDuck && Feature.InfiniteDuck && Feature.Holding && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x5A))
 			{
 				Render::Get().Text(15, 55, "[Debug] Holding fakeduck key.", Render::Get().Visuals, Color::Purple, false);
 			}

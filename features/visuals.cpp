@@ -148,8 +148,6 @@ void Visuals::Name()
 
 void Visuals::Recoil()
 {
-	if (!g_LocalPlayer->IsAlive()) return;
-
 	int w, h;
 
 	g_EngineClient->GetScreenSize(w, h);

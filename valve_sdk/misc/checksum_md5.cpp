@@ -1,7 +1,7 @@
 #include "Checksum_MD5.h"
 
 #include <windows.h>
-#include <stdio.h>
+#include <cstdio>
 
 // The four core functions - F1 is optimized somewhat
 // #define F1(x, y, z) (x & y | ~x & z)

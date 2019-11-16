@@ -182,6 +182,8 @@ namespace Hooks
 			int ScreenWidth, ScreenHeight;
 			g_EngineClient->GetScreenSize(ScreenWidth, ScreenHeight);
 
+			Render::Get().Text(15, 10, "Sahara for Counter-Strike: Global Offensive", Render::Get().Visuals, Color(255, 55, 55, 255), false);
+
 			if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) return;
 
 			C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
@@ -211,7 +213,11 @@ namespace Hooks
 						if (Feature.Name) Visuals::Get().Name();
 						if (Feature.Box) Visuals::Get().Box();
 						if (Feature.Radar) Visuals::Get().Radar();
-						if (Feature.EnemyWarning) Render::Get().Text(5, 5, "There is an enemy nearby.", Render::Get().Visuals, Color(255, 55, 55, 255), false);
+
+						if (g_LocalPlayer->IsAlive() && Feature.Nearby) 
+						{
+							Render::Get().Text(15, 25, "[Debug] There is an enemy nearby.", Render::Get().Visuals, Color(255, 255, 255, 255), false);
+						}
 					}
 				}
 			}

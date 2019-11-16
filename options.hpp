@@ -33,8 +33,11 @@ public:
 #pragma region Misc
 	CONFIG(bool, AutoBunnyhop, false);
 	CONFIG(bool, RemoveScope, false);
-	CONFIG(bool, EnemyWarning, false);
 	CONFIG(bool, ForceInventory, false);
+#pragma endregion
+
+#pragma region Debug
+	CONFIG(bool, Nearby, false);
 #pragma endregion
 };
 

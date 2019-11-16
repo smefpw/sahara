@@ -62,9 +62,13 @@ void Menu::RenderMenu()
 		{
 			ImGui::Checkbox("Remove scope border", &Feature.RemoveScope);
 			ImGui::Checkbox("Force inventory open", &Feature.ForceInventory);
-			ImGui::Checkbox("Enemy nearby warning", &Feature.EnemyWarning);
 			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBunnyhop);
 		}
+		if (ImGui::CollapsingHeader("Debug"))
+		{
+			ImGui::Checkbox("Enemies nearby", &Feature.Nearby);
+		}
+
 		ImGui::End();
 	}
 	ImGui::Render();
@@ -97,7 +101,7 @@ void Menu::CreateStyle()
 
 	ImGui::GetIO().Fonts->AddFontDefault();
 
-	Style.Alpha = 0.75f;                                // Global alpha applies to everything in ImGui
+	Style.Alpha = 1.f;									// Global alpha applies to everything in ImGui
 	Style.WindowPadding = ImVec2(7, 6);                 // Padding within a window
 	Style.WindowMinSize = ImVec2(32, 32);               // Minimum window size
 	Style.WindowRounding = 4.0f;                        // Radius of window corners rounding. Set to 0.0f to have rectangular windows

@@ -13,6 +13,8 @@ class Options
 public:
 #pragma region Aimbot
 	CONFIG(bool, Enabled, false);
+	CONFIG(bool, InfiniteDuck, false);
+	CONFIG(bool, FakeDuck, false);
 
 	CONFIG(int, Hitchance, 65);
 	CONFIG(int, Damage, 35);

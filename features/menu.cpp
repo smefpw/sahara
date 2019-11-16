@@ -44,6 +44,9 @@ void Menu::RenderMenu()
 
 			ImGui::SliderInt("Hitchance", &Feature.Hitchance, 0, 100);
 			ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
+
+			ImGui::Checkbox("Infinite duck", &Feature.InfiniteDuck);
+			if (Feature.InfiniteDuck) ImGui::Checkbox("Fake duck", &Feature.FakeDuck);
 		}
 		if (ImGui::CollapsingHeader("Visuals"))
 		{

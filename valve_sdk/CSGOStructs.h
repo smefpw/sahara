@@ -421,7 +421,7 @@ public:
 	int m_nMoveType();
 	QAngle * GetVAngles();
 	float_t m_flSpawnTime();
-
+	bool FakeDucking();
 };
 
 class C_BaseViewModel : public C_BaseEntity

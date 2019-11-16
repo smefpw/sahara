@@ -83,8 +83,12 @@ RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[])
 	Vector pos = Player->GetAbsOrigin();
 	Vector screen_points[8] = {};
 
-	for (int i = 0; i < 8; i++) if (!Math::WorldToScreen(pointsTransformed[i], screen_points[i])) return rect;
-		else TransformedPoints[i] = screen_points[i];
+	for (int i = 0; i < 8; i++)
+	{
+		if (!Math::WorldToScreen(pointsTransformed[i], screen_points[i])) return rect;
+
+		TransformedPoints[i] = screen_points[i];
+	}
 
 	float left = screen_points[0].x;
 	float top = screen_points[0].y;
@@ -98,7 +102,7 @@ RECT Visuals::GetBBox(C_BasePlayer* Player, Vector TransformedPoints[])
 		if (right < screen_points[i].x) right = screen_points[i].x;
 		if (bottom > screen_points[i].y) bottom = screen_points[i].y;
 	}
-	return RECT{ (long)left, (long)top, (long)right, (long)bottom };
+	return RECT{ LONG(left), LONG(top), LONG(right), LONG(bottom) };
 }
 
 bool Visuals::Begin(C_BasePlayer* Player)
@@ -158,8 +162,8 @@ void Visuals::Recoil()
 
 	QAngle punchAngle = g_LocalPlayer->m_aimPunchAngle();
 
-	x -= dx * punchAngle.yaw;
-	y += dy * punchAngle.pitch;
+	x -= dx * int(punchAngle.yaw);
+	y += dy * int(punchAngle.pitch);
 
 	g_VGuiSurface->DrawLine(x - Feature.Size, y, x + Feature.Size + 1, y);
 	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size + 1);
@@ -168,12 +172,16 @@ void Visuals::Recoil()
 void Visuals::Health()
 {
 	int HealthValue = Context.Player->m_iHealth();
-	std::clamp(HealthValue, 0, 100);
+	HealthValue = std::clamp(HealthValue, 0, 100);
+	
+	auto Multiplier = 12 / 360.f;
+	Multiplier *= (HealthValue / 10.f) - 1;
+	Color HealthColor = Color::FromHSB(Multiplier, 1, 1);
 
-	float Height = (Context.Box.bottom - Context.Box.top) * float(HealthValue / 100.f);
+	float Height = (Context.Box.bottom - Context.Box.top) * float(HealthValue) / 100.f;
 
 	Render::Get().FilledRectange(Context.Box.left - 7, Context.Box.top - 1, Context.Box.left - 2, Context.Box.bottom + 1, Color(0, 0, 0, 150));
-	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, Color(255, 55, 55, 255));
+	Render::Get().FilledRectange(Context.Box.left - 6, Context.Box.top, Context.Box.left - 3, Context.Box.top + Height, HealthColor);
 }
 
 void Visuals::Radar()

@@ -478,3 +478,31 @@ float_t C_BasePlayer::m_flSpawnTime()
 {
 	return *(float_t*)((uintptr_t)this + 0xA360);
 }
+
+bool C_BasePlayer::FakeDucking()
+{
+	static float storedTick;
+	static float crouchedTicks[65];
+
+	if (!this->GetPlayerAnimState()) return false;
+
+	float m_flDuckAmount = this->GetPlayerAnimState()->m_fDuckAmount;
+	float m_flDuckSpeed = this->m_flDuckSpeed();
+	float m_fFlags = this->m_fFlags();
+
+	if (m_flDuckSpeed != 0.f && m_flDuckAmount != 0.f)
+	{
+		if (m_flDuckSpeed == 8.f && m_flDuckAmount <= 0.9f && m_flDuckAmount > 0.01f)
+		{
+			if (storedTick != g_GlobalVars->tickcount)
+			{
+				crouchedTicks[this->EntIndex()] = crouchedTicks[this->EntIndex()] + 1;
+				storedTick = g_GlobalVars->tickcount;
+			}
+			return (crouchedTicks[this->EntIndex()] >= 5);
+		}
+		else crouchedTicks[this->EntIndex()] = 0;
+	}
+
+	return false;
+}

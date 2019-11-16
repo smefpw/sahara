@@ -6,6 +6,14 @@
 #include "../Singleton.h"
 #include "../Helpers/Input.h"
 
+class FakeLag : public Singleton<FakeLag>
+{
+	friend class Singleton<FakeLag>;
+public:
+	void FakeDuck(CUserCmd* cmd, bool& bSendPacket);
+	int duck_moment;
+};
+
 class MovementFix : public Singleton<MovementFix>
 {
 	friend class Singleton<MovementFix>;

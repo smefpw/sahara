@@ -122,6 +122,9 @@ namespace Hooks
 
 		C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
+		if (Feature.InfiniteDuck) cmd->buttons |= IN_BULLRUSH;
+		
+		FakeLag::Get().FakeDuck(cmd, bSendPacket);
 		MovementFix::Get().Start(cmd);
 		RageAimbot::Get().StartEnginePred(cmd);
 
@@ -207,6 +210,12 @@ namespace Hooks
 				Render::Get().Text(15, 45, "[Debug] You're currently scoped in.", Render::Get().Visuals, Color::Blue, false);
 			}
 
+			if (Feature.FakeDuck && Feature.InfiniteDuck && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x43))
+			{
+				auto FakeDuck = g_LocalPlayer->FakeDucking() ? "[Debug] Fake duck successful." : "[Debug] Fake duck unsuccessful.";
+				Render::Get().Text(15, 55, FakeDuck, Render::Get().Visuals, Color::Yellow, false);
+			}
+			
 			for (int i = 1; i <= 64; i++) 
 			{
 				auto pEntity = C_BasePlayer::GetPlayerByIndex(i);

@@ -345,14 +345,7 @@ namespace Hooks
 
 		if (p_entity && p_entity == g_LocalPlayer)
 		{
-			if (g_Input->m_fCameraInThirdPerson && g_LocalPlayer->m_bIsScoped())
-			{
-				g_RenderView->SetBlend(0.25f);
-			}
-			else
-			{
-				g_RenderView->SetBlend(1.f);
-			}
+			g_Input->m_fCameraInThirdPerson && g_LocalPlayer->m_bIsScoped() ? g_RenderView->SetBlend(0.25f) : g_RenderView->SetBlend(1.f);
 		}
 		
 		ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);

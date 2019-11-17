@@ -13,7 +13,8 @@ class Options
 public:
 #pragma region Aimbot
 	CONFIG(bool, Enabled, false);
-	CONFIG(bool, AutoScope, false);
+	CONFIG(bool, Scope, false);
+
 	CONFIG(bool, InfiniteDuck, false);
 	CONFIG(bool, FakeDuck, false);
 
@@ -31,6 +32,7 @@ public:
 	CONFIG(bool, Viewmodel, false);
 	CONFIG(bool, Thirdperson, false);
 
+	CONFIG(int, FOV, 0);
 	CONFIG(int, Size, 5);
 #pragma endregion
 

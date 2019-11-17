@@ -174,11 +174,10 @@ void Visuals::Thirdperson()
 	QAngle vec;
 	g_EngineClient->GetViewAngles(vec);
 	
-	if (GetKeyState(0x56) && Feature.Thirdperson) // 'V' key
+	if (GetKeyState(0x58) && Feature.Thirdperson)
 	{
 		if (!g_Input->m_fCameraInThirdPerson)
 		{
-			// Forcing sv_cheats is a ghetto way to fix flickering in local servers (same with collisions)
 			ConVar* sv_cheats = g_CVar->FindVar("sv_cheats");
 			sv_cheats->m_fnChangeCallbacks = 0;
 			sv_cheats->m_nFlags &= ~FCVAR_CHEAT;

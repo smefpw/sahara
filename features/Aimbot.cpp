@@ -289,15 +289,11 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 	
 	if (BestTargetIndex != -1 && Hitbox.IsValid() && BestTargetSimtime)
 	{
-
 		const auto local_weapon = g_LocalPlayer->m_hActiveWeapon()->m_Item().m_iItemDefinitionIndex();
 
 		if (local_weapon == WEAPON_SCAR20 || local_weapon == WEAPON_G3SG1 || local_weapon == WEAPON_SSG08)
 		{
-			if (!g_LocalPlayer->m_bIsScoped() && Feature.AutoScope)
-			{
-				cmd->buttons |= IN_ATTACK2;
-			}
+			if (!g_LocalPlayer->m_bIsScoped() && Feature.Scope) cmd->buttons |= IN_ATTACK2;
 		}
 		
 		auto Target = C_BasePlayer::GetPlayerByIndex(BestTargetIndex);

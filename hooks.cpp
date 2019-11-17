@@ -187,7 +187,6 @@ namespace Hooks
 
 			if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) return;
 
-			// Only draw watermark when we're in game.
 			Render::Get().Text(15, 10, "Sahara for Counter-Strike: Global Offensive", Render::Get().Visuals, Color(255, 55, 55, 255), false);
 
 			C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
@@ -240,7 +239,6 @@ namespace Hooks
 						if (Feature.Box) Visuals::Get().Box();
 						if (Feature.Radar) Visuals::Get().Radar();
 
-						// Alive check so the shit doesn't draw when we're spectating someone.
 						if (g_LocalPlayer->IsAlive() && Feature.Nearby) 
 						{
 							Render::Get().Text(15, 25, "[Debug] There are enemies nearby.", Render::Get().Visuals, Color(255, 255, 255, 255), false);
@@ -326,12 +324,13 @@ namespace Hooks
 
 		ofunc(g_ClientMode, edx, vsView);
 	}
+	//--------------------------------------------------------------------------------
 	float __stdcall hkGetViewmodelFOV()
 	{
 		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(35);
 		while (!g_EngineClient->IsTakingScreenshot() && g_EngineClient->IsInGame() && !g_LocalPlayer->m_bIsScoped())
 		{
-			if (Feature.Viewmodel) return ofunc() + 35.f;
+			if (Feature.Viewmodel) return ofunc() + Feature.FOV;
 			else return ofunc();
 
 		} return ofunc();
@@ -340,14 +339,13 @@ namespace Hooks
 	void __fastcall hkDrawModelExecute(void* _this, int edx, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 	{
 		static auto ofunc = mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(21);
+		auto pEntity = C_BasePlayer::GetPlayerByIndex(pInfo.entity_index);
 
-		auto p_entity = C_BasePlayer::GetPlayerByIndex(pInfo.entity_index);
-
-		if (p_entity && p_entity == g_LocalPlayer)
+		if (pEntity && pEntity == g_LocalPlayer)
 		{
 			if (g_Input->m_fCameraInThirdPerson && g_LocalPlayer->m_bIsScoped())
 			{
-				g_RenderView->SetBlend(0.25f);
+				g_RenderView->SetBlend(0.35f);
 			}
 			else
 			{

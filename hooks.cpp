@@ -321,12 +321,8 @@ namespace Hooks
 	void __fastcall hkOverrideView(void* _this, int edx, CViewSetup* vsView)
 	{
 		static auto ofunc = clientmode_hook.get_original<decltype(&hkOverrideView)>(18);
-		if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected())
-		{
-			ofunc(g_ClientMode, edx, vsView);
-			return;
-		}
-		vsView->fov = 90.f;
+
+		Visuals::Get().Thirdperson();
 
 		ofunc(g_ClientMode, edx, vsView);
 	}
@@ -343,7 +339,23 @@ namespace Hooks
 	//--------------------------------------------------------------------------------
 	void __fastcall hkDrawModelExecute(void* _this, int edx, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 	{
-		mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(21)(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
+		static auto ofunc = mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(21);
+
+		auto p_entity = C_BasePlayer::GetPlayerByIndex(pInfo.entity_index);
+
+		if (p_entity && p_entity == g_LocalPlayer)
+		{
+			if (g_Input->m_fCameraInThirdPerson && g_LocalPlayer->m_bIsScoped())
+			{
+				g_RenderView->SetBlend(0.25f);
+			}
+			else
+			{
+				g_RenderView->SetBlend(1.f);
+			}
+		}
+		
+		ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);
 		g_MdlRender->ForcedMaterialOverride(nullptr);
 	}
 }

@@ -41,8 +41,13 @@ void Menu::RenderMenu()
 		{
 			ImGui::Checkbox("Enable", &Feature.Enabled);
 
-			ImGui::SliderInt("Hitchance", &Feature.Hitchance, 0, 100);
-			ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
+			if (Feature.Enabled)
+			{
+				ImGui::SliderInt("Hitchance", &Feature.Hitchance, 0, 100);
+				ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
+
+				ImGui::Checkbox("Automatic scope", &Feature.AutoScope);
+			}
 
 			ImGui::Checkbox("Infinite duck", &Feature.InfiniteDuck);
 			if (Feature.InfiniteDuck)
@@ -63,6 +68,7 @@ void Menu::RenderMenu()
 			ImGui::Checkbox("Engine radar", &Feature.Radar);
 			ImGui::Checkbox("Grenade preview", &Feature.Grenade);
 			ImGui::Checkbox("Increased viewmodel", &Feature.Viewmodel);
+			ImGui::Checkbox("Third-person", &Feature.Thirdperson);
 		}
 		if (ImGui::CollapsingHeader("Misc"))
 		{

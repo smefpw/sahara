@@ -87,7 +87,7 @@ void RageAimbot::StartEnginePred(CUserCmd* cmd)
 	flOldCurtime = g_GlobalVars->curtime;
 	flOldFrametime = g_GlobalVars->frametime;
 
-	g_GlobalVars->curtime = nTickBase * g_GlobalVars->interval_per_tick;
+	g_GlobalVars->curtime = float(nTickBase) * g_GlobalVars->interval_per_tick;
 	g_GlobalVars->frametime = g_GlobalVars->interval_per_tick;
 
 	g_GameMovement->StartTrackPredictionErrors(g_LocalPlayer);
@@ -146,7 +146,7 @@ bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlay
 		direction.x = forward.x + (spreadView.x * right.x) + (spreadView.y * up.x);
 		direction.y = forward.y + (spreadView.x * right.y) + (spreadView.y * up.y);
 		direction.z = forward.z + (spreadView.x * right.z) + (spreadView.y * up.z);
-		direction.Normalized();
+		direction = direction.Normalized();
 
 		QAngle viewAnglesSpread;
 		Math::VectorAngles(direction, up, viewAnglesSpread);
@@ -173,7 +173,7 @@ bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlay
 }
 bool RageAimbot::Hitscan(C_BasePlayer* pEntity, Vector& HitboxPos, bool Backtrack, matrix3x4_t* BoneMatrix)
 {
-	std::vector<int> HitBoxesToScan{ 0,1,2,3,4,5,6, HITBOX_LEFT_FOOT, HITBOX_RIGHT_FOOT };
+	std::vector<int> HitBoxesToScan{ HITBOX_HEAD, HITBOX_NECK, HITBOX_CHEST, HITBOX_STOMACH, HITBOX_LEFT_THIGH, HITBOX_RIGHT_THIGH };
 
 	int bestHitbox = -1;
 
@@ -181,7 +181,7 @@ bool RageAimbot::Hitscan(C_BasePlayer* pEntity, Vector& HitboxPos, bool Backtrac
 	{
 		float highestDamage;
 
-		highestDamage = Feature.Damage;
+		highestDamage = float(Feature.Damage);
 
 		for (int HitBoxID : HitBoxesToScan)
 		{
@@ -221,7 +221,7 @@ void RageAimbot::StoreRecords()
 
 		if (!pEntity || pEntity->IsDormant() || !pEntity->IsPlayer() || !pEntity->IsAlive() || !pEntity->IsEnemy())
 		{
-			if (BacktrackRecords[i].size() > 0)
+			if (!BacktrackRecords[i].empty())
 				for (int Tick = 0; Tick < BacktrackRecords[i].size(); Tick++) BacktrackRecords[i].erase(BacktrackRecords[i].begin() + Tick);
 			continue;
 		}
@@ -262,7 +262,7 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 	for (int i = 1; i <= 64; i++)
 	{
 		auto pEntity = C_BasePlayer::GetPlayerByIndex(i);
-		if (!pEntity || !pEntity->IsPlayer() || pEntity->IsDormant() || !pEntity->IsAlive() || !pEntity->IsEnemy() || BacktrackRecords[i].size() < 1) continue;
+		if (!pEntity || !pEntity->IsPlayer() || pEntity->IsDormant() || !pEntity->IsAlive() || !pEntity->IsEnemy() || BacktrackRecords[i].empty()) continue;
 
 		float PlayerDistance = Math::VectorDistance(g_LocalPlayer->m_vecOrigin(), pEntity->m_vecOrigin());
 
@@ -286,8 +286,20 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 			}
 		}
 	}
+	
 	if (BestTargetIndex != -1 && Hitbox.IsValid() && BestTargetSimtime)
 	{
+
+		const auto local_weapon = g_LocalPlayer->m_hActiveWeapon()->m_Item().m_iItemDefinitionIndex();
+
+		if (local_weapon == WEAPON_SCAR20 || local_weapon == WEAPON_G3SG1 || local_weapon == WEAPON_SSG08)
+		{
+			if (!g_LocalPlayer->m_bIsScoped() && Feature.AutoScope)
+			{
+				cmd->buttons |= IN_ATTACK2;
+			}
+		}
+		
 		auto Target = C_BasePlayer::GetPlayerByIndex(BestTargetIndex);
 		if (!Target) return;
 		QAngle AimAngle = Math::CalcAngle(g_LocalPlayer->GetEyePos(), Hitbox);

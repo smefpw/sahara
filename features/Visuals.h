@@ -41,4 +41,5 @@ public:
 	void Box();
 	void Radar();
 	void Recoil();
+	void Thirdperson();
 };

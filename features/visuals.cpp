@@ -167,6 +167,34 @@ void Visuals::Recoil()
 	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size + 1);
 }
 
+void Visuals::Thirdperson()
+{
+	if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) return;
+
+	QAngle vec;
+	g_EngineClient->GetViewAngles(vec);
+	
+	if (GetKeyState(0x56) && Feature.Thirdperson) // 'V' key
+	{
+		if (!g_Input->m_fCameraInThirdPerson)
+		{
+			// Forcing sv_cheats is a ghetto way to fix flickering in local servers (same with collisions)
+			ConVar* sv_cheats = g_CVar->FindVar("sv_cheats");
+			sv_cheats->m_fnChangeCallbacks = 0;
+			sv_cheats->m_nFlags &= ~FCVAR_CHEAT;
+			sv_cheats->SetValue(1);
+			
+			g_Input->m_fCameraInThirdPerson = true;
+			g_Input->m_vecCameraOffset = Vector(vec.pitch, vec.yaw, 80);
+		}
+	}
+	else
+	{	
+		g_Input->m_fCameraInThirdPerson = false;
+		g_Input->m_vecCameraOffset = Vector(vec.pitch, vec.yaw, vec.roll);
+	}
+}
+
 void Visuals::Health()
 {
 	int HealthValue = Context.Player->m_iHealth();

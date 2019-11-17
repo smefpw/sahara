@@ -19,7 +19,7 @@ public:
 	CONFIG(bool, FakeDuck, false);
 
 	CONFIG(int, Hitchance, 65);
-	CONFIG(int, Damage, 35);
+	CONFIG(int, Damage, 40);
 #pragma endregion
 
 #pragma region Visuals
@@ -32,7 +32,7 @@ public:
 	CONFIG(bool, Viewmodel, false);
 	CONFIG(bool, Thirdperson, false);
 
-	CONFIG(int, FOV, 0);
+	CONFIG(int, FOV, 35);
 	CONFIG(int, Size, 5);
 #pragma endregion
 
@@ -40,13 +40,6 @@ public:
 	CONFIG(bool, AutoBunnyhop, false);
 	CONFIG(bool, RemoveScope, false);
 	CONFIG(bool, ForceInventory, false);
-#pragma endregion
-
-#pragma region Debug
-	CONFIG(bool, Nearby, false);
-	CONFIG(bool, Alive, false);
-	CONFIG(bool, Scoped, false);
-	CONFIG(bool, Holding, false);
 #pragma endregion
 };
 

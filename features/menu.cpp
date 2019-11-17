@@ -32,6 +32,7 @@ void Menu::RenderMenu()
 	if (!Visible) return;
 
 	ImGui_ImplDX9_NewFrame();
+	ImGui::GetIO().MouseDrawCursor = Visible;
 	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Once);
 	ImGui::SetNextWindowSize(ImVec2{ 250, 300 }, ImGuiSetCond_Once);
 
@@ -44,17 +45,13 @@ void Menu::RenderMenu()
 			if (Feature.Enabled)
 			{
 				ImGui::SliderInt("Hitchance", &Feature.Hitchance, 0, 100);
-				ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
+				ImGui::SliderInt("Damage", &Feature.Damage, 0, 100);
 
 				ImGui::Checkbox("Automatic scope", &Feature.Scope);
 			}
 
 			ImGui::Checkbox("Infinite duck", &Feature.InfiniteDuck);
-			if (Feature.InfiniteDuck)
-			{
-				ImGui::Checkbox("Fake duck", &Feature.FakeDuck);
-				if (Feature.FakeDuck) ImGui::Text("Hold the key z to fakeduck.");
-			}
+			if (Feature.InfiniteDuck) ImGui::Checkbox("Fake duck", &Feature.FakeDuck);
 		}
 		if (ImGui::CollapsingHeader("Visuals"))
 		{
@@ -72,20 +69,12 @@ void Menu::RenderMenu()
 			if (Feature.Viewmodel) ImGui::SliderInt("", &Feature.FOV, 0, 60);
 
 			ImGui::Checkbox("Thirdperson", &Feature.Thirdperson);
-			if (Feature.Thirdperson) ImGui::Text("Toggle thirdperson with x");
 		}
 		if (ImGui::CollapsingHeader("Misc"))
 		{
 			ImGui::Checkbox("Remove scope border", &Feature.RemoveScope);
 			ImGui::Checkbox("Force inventory open", &Feature.ForceInventory);
 			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBunnyhop);
-		}
-		if (ImGui::CollapsingHeader("Debug"))
-		{
-			ImGui::Checkbox("Are enemies nearby", &Feature.Nearby);
-			ImGui::Checkbox("Localplayer alive check", &Feature.Alive);
-			ImGui::Checkbox("Is localplayer scoped", &Feature.Scoped);
-			ImGui::Checkbox("Fakeduck active and holding", &Feature.Holding);
 		}
 
 		ImGui::End();

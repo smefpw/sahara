@@ -185,9 +185,9 @@ namespace Hooks
 			int ScreenWidth, ScreenHeight;
 			g_EngineClient->GetScreenSize(ScreenWidth, ScreenHeight);
 
-			if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) return;
-
 			Render::Get().Text(15, 10, "Sahara for Counter-Strike: Global Offensive", Render::Get().Visuals, Color(255, 55, 55, 255), false);
+
+			if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) return;
 
 			C_BaseCombatWeapon* Weapon = g_LocalPlayer->m_hActiveWeapon();
 
@@ -199,29 +199,11 @@ namespace Hooks
 				Render::Get().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
 			}
 
-			if (Feature.Recoil && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive())
-			{
-				Visuals::Get().Recoil();
-			}
+			if (Feature.Recoil && g_LocalPlayer->IsAlive()) Visuals::Get().Recoil();
 
-			if (Feature.Alive && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive())
+			if (Feature.FakeDuck && Feature.InfiniteDuck && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x5A))
 			{
-				Render::Get().Text(15, 35, "[Debug] Localplayer is alive.", Render::Get().Visuals, Color::Yellow, false);
-			}
-
-			if (Feature.Alive && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && !g_LocalPlayer->IsAlive())
-			{
-				Render::Get().Text(15, 35, "[Debug] Localplayer is dead.", Render::Get().Visuals, Color::Red, false);
-			}
-
-			if (Feature.Scoped && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive() && g_LocalPlayer->m_bIsScoped())
-			{
-				Render::Get().Text(15, 45, "[Debug] You're currently scoped in.", Render::Get().Visuals, Color::Blue, false);
-			}
-
-			if (Feature.FakeDuck && Feature.InfiniteDuck && Feature.Holding && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x5A))
-			{
-				Render::Get().Text(15, 55, "[Debug] Holding fakeduck key.", Render::Get().Visuals, Color::Purple, false);
+				Render::Get().Text(15, 25, "[Debug] Holding fakeduck key.", Render::Get().Visuals, Color::Yellow, false);
 			}
 			
 			for (int i = 1; i <= 64; i++) 
@@ -238,11 +220,6 @@ namespace Hooks
 						if (Feature.Name) Visuals::Get().Name();
 						if (Feature.Box) Visuals::Get().Box();
 						if (Feature.Radar) Visuals::Get().Radar();
-
-						if (g_LocalPlayer->IsAlive() && Feature.Nearby) 
-						{
-							Render::Get().Text(15, 25, "[Debug] There are enemies nearby.", Render::Get().Visuals, Color(255, 255, 255, 255), false);
-						}
 					}
 				}
 			}
@@ -311,6 +288,7 @@ namespace Hooks
 		if (Menu::Get().IsVisible()) 
 		{
 			g_VGuiSurface->UnlockCursor();
+			g_InputSystem->ResetInputState();
 			return;
 		}
 		ofunc(g_VGuiSurface);

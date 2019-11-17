@@ -16,9 +16,6 @@ namespace Hooks
 	inline vfunc_hook enginehook_hook;
 	inline vfunc_hook clientmode_hook;
 
-	using GetViewmodelFOV = float(__thiscall*)();
-	using IsConnected_t = bool(__thiscall*)(IVEngineClient*);
-
 	long __stdcall hkEndScene(IDirect3DDevice9* device);
 	long __stdcall hkReset(IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* pPresentationParameters);
     void __stdcall hkCreateMove(int sequence_number, float input_sample_frametime, bool active, bool& bSendPacket);
@@ -29,6 +26,4 @@ namespace Hooks
 	void __fastcall hkOverrideView(void* _this, int, CViewSetup * vsView);
 	int  __fastcall hkDoPostScreenEffects(void* _this, int, int a1);
 	void __fastcall hkLockCursor(void* _this);
-	float __stdcall hkGetViewmodelFOV();
-	bool __stdcall IsConnected();
 }

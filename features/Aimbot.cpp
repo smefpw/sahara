@@ -15,7 +15,7 @@ void FakeLag::FakeDuck(CUserCmd* cmd, bool& bSendPacket)
 	static int cnt = 0;
 	static bool do_ = false;
 
-	if (Feature.FakeDuck && Feature.InfiniteDuck && GetAsyncKeyState(0x5A))
+	if (Feature.FakeDuck && Feature.InfiniteDuck && GetAsyncKeyState(0x43)) // 'C' key
 	{
 		g_LocalPlayer->GetPlayerAnimState()->m_fDuckAmount = 1.f;
 
@@ -286,16 +286,18 @@ void RageAimbot::Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket
 			}
 		}
 	}
-	
+
 	if (BestTargetIndex != -1 && Hitbox.IsValid() && BestTargetSimtime)
 	{
 		const auto local_weapon = g_LocalPlayer->m_hActiveWeapon()->m_Item().m_iItemDefinitionIndex();
-
 		if (local_weapon == WEAPON_SCAR20 || local_weapon == WEAPON_G3SG1 || local_weapon == WEAPON_SSG08)
 		{
-			if (!g_LocalPlayer->m_bIsScoped() && Feature.Scope) cmd->buttons |= IN_ATTACK2;
+			if (!g_LocalPlayer->m_bIsScoped() && Feature.AutoScope)
+			{
+				cmd->buttons |= IN_ATTACK2;
+			}
 		}
-		
+
 		auto Target = C_BasePlayer::GetPlayerByIndex(BestTargetIndex);
 		if (!Target) return;
 		QAngle AimAngle = Math::CalcAngle(g_LocalPlayer->GetEyePos(), Hitbox);

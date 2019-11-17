@@ -34,7 +34,7 @@ void Menu::RenderMenu()
 	ImGui_ImplDX9_NewFrame();
 	ImGui::GetIO().MouseDrawCursor = Visible;
 	ImGui::SetNextWindowPosCenter(ImGuiSetCond_Once);
-	ImGui::SetNextWindowSize(ImVec2{ 250, 300 }, ImGuiSetCond_Once);
+	ImGui::SetNextWindowSize(ImVec2{ 400, 250 }, ImGuiSetCond_Once);
 
 	if (ImGui::Begin("Sahara", &Visible, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse))
 	{
@@ -45,13 +45,16 @@ void Menu::RenderMenu()
 			if (Feature.Enabled)
 			{
 				ImGui::SliderInt("Hitchance", &Feature.Hitchance, 0, 100);
-				ImGui::SliderInt("Damage", &Feature.Damage, 0, 100);
+				ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
 
-				ImGui::Checkbox("Automatic scope", &Feature.Scope);
+				ImGui::Checkbox("Automatic scope", &Feature.AutoScope);
 			}
 
 			ImGui::Checkbox("Infinite duck", &Feature.InfiniteDuck);
-			if (Feature.InfiniteDuck) ImGui::Checkbox("Fake duck", &Feature.FakeDuck);
+			if (Feature.InfiniteDuck)
+			{
+				ImGui::Checkbox("Fake duck", &Feature.FakeDuck);
+			}
 		}
 		if (ImGui::CollapsingHeader("Visuals"))
 		{
@@ -64,21 +67,18 @@ void Menu::RenderMenu()
 
 			ImGui::Checkbox("Engine radar", &Feature.Radar);
 			ImGui::Checkbox("Grenade preview", &Feature.Grenade);
-
-			ImGui::Checkbox("Viewmodel fov", &Feature.Viewmodel);
-			if (Feature.Viewmodel) ImGui::SliderInt("", &Feature.FOV, 0, 60);
-
-			ImGui::Checkbox("Thirdperson", &Feature.Thirdperson);
+			ImGui::Checkbox("Third-person", &Feature.Thirdperson);
+			ImGui::SliderInt("Override view", &Feature.ViewDistance, 1, 135);
 		}
 		if (ImGui::CollapsingHeader("Misc"))
 		{
 			ImGui::Checkbox("Remove scope border", &Feature.RemoveScope);
-			ImGui::Checkbox("Force inventory open", &Feature.ForceInventory);
 			ImGui::Checkbox("Automatic bunnyhop", &Feature.AutoBunnyhop);
 		}
 
 		ImGui::End();
 	}
+	
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
 }

@@ -54,6 +54,7 @@ private:
 public:
 	void StoreRecords();
 	std::vector<TickInfo> BacktrackRecords[65];
+	void Autostop(CUserCmd* cmd);
 	void StartEnginePred(CUserCmd* cmd);
 	void EndEnginePred();
 	void Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket);

@@ -27,12 +27,10 @@ namespace Hooks
 		direct3d_hook.hook_index(16, hkReset);
 		hlclient_hook.hook_index(37, hkFrameStageNotify);
 		hlclient_hook.hook_index(22, hkCreateMove_Proxy);
-		enginehook_hook.hook_index(27, IsConnected);
 		vguipanel_hook.hook_index(41, hkPaintTraverse);
 		vguisurf_hook.hook_index(67, hkLockCursor);
 		mdlrender_hook.hook_index(21, hkDrawModelExecute);
 		clientmode_hook.hook_index(44, hkDoPostScreenEffects);
-		clientmode_hook.hook_index(35, hkGetViewmodelFOV);
 		clientmode_hook.hook_index(18, hkOverrideView);
 
 		Render::Get().CreateFonts();
@@ -52,11 +50,6 @@ namespace Hooks
 		fog_enableskybox->m_fnChangeCallbacks.m_Size = 0;
 		fog_enableskybox->m_nFlags &= ~FCVAR_CHEAT;
 		fog_enableskybox->SetValue(0);
-
-		static ConVar* sv_skyname = g_CVar->FindVar("sv_skyname");
-		sv_skyname->m_fnChangeCallbacks.m_Size = 0;
-		sv_skyname->m_nFlags &= ~FCVAR_CHEAT;
-		sv_skyname->SetValue("sky_csgo_night02b");
 
 		static ConVar* cl_grenadepreview = g_CVar->FindVar("cl_grenadepreview");
 		cl_grenadepreview->m_fnChangeCallbacks.m_Size = 0;
@@ -185,7 +178,12 @@ namespace Hooks
 			int ScreenWidth, ScreenHeight;
 			g_EngineClient->GetScreenSize(ScreenWidth, ScreenHeight);
 
-			Render::Get().Text(15, 10, "Sahara for Counter-Strike: Global Offensive", Render::Get().Visuals, Color(255, 55, 55, 255), false);
+			const auto margin = 10;
+			int tall, wide;		
+			const char* watermark = "Sahara for Counter-Strike: Global Offensive";
+			
+			Render::Get().TextSize(wide, tall, watermark, Render::Get().Visuals);
+			Render::Get().Text(ScreenWidth - wide - margin, margin, watermark, Render::Get().Visuals, Color(255, 55, 55, 255), false);
 
 			if (!g_EngineClient->IsInGame() || !g_EngineClient->IsConnected() || !g_LocalPlayer) return;
 
@@ -199,11 +197,9 @@ namespace Hooks
 				Render::Get().Line(0, ScreenHeight / 2, ScreenWidth, ScreenHeight / 2, Color(0, 0, 0, 150));
 			}
 
-			if (Feature.Recoil && g_LocalPlayer->IsAlive()) Visuals::Get().Recoil();
-
-			if (Feature.FakeDuck && Feature.InfiniteDuck && g_LocalPlayer->IsAlive() && GetAsyncKeyState(0x5A))
+			if (Feature.Recoil && g_EngineClient->IsInGame() && g_EngineClient->IsConnected() && g_LocalPlayer->IsAlive())
 			{
-				Render::Get().Text(15, 25, "[Debug] Holding fakeduck key.", Render::Get().Visuals, Color::Yellow, false);
+				Visuals::Get().Recoil();
 			}
 			
 			for (int i = 1; i <= 64; i++) 
@@ -269,18 +265,6 @@ namespace Hooks
 		ofunc(g_CHLClient, edx, stage);
 	}
 	//--------------------------------------------------------------------------------
-	bool __stdcall IsConnected() {
-
-		auto ofunc = enginehook_hook.get_original<IsConnected_t>(27);
-
-		static void* unk = Utilities::PatternScan(GetModuleHandleA("client_panorama.dll"), "75 04 B0 01 5F") - 2;
-		if (_ReturnAddress() == unk && Feature.ForceInventory) {
-			return false;
-		}
-
-		return ofunc(g_EngineClient);
-	}
-	//--------------------------------------------------------------------------------
 	void __fastcall hkLockCursor(void* _this)
 	{
 		static auto ofunc = vguisurf_hook.get_original<decltype(&hkLockCursor)>(67);
@@ -288,7 +272,6 @@ namespace Hooks
 		if (Menu::Get().IsVisible()) 
 		{
 			g_VGuiSurface->UnlockCursor();
-			g_InputSystem->ResetInputState();
 			return;
 		}
 		ofunc(g_VGuiSurface);
@@ -298,37 +281,33 @@ namespace Hooks
 	{
 		static auto ofunc = clientmode_hook.get_original<decltype(&hkOverrideView)>(18);
 
+		if (g_EngineClient->IsInGame() && !g_LocalPlayer->m_bIsScoped() && g_LocalPlayer->IsAlive())
+			vsView->fov = static_cast<float>(Feature.ViewDistance);
+
 		Visuals::Get().Thirdperson();
 
 		ofunc(g_ClientMode, edx, vsView);
 	}
 	//--------------------------------------------------------------------------------
-	float __stdcall hkGetViewmodelFOV()
-	{
-		static auto ofunc = clientmode_hook.get_original<GetViewmodelFOV>(35);
-		while (!g_EngineClient->IsTakingScreenshot() && g_EngineClient->IsInGame() && !g_LocalPlayer->m_bIsScoped())
-		{
-			if (Feature.Viewmodel) return ofunc() + Feature.FOV;
-			else return ofunc();
-
-		} return ofunc();
-	}
-	//--------------------------------------------------------------------------------
 	void __fastcall hkDrawModelExecute(void* _this, int edx, IMatRenderContext* ctx, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld)
 	{
 		static auto ofunc = mdlrender_hook.get_original<decltype(&hkDrawModelExecute)>(21);
-		auto pEntity = C_BasePlayer::GetPlayerByIndex(pInfo.entity_index);
+		static auto vmt_material = g_MatSystem->FindMaterial("debug/debugambientcube", TEXTURE_GROUP_MODEL);
 
-		if (pEntity && pEntity == g_LocalPlayer)
+		if (!vmt_material || vmt_material->IsErrorMaterial()) return;
+
+		auto p_entity = C_BasePlayer::GetPlayerByIndex(pInfo.entity_index);
+
+		if (p_entity && p_entity == g_LocalPlayer && g_Input->m_fCameraInThirdPerson)
 		{
-			if (g_Input->m_fCameraInThirdPerson && g_LocalPlayer->m_bIsScoped())
-			{
-				g_RenderView->SetBlend(0.35f);
-			}
-			else
-			{
-				g_RenderView->SetBlend(1.f);
-			}
+			float alpha;
+			g_LocalPlayer->m_bIsScoped() ? alpha = 0.25f : alpha = 1.f;
+
+			vmt_material->IncrementReferenceCount();
+			vmt_material->ColorModulate(1.f, 1.f, 1.f);
+			vmt_material->AlphaModulate(alpha);
+
+			g_MdlRender->ForcedMaterialOverride(vmt_material);
 		}
 		
 		ofunc(g_MdlRender, 0, ctx, state, pInfo, pCustomBoneToWorld);

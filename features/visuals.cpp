@@ -160,8 +160,8 @@ void Visuals::Recoil()
 
 	QAngle punchAngle = g_LocalPlayer->m_aimPunchAngle();
 
-	x -= dx * punchAngle.yaw;
-	y += dy * punchAngle.pitch;
+	x -= dx * int(punchAngle.yaw);
+	y += dy * int(punchAngle.pitch);
 
 	g_VGuiSurface->DrawLine(x - Feature.Size, y, x + Feature.Size + 1, y);
 	g_VGuiSurface->DrawLine(x, y - Feature.Size, x, y + Feature.Size + 1);
@@ -174,10 +174,11 @@ void Visuals::Thirdperson()
 	QAngle vec;
 	g_EngineClient->GetViewAngles(vec);
 	
-	if (GetKeyState(0x58) && Feature.Thirdperson)
+	if (GetKeyState(0x56) && Feature.Thirdperson) // 'V' key
 	{
 		if (!g_Input->m_fCameraInThirdPerson)
 		{
+			// Forcing sv_cheats is a ghetto way to fix flickering in local servers (same with collisions)
 			ConVar* sv_cheats = g_CVar->FindVar("sv_cheats");
 			sv_cheats->m_fnChangeCallbacks = 0;
 			sv_cheats->m_nFlags &= ~FCVAR_CHEAT;

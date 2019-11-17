@@ -4,6 +4,7 @@
 
 #define RAD2DEG(x) DirectX::XMConvertToDegrees(x)
 #define DEG2RAD(x) DirectX::XMConvertToRadians(x)
+#define Square(x) ((x)*(x))
 
 #define PI 3.14159265358979323846264338327950
 

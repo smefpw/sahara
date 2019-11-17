@@ -19,6 +19,7 @@ public:
 
 	CONFIG(int, Hitchance, 65);
 	CONFIG(int, Damage, 25);
+	CONFIG(int, SlowWalk, 25);
 #pragma endregion
 
 #pragma region Visuals

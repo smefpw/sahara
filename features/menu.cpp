@@ -48,6 +48,7 @@ void Menu::RenderMenu()
 				ImGui::SliderInt("Min Dmg", &Feature.Damage, 0, 100);
 
 				ImGui::Checkbox("Automatic scope", &Feature.AutoScope);
+				ImGui::SliderInt("Slow walk", &Feature.SlowWalk , 0, 100);
 			}
 
 			ImGui::Checkbox("Infinite duck", &Feature.InfiniteDuck);

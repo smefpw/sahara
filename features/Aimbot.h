@@ -57,5 +57,6 @@ public:
 	void Autostop(CUserCmd* cmd);
 	void StartEnginePred(CUserCmd* cmd);
 	void EndEnginePred();
+	void SlowWalk(CUserCmd* cmd);
 	void Do(CUserCmd* cmd, C_BaseCombatWeapon* Weapon, bool& bSendPacket);
 };

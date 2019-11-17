@@ -110,6 +110,29 @@ void RageAimbot::EndEnginePred()
 	g_GlobalVars->frametime = flOldFrametime;
 }
 
+void RageAimbot::SlowWalk(CUserCmd* cmd)
+{
+	if (!GetAsyncKeyState(VK_SHIFT) || Feature.SlowWalk == 0) return;
+
+	float speed = float(Feature.SlowWalk);
+
+	float min_speed = Math::FASTSQRT(Square(cmd->forwardmove) + Square(cmd->sidemove) + Square(cmd->upmove));
+
+	if (min_speed <= 0.f) return;
+
+	if (cmd->buttons & IN_DUCK)
+		speed *= 2.94117647f;
+
+	if (min_speed <= speed)
+		return;
+
+	float x = speed / min_speed;
+
+	cmd->forwardmove *= x;
+	cmd->sidemove *= x;
+	cmd->upmove *= x;
+}
+
 bool RageAimbot::Hitchance(C_BaseCombatWeapon* weapon, QAngle angles, C_BasePlayer* ent, float chance)
 {
 	Vector forward, right, up;

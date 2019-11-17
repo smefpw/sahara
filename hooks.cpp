@@ -118,6 +118,7 @@ namespace Hooks
 		if (Feature.InfiniteDuck) cmd->buttons |= IN_BULLRUSH;
 		
 		FakeLag::Get().FakeDuck(cmd, bSendPacket);
+		RageAimbot::Get().SlowWalk(cmd);
 		MovementFix::Get().Start(cmd);
 		RageAimbot::Get().StartEnginePred(cmd);
 
